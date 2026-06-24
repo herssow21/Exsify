@@ -1,0 +1,225 @@
+{
+  "app": {
+    "name": "EXSIFY",
+    "tagline": "Software Solutions for Africa & Middle East",
+    "description": "Empowering businesses across Africa and the Middle East with innovative software solutions"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "whoWeAre": "Who We Are",
+    "careers": "Careers",
+    "contact": "Contact & News",
+    "myLibrary": "My Library",
+    "admin": "Admin Dashboard",
+    "login": "Login",
+    "logout": "Logout",
+    "signup": "Sign Up"
+  },
+  "hero": {
+    "title": "Transform Your Business with",
+    "subtitle": "Cutting-edge software solutions designed for the unique challenges of African and Middle Eastern markets",
+    "ctaPrimary": "Explore Solutions",
+    "ctaSecondary": "Get a Demo",
+    "stats": {
+      "downloads": "Total Downloads",
+      "apps": "Software Solutions",
+      "countries": "Countries Served",
+      "satisfaction": "Customer Satisfaction"
+    }
+  },
+  "features": {
+    "title": "Why Choose EXSIFY",
+    "subtitle": "We understand the unique challenges of operating in African and Middle Eastern markets",
+    "items": {
+      "localized": {
+        "title": "Localized Solutions",
+        "description": "Software tailored for regional requirements including RTL support, local currencies, and compliance"
+      },
+      "offline": {
+        "title": "Offline Capability",
+        "description": "Continue operations even with intermittent internet connectivity"
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Round-the-clock customer support in English and Arabic"
+      },
+      "secure": {
+        "title": "Enterprise Security",
+        "description": "Bank-grade security with data sovereignty compliance"
+      }
+    }
+  },
+  "apps": {
+    "title": "Our Software Solutions",
+    "subtitle": "Comprehensive business software for every need",
+    "featured": "Featured",
+    "categories": {
+      "all": "All Categories",
+      "retail": "Retail",
+      "hr": "Human Resources",
+      "inventory": "Inventory",
+      "finance": "Finance",
+      "sales": "Sales & CRM",
+      "education": "Education",
+      "healthcare": "Healthcare",
+      "analytics": "Analytics"
+    },
+    "viewDetails": "View Details",
+    "download": "Download",
+    "price": "Price",
+    "rating": "Rating",
+    "downloads": "Downloads",
+    "reviews": "Reviews",
+    "features": "Features",
+    "screenshots": "Screenshots",
+    "relatedApps": "Related Software",
+    "backToApps": "Back to All Apps"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to access your account and downloads",
+      "email": "Email Address",
+      "password": "Password",
+      "submit": "Sign In",
+      "forgotPassword": "Forgot Password?",
+      "noAccount": "Don't have an account?",
+      "signup": "Sign Up"
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Join thousands of businesses using EXSIFY",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "country": "Country",
+      "currency": "Preferred Currency",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account?",
+      "login": "Sign In"
+    },
+    "errors": {
+      "invalidEmail": "Please enter a valid email address",
+      "weakPassword": "Password must be at least 8 characters with letters and numbers",
+      "passwordMismatch": "Passwords do not match",
+      "required": "This field is required",
+      "invalidCredentials": "Invalid email or password",
+      "emailExists": "An account with this email already exists"
+    }
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "overview": "Overview",
+    "apps": "App Manager",
+    "consultations": "Consultations",
+    "reviews": "Reviews",
+    "news": "News & Updates",
+    "users": "Users",
+    "stats": {
+      "totalDownloads": "Total Downloads",
+      "activeUsers": "Active Users",
+      "totalRevenue": "Total Revenue",
+      "pendingReviews": "Pending Reviews",
+      "newConsultations": "New Consultations",
+      "growth": "Growth"
+    },
+    "actions": {
+      "add": "Add New",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "search": "Search",
+      "filter": "Filter",
+      "export": "Export CSV",
+      "bulkActions": "Bulk Actions",
+      "selectAll": "Select All",
+      "toggleStatus": "Toggle Status",
+      "toggleFeatured": "Toggle Featured",
+      "markContacted": "Mark as Contacted",
+      "approve": "Approve",
+      "reject": "Reject"
+    },
+    "table": {
+      "name": "Name",
+      "category": "Category",
+      "price": "Price",
+      "status": "Status",
+      "featured": "Featured",
+      "downloads": "Downloads",
+      "rating": "Rating",
+      "actions": "Actions",
+      "email": "Email",
+      "company": "Company",
+      "date": "Date",
+      "role": "Role",
+      "country": "Country"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "contacted": "Contacted",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "noResults": "No results found"
+  },
+  "consultation": {
+    "title": "Request a Consultation",
+    "subtitle": "Get personalized guidance on the right solutions for your business",
+    "name": "Your Name",
+    "email": "Email Address",
+    "company": "Company Name",
+    "message": "How can we help?",
+    "submit": "Submit Request",
+    "success": "Thank you! We'll contact you soon."
+  },
+  "footer": {
+    "tagline": "Empowering businesses across Africa and the Middle East",
+    "quickLinks": "Quick Links",
+    "support": "Support",
+    "contact": "Contact Us",
+    "rights": "All rights reserved",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "close": "Close",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "and": "and"
+  },
+  "currency": {
+    "USD": "US Dollar",
+    "EUR": "Euro",
+    "SAR": "Saudi Riyal",
+    "KES": "Kenyan Shilling"
+  },
+  "countries": {
+    "Saudi Arabia": "Saudi Arabia",
+    "UAE": "United Arab Emirates",
+    "Egypt": "Egypt",
+    "Nigeria": "Nigeria",
+    "Kenya": "Kenya",
+    "South Africa": "South Africa",
+    "Qatar": "Qatar",
+    "Morocco": "Morocco",
+    "Tunisia": "Tunisia",
+    "Algeria": "Algeria",
+    "Jordan": "Jordan",
+    "Kuwait": "Kuwait",
+    "Bahrain": "Bahrain",
+    "Oman": "Oman"
+  }
+}
