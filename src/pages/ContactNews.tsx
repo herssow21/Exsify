@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import {
   Mail, Phone, MapPin, Send, Calendar, ArrowRight, Newspaper,
   Building2, User, DollarSign, Globe, MessageSquare, CheckCircle,
-  Briefcase, Code, Wrench
+  Briefcase, Code, Wrench, Linkedin, Facebook, Instagram, Twitter, MessageCircle
 } from 'lucide-react';
 import { useNews } from '../hooks/useDatabase';
 import { useToast } from '../context/ToastContext';
@@ -35,6 +35,14 @@ const budgetOptions = [
   { value: '$50k+', label: '$50,000+' },
 ];
 
+const socialLinks = [
+  { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/966501234567', color: 'bg-green-500' },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/company/exsify', color: 'bg-blue-700' },
+  { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/exsify', color: 'bg-sky-500' },
+  { icon: Facebook, label: 'Facebook', href: 'https://facebook.com/exsify', color: 'bg-blue-600' },
+  { icon: Instagram, label: 'Instagram', href: 'https://instagram.com/exsify', color: 'bg-pink-600' },
+];
+
 export default function ContactNews() {
   const { t, i18n } = useTranslation();
   const { news } = useNews();
@@ -44,7 +52,6 @@ export default function ContactNews() {
 
   const [activeForm, setActiveForm] = useState<'contact' | 'consultation'>('contact');
 
-  // Contact form state
   const [contactData, setContactData] = useState({
     name: '',
     email: '',
@@ -52,7 +59,6 @@ export default function ContactNews() {
     message: ''
   });
 
-  // Consultation form state
   const [consultationData, setConsultationData] = useState({
     fullName: '',
     email: '',
@@ -71,9 +77,8 @@ export default function ContactNews() {
       return;
     }
 
-    // Actually save the contact message to localStorage
     const messages = JSON.parse(localStorage.getItem('exsify_messages') || '[]');
-    const newMessage = {
+    messages.push({
       id: `msg-${Date.now()}`,
       name: contactData.name,
       email: contactData.email,
@@ -81,8 +86,7 @@ export default function ContactNews() {
       message: contactData.message,
       status: 'new',
       createdAt: new Date().toISOString(),
-    };
-    messages.push(newMessage);
+    });
     localStorage.setItem('exsify_messages', JSON.stringify(messages));
 
     showToast('Thank you for your message! We will get back to you soon.', 'success');
@@ -96,15 +100,13 @@ export default function ContactNews() {
       return;
     }
 
-    // Save to localStorage as a consultation
     const consultations = JSON.parse(localStorage.getItem('exsify_consultations') || '[]');
-    const newConsultation = {
+    consultations.push({
       id: `consult-${Date.now()}`,
       ...consultationData,
       status: 'new',
       submittedAt: new Date().toISOString()
-    };
-    consultations.push(newConsultation);
+    });
     localStorage.setItem('exsify_consultations', JSON.stringify(consultations));
 
     showToast('Consultation request submitted! Our team will contact you within 24 hours.', 'success');
@@ -136,25 +138,25 @@ export default function ContactNews() {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-[#1E293B] mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1E293B] mb-6 tracking-tight text-start">
               Get in{' '}
               <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-primary-dark))] bg-clip-text text-transparent">
                 Touch
               </span>
             </h1>
-            <p className="text-gray-500 text-lg mb-8">
-              Have a question or want to learn more about our solutions? 
+            <p className="text-gray-600 text-base sm:text-lg mb-8 max-w-lg text-start">
+              Have a question or want to learn more about our solutions?
               We'd love to hear from you.
             </p>
 
-            <div className="space-y-6">
+            <div className="space-y-5">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-[hsl(var(--exsify-primary))]/10 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Mail className="w-6 h-6 text-[hsl(var(--exsify-primary))]" />
                 </div>
                 <div>
                   <h3 className="text-[#1E293B] font-bold mb-1">Email</h3>
-                  <a href="mailto:info@exsify.com" className="text-gray-500 hover:text-[hsl(var(--exsify-primary))] transition-colors">
+                  <a href="mailto:info@exsify.com" className="text-gray-600 hover:text-[hsl(var(--exsify-primary))] transition-colors">
                     info@exsify.com
                   </a>
                 </div>
@@ -166,10 +168,10 @@ export default function ContactNews() {
                 </div>
                 <div>
                   <h3 className="text-[#1E293B] font-bold mb-1">Phone / WhatsApp</h3>
-                  <a href="tel:+966501234567" className="text-gray-500 hover:text-[hsl(var(--exsify-primary))] transition-colors block">
+                  <a href="tel:+966501234567" className="text-gray-600 hover:text-[hsl(var(--exsify-primary))] transition-colors block">
                     +966 50 123 4567 (KSA)
                   </a>
-                  <a href="tel:+254712345678" className="text-gray-500 hover:text-[hsl(var(--exsify-primary))] transition-colors block">
+                  <a href="tel:+254712345678" className="text-gray-600 hover:text-[hsl(var(--exsify-primary))] transition-colors block">
                     +254 712 345 678 (Kenya)
                   </a>
                 </div>
@@ -181,7 +183,7 @@ export default function ContactNews() {
                 </div>
                 <div>
                   <h3 className="text-[#1E293B] font-bold mb-1">Address</h3>
-                  <p className="text-gray-500">
+                  <p className="text-gray-600">
                     123 Business District<br />
                     Riyadh, Saudi Arabia
                   </p>
@@ -189,18 +191,37 @@ export default function ContactNews() {
               </div>
             </div>
 
+            {/* Social links */}
+            <div className="mt-8">
+              <h3 className="text-[#1E293B] font-bold mb-3">Connect with us</h3>
+              <div className="flex items-center gap-3">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className={`w-10 h-10 ${social.color} rounded-full flex items-center justify-center text-white shadow-md hover:scale-110 transition-transform`}
+                  >
+                    <social.icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
+            </div>
+
             {/* Quick stats */}
-            <div className="mt-10 grid grid-cols-3 gap-4">
-              <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
-                <p className="text-2xl font-bold text-[hsl(var(--exsify-primary))]">24h</p>
+            <div className="mt-8 grid grid-cols-3 gap-4">
+              <div className="bg-white rounded-xl border border-gray-200 p-4 text-center shadow-sm">
+                <p className="text-2xl font-black text-[hsl(var(--exsify-primary))]">24h</p>
                 <p className="text-gray-500 text-xs">Response Time</p>
               </div>
-              <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
-                <p className="text-2xl font-bold text-[hsl(var(--exsify-primary))]">14+</p>
+              <div className="bg-white rounded-xl border border-gray-200 p-4 text-center shadow-sm">
+                <p className="text-2xl font-black text-[hsl(var(--exsify-primary))]">14+</p>
                 <p className="text-gray-500 text-xs">Countries</p>
               </div>
-              <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
-                <p className="text-2xl font-bold text-[hsl(var(--exsify-primary))]">8</p>
+              <div className="bg-white rounded-xl border border-gray-200 p-4 text-center shadow-sm">
+                <p className="text-2xl font-black text-[hsl(var(--exsify-primary))]">8</p>
                 <p className="text-gray-500 text-xs">Software Products</p>
               </div>
             </div>
@@ -213,29 +234,39 @@ export default function ContactNews() {
             className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden"
           >
             {/* Form Toggle Tabs */}
-            <div className="flex border-b border-gray-200">
-              <button
-                onClick={() => setActiveForm('contact')}
-                className={`flex-1 py-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
-                  activeForm === 'contact'
-                    ? 'text-[hsl(var(--exsify-primary))] border-b-2 border-[hsl(var(--exsify-primary))]'
-                    : 'text-gray-500 hover:text-[#1E293B]'
-                }`}
-              >
-                <MessageSquare className="w-4 h-4" />
-                Quick Message
-              </button>
-              <button
-                onClick={() => setActiveForm('consultation')}
-                className={`flex-1 py-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
-                  activeForm === 'consultation'
-                    ? 'text-[hsl(var(--exsify-primary))] border-b-2 border-[hsl(var(--exsify-primary))]'
-                    : 'text-gray-500 hover:text-[#1E293B]'
-                }`}
-              >
-                <Briefcase className="w-4 h-4" />
-                Strategy Consultation
-              </button>
+            <div className="bg-gray-50 border-b border-gray-200 p-4">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                Choose how you'd like to reach us
+              </p>
+              <div className="flex rounded-xl bg-white p-1 border border-gray-200">
+                <button
+                  onClick={() => setActiveForm('contact')}
+                  className={`flex-1 py-3 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
+                    activeForm === 'contact'
+                      ? 'bg-[hsl(var(--exsify-primary))] text-white shadow-sm'
+                      : 'text-gray-500 hover:text-[#1E293B]'
+                  }`}
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  Quick Message
+                </button>
+                <button
+                  onClick={() => setActiveForm('consultation')}
+                  className={`flex-1 py-3 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
+                    activeForm === 'consultation'
+                      ? 'bg-[hsl(var(--exsify-primary))] text-white shadow-sm'
+                      : 'text-gray-500 hover:text-[#1E293B]'
+                  }`}
+                >
+                  <Briefcase className="w-4 h-4" />
+                  Strategy Consultation
+                </button>
+              </div>
+              <p className="mt-3 text-xs text-gray-500">
+                {activeForm === 'contact'
+                  ? 'Best for general questions, support requests, or feedback.'
+                  : 'Best for project proposals, custom solutions, and scoping calls.'}
+              </p>
             </div>
 
             <div className="p-6 md:p-8">
@@ -427,7 +458,7 @@ export default function ContactNews() {
         >
           <div className="flex items-center gap-3 mb-8">
             <Newspaper className="w-8 h-8 text-[hsl(var(--exsify-primary))]" />
-            <h2 className="text-3xl font-bold text-[#1E293B]">Latest News</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1E293B]">Latest News</h2>
           </div>
 
           {featuredNews.length > 0 && (
@@ -464,7 +495,7 @@ export default function ContactNews() {
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {regularNews.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -472,7 +503,7 @@ export default function ContactNews() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 + index * 0.1 }}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[hsl(var(--exsify-primary))]/40 transition-all"
+                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[hsl(var(--exsify-primary))]/40 transition-all shadow-sm"
               >
                 {item.imageUrl && (
                   <div className="h-40 overflow-hidden">

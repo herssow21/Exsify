@@ -13,6 +13,7 @@ import NewsManager from '../components/admin/NewsManager';
 import UserManager from '../components/admin/UserManager';
 import ThemeManager from '../components/admin/ThemeManager';
 import MediaManager from '../components/admin/MediaManager';
+import ContentEditor from '../components/admin/ContentEditor';
 
 export default function AdminDashboard() {
   const { t } = useTranslation();
@@ -59,6 +60,8 @@ export default function AdminDashboard() {
         return <ThemeManager />;
       case 'media':
         return <MediaManager />;
+      case 'content':
+        return <ContentEditor />;
       default:
         return <AdminOverview />;
     }

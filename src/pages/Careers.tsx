@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { MapPin, Briefcase, Clock, ChevronDown, ChevronUp, Send } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, Briefcase, Clock, ChevronDown, ChevronUp, Send, X, FileUp, User, Mail, FileText } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 
 const jobOpenings = [
@@ -78,43 +78,65 @@ const jobOpenings = [
 ];
 
 const benefits = [
-  {
-    title: 'Competitive Salary',
-    description: 'We offer market-competitive compensation packages'
-  },
-  {
-    title: 'Remote Friendly',
-    description: 'Work from anywhere in the MENA region'
-  },
-  {
-    title: 'Health Insurance',
-    description: 'Comprehensive health coverage for you and your family'
-  },
-  {
-    title: 'Learning Budget',
-    description: 'Annual budget for courses, conferences, and books'
-  },
-  {
-    title: 'Flexible Hours',
-    description: 'Work when you are most productive'
-  },
-  {
-    title: 'Paid Time Off',
-    description: 'Generous vacation and parental leave policies'
-  }
+  { title: 'Competitive Salary', description: 'We offer market-competitive compensation packages', icon: Briefcase },
+  { title: 'Remote Friendly', description: 'Work from anywhere in the MENA region', icon: MapPin },
+  { title: 'Health Insurance', description: 'Comprehensive health coverage for you and your family', icon: User },
+  { title: 'Learning Budget', description: 'Annual budget for courses, conferences, and books', icon: FileText },
+  { title: 'Flexible Hours', description: 'Work when you are most productive', icon: Clock },
+  { title: 'Paid Time Off', description: 'Generous vacation and parental leave policies', icon: Send },
 ];
 
 export default function Careers() {
   const { t } = useTranslation();
   const { showToast } = useToast();
   const [expandedJob, setExpandedJob] = useState<number | null>(null);
+  const [applyJob, setApplyJob] = useState<{ id: number; title: string } | null>(null);
+  const [applicant, setApplicant] = useState({ name: '', email: '', message: '' });
+  const [cvFile, setCvFile] = useState<File | null>(null);
 
   const toggleJob = (jobId: number) => {
     setExpandedJob(expandedJob === jobId ? null : jobId);
   };
 
-  const handleApply = (jobTitle: string) => {
-    showToast(`Application submitted for ${jobTitle}`, 'success');
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    if (file && file.type !== 'application/pdf') {
+      showToast('Please upload a PDF file', 'error');
+      return;
+    }
+    setCvFile(file);
+  };
+
+  const submitApplication = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!applyJob) return;
+    if (!applicant.name || !applicant.email || !cvFile) {
+      showToast('Please provide your name, email, and a PDF CV', 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const applications = JSON.parse(localStorage.getItem('exsify_job_applications') || '[]');
+      applications.push({
+        id: `app-${Date.now()}`,
+        jobId: applyJob.id,
+        jobTitle: applyJob.title,
+        name: applicant.name,
+        email: applicant.email,
+        message: applicant.message,
+        cvName: cvFile.name,
+        cvData: reader.result,
+        appliedAt: new Date().toISOString(),
+      });
+      localStorage.setItem('exsify_job_applications', JSON.stringify(applications));
+
+      showToast(`Application submitted for ${applyJob.title}`, 'success');
+      setApplyJob(null);
+      setApplicant({ name: '', email: '', message: '' });
+      setCvFile(null);
+    };
+    reader.readAsDataURL(cvFile);
   };
 
   return (
@@ -124,16 +146,16 @@ export default function Careers() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+          className="mb-16 text-start"
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-[#1E293B] mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1E293B] mb-6 tracking-tight">
             Join Our{' '}
             <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-accent))] bg-clip-text text-transparent">
               Team
             </span>
           </h1>
-          <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-            Help us build the future of business software in Africa and the Middle East. 
+          <p className="text-gray-600 max-w-2xl text-base sm:text-lg">
+            Help us build the future of business software in Africa and the Middle East.
             We are always looking for talented individuals who share our passion.
           </p>
         </motion.div>
@@ -145,19 +167,22 @@ export default function Careers() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-2xl font-bold text-[#1E293B] text-center mb-8">Why Work at EXSIFY?</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-2xl font-bold text-[#1E293B] mb-8">Why Work at EXSIFY?</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={benefit.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-xl border border-gray-200 p-6"
+                transition={{ delay: index * 0.05 }}
+                className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md hover:border-[hsl(var(--exsify-primary))]/30 transition-all"
               >
+                <div className="w-10 h-10 bg-[hsl(var(--exsify-primary))]/10 rounded-lg flex items-center justify-center mb-4">
+                  <benefit.icon className="w-5 h-5 text-[hsl(var(--exsify-primary))]" />
+                </div>
                 <h3 className="text-[#1E293B] font-bold mb-2">{benefit.title}</h3>
-                <p className="text-gray-400 text-sm">{benefit.description}</p>
+                <p className="text-gray-500 text-sm">{benefit.description}</p>
               </motion.div>
             ))}
           </div>
@@ -169,7 +194,7 @@ export default function Careers() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl font-bold text-[#1E293B] text-center mb-8">Open Positions</h2>
+          <h2 className="text-2xl font-bold text-[#1E293B] mb-8">Open Positions</h2>
           <div className="space-y-4">
             {jobOpenings.map((job) => (
               <motion.div
@@ -177,61 +202,63 @@ export default function Careers() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden"
+                className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
               >
                 <button
                   onClick={() => toggleJob(job.id)}
-                  className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors"
+                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex-1">
                     <h3 className="text-[#1E293B] font-bold text-lg mb-2">{job.title}</h3>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
-                        <Briefcase className="w-4 h-4" />
+                        <Briefcase className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
                         {job.department}
                       </span>
                       <span className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
+                        <MapPin className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
                         {job.location}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
+                        <Clock className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
                         {job.type}
                       </span>
                     </div>
                   </div>
                   {expandedJob === job.id ? (
-                    <ChevronUp className="w-6 h-6 text-gray-400" />
+                    <ChevronUp className="w-6 h-6 text-gray-400 flex-shrink-0" />
                   ) : (
-                    <ChevronDown className="w-6 h-6 text-gray-400" />
+                    <ChevronDown className="w-6 h-6 text-gray-400 flex-shrink-0" />
                   )}
                 </button>
 
-                {expandedJob === job.id && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="px-6 pb-6 border-t border-gray-200"
-                  >
-                    <div className="pt-4">
-                      <p className="text-gray-500 mb-4">{job.description}</p>
-                      <h4 className="text-white font-medium mb-2">Requirements:</h4>
-                      <ul className="list-disc list-inside text-gray-500 mb-6 space-y-1">
-                        {job.requirements.map((req, index) => (
-                          <li key={index}>{req}</li>
-                        ))}
-                      </ul>
-                      <button
-                        onClick={() => handleApply(job.title)}
-                        className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--exsify-primary))] text-white rounded-lg hover:bg-[hsl(var(--exsify-primary))]/80 transition-colors"
-                      >
-                        <Send className="w-4 h-4" />
-                        Apply Now
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
+                <AnimatePresence>
+                  {expandedJob === job.id && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="px-5 sm:px-6 pb-6 border-t border-gray-100"
+                    >
+                      <div className="pt-4">
+                        <p className="text-gray-600 mb-4">{job.description}</p>
+                        <h4 className="text-[#1E293B] font-bold mb-2">Requirements:</h4>
+                        <ul className="list-disc list-inside text-gray-600 mb-6 space-y-1">
+                          {job.requirements.map((req, index) => (
+                            <li key={index}>{req}</li>
+                          ))}
+                        </ul>
+                        <button
+                          onClick={() => setApplyJob({ id: job.id, title: job.title })}
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-[hsl(var(--exsify-primary))] text-white rounded-lg font-semibold hover:bg-[hsl(var(--exsify-primary-dark))] transition-colors"
+                        >
+                          <Send className="w-4 h-4" />
+                          Apply Now
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             ))}
           </div>
@@ -242,17 +269,118 @@ export default function Careers() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-12 text-center"
+          className="mt-12 p-6 bg-white rounded-xl border border-gray-200 text-center"
         >
-          <p className="text-gray-500 mb-4">Don't see a position that fits your skills?</p>
-          <button
-            onClick={() => showToast('Thank you for your interest! Please send your CV to careers@exsify.com', 'info')}
-            className="text-[hsl(var(--exsify-primary))] hover:underline"
+          <p className="text-gray-600 mb-2">Don't see a position that fits your skills?</p>
+          <a
+            href="mailto:careers@exsify.com"
+            className="text-[hsl(var(--exsify-primary))] hover:underline font-medium"
           >
             Send us your resume anyway
-          </button>
+          </a>
         </motion.div>
       </div>
+
+      {/* Apply Modal */}
+      <AnimatePresence>
+        {applyJob && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            onClick={() => setApplyJob(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            >
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-bold text-[#1E293B]">Apply for {applyJob.title}</h3>
+                  <p className="text-gray-500 text-sm">Upload your CV in PDF format</p>
+                </div>
+                <button
+                  onClick={() => setApplyJob(null)}
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={submitApplication} className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      type="text"
+                      required
+                      value={applicant.name}
+                      onChange={(e) => setApplicant({ ...applicant, name: e.target.value })}
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1E293B] focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      type="email"
+                      required
+                      value={applicant.email}
+                      onChange={(e) => setApplicant({ ...applicant, email: e.target.value })}
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1E293B] focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
+                      placeholder="john@email.com"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">CV / Resume (PDF) *</label>
+                  <label className="flex flex-col items-center justify-center gap-2 w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[hsl(var(--exsify-primary))] hover:bg-[hsl(var(--exsify-primary))]/5 transition-colors">
+                    <FileUp className="w-8 h-8 text-[hsl(var(--exsify-primary))]" />
+                    <span className="text-sm text-gray-600">
+                      {cvFile ? cvFile.name : 'Click to upload PDF'}
+                    </span>
+                    <input
+                      type="file"
+                      accept=".pdf,application/pdf"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Cover Message</label>
+                  <textarea
+                    value={applicant.message}
+                    onChange={(e) => setApplicant({ ...applicant, message: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1E293B] focus:border-[hsl(var(--exsify-primary))] focus:outline-none resize-none"
+                    placeholder="Tell us why you're a great fit..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[hsl(var(--exsify-primary))] text-white rounded-lg font-semibold hover:bg-[hsl(var(--exsify-primary-dark))] transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                  Submit Application
+                </button>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

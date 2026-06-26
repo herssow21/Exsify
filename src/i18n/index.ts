@@ -24,4 +24,21 @@ i18n
     }
   });
 
+// Apply custom text overrides saved from the Content Editor
+function applyTranslationOverrides() {
+  try {
+    const raw = localStorage.getItem("exsify_translations_override");
+    if (!raw) return;
+    const overrides = JSON.parse(raw);
+    for (const lng of ["en", "ar"]) {
+      if (overrides[lng]) {
+        i18n.addResourceBundle(lng, "translation", overrides[lng], true, true);
+      }
+    }
+  } catch {
+    // ignore invalid override data
+  }
+}
+applyTranslationOverrides();
+
 export default i18n;

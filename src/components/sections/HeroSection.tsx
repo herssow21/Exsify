@@ -3,18 +3,13 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ArrowRight, Star, Sparkles, Briefcase } from 'lucide-react';
+import { partnerCountries } from '../../utils/countryFlags';
 
 export default function HeroSection() {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
 
-  const countries = [
-    { code: 'KE', name: 'Kenya' },
-    { code: 'SA', name: 'Saudi Arabia' },
-    { code: 'AE', name: 'UAE' },
-    { code: 'EG', name: 'Egypt' },
-    { code: 'NG', name: 'Nigeria' },
-  ];
+  const heroCountries = partnerCountries;
 
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-to-br from-[#F8FAFC] via-white to-[#EDF5F1]">
@@ -33,7 +28,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center lg:text-left"
+            className="text-start lg:text-start"
           >
             {/* Badge */}
             <motion.div
@@ -53,7 +48,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#1E293B] mb-6 leading-[1.1] sm:leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#1E293B] mb-6 leading-[1.1] sm:leading-tight tracking-tight"
             >
               {t('hero.title') || 'Enterprise Software.'}<br />
               <span className="text-[#1E293B]">African Innovation.</span><br />
@@ -67,31 +62,32 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-gray-600 text-base sm:text-lg mb-8 max-w-xl mx-auto lg:mx-0"
+              className="text-gray-600 text-base sm:text-lg mb-8 max-w-xl mx-0 lg:mx-0"
             >
               Trusted by businesses across Africa and the Middle East
             </motion.p>
 
-            {/* Country Pills */}
+            {/* Country flags */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45 }}
-              className="flex flex-col items-center gap-3 mb-8 justify-center lg:items-start"
+              className="mb-8"
             >
-              <div className="flex items-center gap-2 flex-wrap justify-center">
-                {countries.map((country) => (
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                {heroCountries.map((country) => (
                   <span
-                    key={country.code}
-                    className="inline-flex items-center px-2.5 py-1 bg-gray-100 border border-gray-200 rounded text-xs font-semibold text-gray-700"
+                    key={country.name}
+                    title={country.name}
+                    className="inline-flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-full text-xl shadow-sm flex-shrink-0"
                   >
-                    {country.code}
+                    {country.flag}
                   </span>
                 ))}
               </div>
-              <span className="text-gray-500 text-sm text-center lg:text-left">
-                Kenya, Saudi Arabia, UAE, Egypt, Nigeria & 12+ Nations
-              </span>
+              <p className="text-gray-500 text-sm mt-2 text-start lg:text-start">
+                Proudly serving {heroCountries.length}+ countries across Africa & the Middle East
+              </p>
             </motion.div>
 
             {/* CTA Buttons */}
@@ -99,7 +95,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              className="flex flex-col sm:flex-row gap-4 justify-start lg:justify-start"
             >
               <Link
                 to="/services"
@@ -122,7 +118,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex items-center gap-3 mt-8 justify-center lg:justify-start"
+              className="flex items-center gap-3 mt-8 justify-start lg:justify-start"
             >
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (

@@ -33,11 +33,23 @@ export default function UserManager() {
   );
 
   const handleRoleSave = () => {
-    if (editingUser) {
-      update(editingUser.id, { role: newRole });
-      showToast(`Role updated to ${newRole}`, 'success');
-      setEditingUser(null);
+    if (!editingUser) return;
+
+    const otherAdmin = users.find(u => u.role === 'admin' && u.id !== editingUser.id);
+
+    if (newRole === 'admin' && otherAdmin) {
+      showToast('Only one system admin is allowed. Demote the existing admin first.', 'error');
+      return;
     }
+
+    if (editingUser.role === 'admin' && newRole === 'customer' && !otherAdmin) {
+      showToast('You must keep at least one admin account.', 'error');
+      return;
+    }
+
+    update(editingUser.id, { role: newRole });
+    showToast(`Role updated to ${newRole}`, 'success');
+    setEditingUser(null);
   };
 
   const handleDelete = () => {

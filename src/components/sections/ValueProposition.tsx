@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Globe, WifiOff, HeadphonesIcon, Shield, Zap, Clock } from 'lucide-react';
+import { partnerCountries } from '../../utils/countryFlags';
 
 const features = [
   {
@@ -79,8 +80,8 @@ export default function ValueProposition() {
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
                 
                 {/* Icon */}
-                <div className={`relative w-14 h-14 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <feature.icon className="w-7 h-7 text-white" />
+                <div className={`relative w-14 h-14 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-translate-y-1 group-hover:rotate-3 transition-all duration-300 shadow-md group-hover:shadow-lg`}>
+                  <feature.icon className="w-7 h-7 text-white group-hover:animate-pulse" />
                 </div>
 
                 {/* Content */}
@@ -95,32 +96,48 @@ export default function ValueProposition() {
           ))}
         </div>
 
-        {/* Bottom CTA */}
+        {/* Country marquee */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6 }}
-          className="mt-16 text-center"
+          className="mt-16"
         >
-          <div className="inline-flex items-center gap-4 px-8 py-4 bg-[hsl(var(--exsify-primary))]/5 border border-gray-200 rounded-2xl">
-            <div className="flex -space-x-3">
-              {['🇸🇦', '🇦🇪', '🇪🇬', '🇳🇬', '🇰🇪'].map((flag, i) => (
+          <div className="text-center mb-6">
+            <p className="text-[#1E293B] font-bold text-lg">Trusted across {partnerCountries.length}+ countries</p>
+            <p className="text-gray-500 text-sm">Join businesses scaling across Africa & the Middle East</p>
+          </div>
+
+          <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white py-4">
+            <div className="marquee-track flex items-center gap-6">
+              {[...partnerCountries, ...partnerCountries].map((country, i) => (
                 <div
-                  key={i}
-                  className="w-10 h-10 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center text-lg"
+                  key={`${country.name}-${i}`}
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-100 whitespace-nowrap"
                 >
-                  {flag}
+                  <span className="text-xl">{country.flag}</span>
+                  <span className="text-sm font-medium text-[#1E293B]">{country.name}</span>
                 </div>
               ))}
-            </div>
-            <div className="text-left">
-              <p className="text-[#1E293B] font-medium">Trusted across 14+ countries</p>
-              <p className="text-gray-500 text-sm">Join 50,000+ active users</p>
             </div>
           </div>
         </motion.div>
       </div>
+
+      <style>{`
+        .marquee-track {
+          animation: marquee-scroll 30s linear infinite;
+          width: max-content;
+        }
+        .marquee-track:hover {
+          animation-play-state: paused;
+        }
+        @keyframes marquee-scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
     </section>
   );
 }

@@ -12,6 +12,7 @@ import {
   X,
   Palette,
   FolderOpen,
+  FileText,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -32,6 +33,7 @@ export default function AdminSidebar({ activeTab, onTabChange, mobileOpen, onMob
     { id: 'news', label: t('admin.news'), icon: Newspaper },
     { id: 'users', label: t('admin.users'), icon: Users },
     { id: 'media', label: 'Media', icon: FolderOpen },
+    { id: 'content', label: 'Content', icon: FileText },
     { id: 'theme', label: 'Theme', icon: Palette },
   ];
 

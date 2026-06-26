@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import type { App } from '../types';
 import { useApps, useReviews } from '../hooks/useDatabase';
+import { addDownload } from '../utils/dbOperations';
 import { useSettings } from '../context/SettingsContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -28,7 +29,7 @@ export default function AppDetail() {
   const { apps } = useApps();
   const { reviews } = useReviews();
   const { currency } = useSettings();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { showToast } = useToast();
   const isRTL = i18n.language === 'ar';
   const [selectedImage, setSelectedImage] = useState(0);
@@ -64,12 +65,17 @@ export default function AppDetail() {
     .slice(0, 3);
 
   const handleDownload = () => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !user) {
       showToast('Please sign in to download', 'error');
       navigate('/auth?mode=login');
       return;
     }
-    showToast('Download started!', 'success');
+    try {
+      addDownload(user.id, app.id);
+      showToast('Download started! Check My Library.', 'success');
+    } catch {
+      showToast('Download failed. Please try again.', 'error');
+    }
   };
 
   const handleShare = () => {

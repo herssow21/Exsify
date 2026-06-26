@@ -8,6 +8,10 @@ const currencies: { code: CurrencyCode; symbol: string; name: string }[] = [
   { code: 'EUR', symbol: '€', name: 'Euro' },
   { code: 'SAR', symbol: 'ر.س', name: 'Saudi Riyal' },
   { code: 'KES', symbol: 'KSh', name: 'Kenyan Shilling' },
+  { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham' },
+  { code: 'EGP', symbol: 'ج.م', name: 'Egyptian Pound' },
+  { code: 'NGN', symbol: '₦', name: 'Nigerian Naira' },
+  { code: 'ZAR', symbol: 'R', name: 'South African Rand' },
 ];
 
 export default function CurrencySwitcher() {

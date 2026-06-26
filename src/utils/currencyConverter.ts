@@ -10,6 +10,10 @@ export const exchangeRates: Record<CurrencyCode, number> = {
   EUR: 0.92,
   SAR: 3.75,
   KES: 145.00,
+  AED: 3.67,
+  EGP: 49.50,
+  NGN: 1550.00,
+  ZAR: 18.50,
 };
 
 // Currency symbols
@@ -18,6 +22,10 @@ export const currencySymbols: Record<CurrencyCode, string> = {
   EUR: '€',
   SAR: '﷼',
   KES: 'KSh',
+  AED: 'د.إ',
+  EGP: 'ج.م',
+  NGN: '₦',
+  ZAR: 'R',
 };
 
 /**
@@ -39,14 +47,9 @@ export function convertPrice(priceInUSD: number, targetCurrency: CurrencyCode): 
 export function formatPrice(priceInUSD: number, currency: CurrencyCode): string {
   const converted = convertPrice(priceInUSD, currency);
   
-  const formatters: Record<CurrencyCode, Intl.NumberFormat> = {
-    USD: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }),
-    EUR: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }),
-    SAR: new Intl.NumberFormat('ar-SA', { style: 'currency', currency: 'SAR' }),
-    KES: new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES' }),
-  };
-  
-  return formatters[currency].format(converted);
+  const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency });
+
+  return formatter.format(converted);
 }
 
 /**

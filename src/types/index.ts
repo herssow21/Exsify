@@ -5,7 +5,7 @@
  */
 
 export type UserRole = 'admin' | 'customer';
-export type CurrencyCode = 'USD' | 'EUR' | 'SAR' | 'KES';
+export type CurrencyCode = 'USD' | 'EUR' | 'SAR' | 'KES' | 'AED' | 'EGP' | 'NGN' | 'ZAR';
 export type LanguageCode = 'en' | 'ar';
 export type AppStatus = 'active' | 'inactive';
 export type ConsultationStatus = 'new' | 'contacted' | 'closed';
@@ -216,6 +216,10 @@ export const exchangeRates: Record<CurrencyCode, number> = {
   EUR: 0.92,
   SAR: 3.75,
   KES: 145.00,
+  AED: 3.67,
+  EGP: 49.50,
+  NGN: 1550.00,
+  ZAR: 18.50,
 };
 
 // Currency symbols
@@ -224,6 +228,10 @@ export const currencySymbols: Record<CurrencyCode, string> = {
   EUR: '€',
   SAR: '﷼',
   KES: 'KSh',
+  AED: 'د.إ',
+  EGP: 'ج.م',
+  NGN: '₦',
+  ZAR: 'R',
 };
 
 // Countries list
