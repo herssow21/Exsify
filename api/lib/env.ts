@@ -8,7 +8,7 @@ config({ path: resolve(__dirname, ".env") });
 
 function getEnv(name: string): string {
   const value = process.env[name];
-  if (!value) {
+  if (!value && process.env.NODE_ENV === "production") {
     console.warn(`[env] Warning: ${name} is not set`);
   }
   return value ?? "";

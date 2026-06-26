@@ -53,11 +53,11 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1E293B] mb-6 leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#1E293B] mb-6 leading-[1.1] sm:leading-tight"
             >
               {t('hero.title') || 'Enterprise Software.'}<br />
               <span className="text-[#1E293B]">African Innovation.</span><br />
-              <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-primary-dark))] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[hsl(var(--exsify-accent))] to-[hsl(var(--exsify-accent-dark))] bg-clip-text text-transparent">
                 Global Scale.
               </span>
             </motion.h1>
@@ -67,7 +67,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-gray-600 text-lg mb-8 max-w-xl mx-auto lg:mx-0"
+              className="text-gray-600 text-base sm:text-lg mb-8 max-w-xl mx-auto lg:mx-0"
             >
               Trusted by businesses across Africa and the Middle East
             </motion.p>
@@ -77,9 +77,9 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45 }}
-              className="flex items-center gap-3 mb-8 flex-wrap justify-center lg:justify-start"
+              className="flex flex-col items-center gap-3 mb-8 justify-center lg:items-start"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap justify-center">
                 {countries.map((country) => (
                   <span
                     key={country.code}
@@ -89,7 +89,7 @@ export default function HeroSection() {
                   </span>
                 ))}
               </div>
-              <span className="text-gray-500 text-sm">
+              <span className="text-gray-500 text-sm text-center lg:text-left">
                 Kenya, Saudi Arabia, UAE, Egypt, Nigeria & 12+ Nations
               </span>
             </motion.div>
@@ -103,14 +103,14 @@ export default function HeroSection() {
             >
               <Link
                 to="/services"
-                className="group flex items-center justify-center gap-2 px-8 py-4 bg-[hsl(var(--exsify-primary))] text-white rounded-xl font-semibold hover:bg-[hsl(var(--exsify-primary-dark))] transition-all hover:shadow-lg hover:shadow-[hsl(var(--exsify-primary))]/20"
+                className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-[hsl(var(--exsify-primary))] text-white rounded-xl font-semibold hover:bg-[hsl(var(--exsify-primary-dark))] transition-all hover:shadow-lg hover:shadow-[hsl(var(--exsify-primary))]/20"
               >
                 Explore Solutions
                 <ArrowRight className={`w-5 h-5 transition-transform group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`} />
               </Link>
               <Link
                 to="/contact"
-                className="group flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-[hsl(var(--exsify-primary))] text-[hsl(var(--exsify-primary))] rounded-xl font-semibold hover:bg-[hsl(var(--exsify-primary))] hover:text-white transition-all"
+                className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white border-2 border-[hsl(var(--exsify-primary))] text-[hsl(var(--exsify-primary))] rounded-xl font-semibold hover:bg-[hsl(var(--exsify-primary))] hover:text-white transition-all"
               >
                 <Briefcase className="w-5 h-5" />
                 Request a Service

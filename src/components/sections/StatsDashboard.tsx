@@ -18,7 +18,7 @@ export default function StatsDashboard() {
       color: 'bg-blue-500'
     },
     {
-      value: 8,
+      value: stats.totalApps || 8,
       suffix: '',
       label: t('hero.stats.apps'),
       icon: TrendingUp,
@@ -53,7 +53,7 @@ export default function StatsDashboard() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
             Trusted by Businesses Across{' '}
             <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-primary-dark))] bg-clip-text text-transparent">
               Africa & Middle East

@@ -17,8 +17,8 @@ export default function SystemTicker() {
   const { stats } = useStats();
 
   const tickerItems = [
-    { icon: Download, label: t('hero.stats.downloads'), value: formatNumber(stats.totalDownloads || 15420) },
-    { icon: Star, label: t('hero.stats.apps'), value: '8' },
+    { icon: Download, label: t('hero.stats.downloads'), value: formatNumber(stats.totalDownloads || 0) },
+    { icon: Star, label: t('hero.stats.apps'), value: stats.totalApps || 8 },
     { icon: Users, label: t('hero.stats.countries'), value: '14+' },
     { icon: TrendingUp, label: t('hero.stats.satisfaction'), value: '96%' },
   ];
@@ -44,14 +44,14 @@ export default function SystemTicker() {
       </div>
 
       {/* Stats Bar */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-[hsl(var(--exsify-dark))] border-b border-white/10">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-center gap-8 py-2 px-4 flex-wrap">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 py-3 px-4">
             {tickerItems.map((item, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <item.icon className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
-                <span className="text-[hsl(var(--exsify-primary))] font-bold text-sm">{item.value}</span>
-                <span className="text-gray-500 text-xs">{item.label}</span>
+              <div key={index} className="flex items-center justify-center gap-2">
+                <item.icon className="w-4 h-4 text-[hsl(var(--exsify-accent))]" />
+                <span className="text-white font-bold text-sm">{item.value}</span>
+                <span className="text-gray-400 text-xs">{item.label}</span>
               </div>
             ))}
           </div>

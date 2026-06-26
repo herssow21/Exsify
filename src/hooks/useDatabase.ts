@@ -202,7 +202,10 @@ export function useStats() {
     totalRevenue: 0,
     pendingReviews: 0,
     newConsultations: 0,
-    growth: 0
+    growth: 0,
+    totalApps: 0,
+    countriesServed: 0,
+    customerSatisfaction: 0
   });
   const [loading, setLoading] = useState(true);
 
