@@ -14,6 +14,7 @@ import {
   FolderOpen,
 } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
+import { trpc } from "../../providers/trpc";
 
 interface MediaFile {
   id: number;
@@ -58,29 +59,18 @@ function getFileIcon(type: string) {
 export default function MediaManager() {
   const { showToast } = useToast();
   const [files, setFiles] = useState<MediaFile[]>([]);
-  const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  const fetchFiles = async () => {
-    try {
-      const res = await fetch("/api/trpc/upload.list");
-      const json = await res.json();
-      if (json.result?.data) {
-        setFiles(json.result.data);
-      }
-    } catch (err) {
-      console.error("Failed to fetch media:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data, isLoading, refetch } = trpc.upload.list.useQuery();
 
   useEffect(() => {
-    fetchFiles();
-  }, []);
+    if (data) {
+      setFiles(data as MediaFile[]);
+    }
+  }, [data]);
 
   const handleDelete = async (id: number) => {
     setDeletingId(id);
@@ -123,7 +113,7 @@ export default function MediaManager() {
       const data = await res.json();
       if (data.success) {
         showToast("File uploaded successfully", "success");
-        fetchFiles();
+        refetch();
       } else {
         showToast(data.error || "Upload failed", "error");
       }
@@ -214,7 +204,7 @@ export default function MediaManager() {
       </motion.div>
 
       {/* File Grid */}
-      {loading ? (
+      {isLoading ? (
         <div className="flex items-center justify-center py-16">
           <div className="w-8 h-8 border-2 border-[hsl(var(--exsify-primary))] border-t-transparent rounded-full animate-spin" />
         </div>

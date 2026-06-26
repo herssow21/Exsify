@@ -28,8 +28,6 @@ function getMimeCategory(mime: string): "image" | "document" | "archive" | "othe
 
 const app = new Hono<{ Bindings: HttpBindings }>();
 
-app.use(bodyLimit({ maxSize: 50 * 1024 * 1024 }));
-
 // Custom file serving for uploads (works on all platforms, dev + production)
 app.get("/uploads/*", async (c) => {
   try {
@@ -57,8 +55,15 @@ app.get("/uploads/*", async (c) => {
 });
 
 // File upload endpoint
-app.post("/api/upload", async (c) => {
+app.post("/api/upload", bodyLimit({ maxSize: 50 * 1024 * 1024 }), async (c) => {
   try {
+    if (!env.databaseUrl) {
+      return c.json(
+        { error: "DATABASE_URL is not set. Uploads require a database connection." },
+        500,
+      );
+    }
+
     const formData = await c.req.formData();
     const file = formData.get("file") as File | null;
     const uploadedBy = (formData.get("uploadedBy") as string) || "admin";
@@ -104,7 +109,8 @@ app.post("/api/upload", async (c) => {
     });
   } catch (err) {
     console.error("Upload error:", err);
-    return c.json({ error: "Upload failed" }, 500);
+    const message = err instanceof Error ? err.message : "Upload failed";
+    return c.json({ error: message }, 500);
   }
 });
 

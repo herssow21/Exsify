@@ -52,7 +52,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
-              <img src="/exsify_logo.png" alt="EXSIFY" className="w-10 h-10 object-contain" />
+              <img src="/exfy_Logo.png" alt="EXSIFY" className="w-10 h-10 object-contain" />
             </div>
             <span className="text-[#fff] font-bold text-xl tracking-tight">
               {t('app.name')} 

@@ -7,7 +7,7 @@ const __dirname = import.meta.dirname
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    devServer({ entry: "api/boot.ts", exclude: [/^\/(?!api\/).*$/] }),
+    devServer({ entry: "api/boot.ts", exclude: [/^\/(?!(api|uploads)(\/|$)).*$/] }),
     react()],
   resolve: {
     alias: {
