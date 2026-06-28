@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, User, MapPin, DollarSign, ArrowRight } from 'lucide-react';
+import { kenyanCounties } from '../utils/kenyanMarket';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
 import { useToast } from '../context/ToastContext';
@@ -59,6 +60,7 @@ export default function Auth() {
     password: '',
     confirmPassword: '',
     country: countries[0],
+    region: '',
     currency: 'USD'
   });
 
@@ -141,6 +143,7 @@ export default function Auth() {
       email: signupData.email,
       password: signupData.password,
       country: signupData.country,
+      region: signupData.region || undefined,
       currency: signupData.currency
     });
 
@@ -454,6 +457,30 @@ export default function Auth() {
                       </select>
                     </div>
                   </div>
+
+                  {signupData.country === 'Kenya' && (
+                    <div className="col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        County / Region
+                      </label>
+                      <div className="relative">
+                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <select
+                          value={signupData.region}
+                          onChange={e => setSignupData(prev => ({ ...prev, region: e.target.value }))}
+                          className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1E293B] focus:border-[hsl(var(--exsify-primary))] focus:outline-none appearance-none"
+                          required
+                        >
+                          <option value="">Select county</option>
+                          {kenyanCounties.map(county => (
+                            <option key={county.code} value={county.name}>
+                              {county.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">

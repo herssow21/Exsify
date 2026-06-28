@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Mail, Phone, MapPin, Send, Calendar, ArrowRight, Newspaper,
@@ -10,6 +11,8 @@ import { useNews } from '../hooks/useDatabase';
 import { useToast } from '../context/ToastContext';
 import { useSettings } from '../context/SettingsContext';
 import { partnerCountries } from '../utils/countryFlags';
+import { convertPrice, getCurrencySymbol, formatNumber } from '../utils/currencyConverter';
+import type { CurrencyCode } from '../types';
 
 const serviceOptions = [
   { value: 'KaatibPOS', label: 'KaatibPOS - Retail POS', icon: Briefcase },
@@ -29,12 +32,16 @@ const countries = [
   'Jordan', 'Kuwait', 'Bahrain', 'Oman'
 ];
 
-const budgetOptions = [
-  { value: '<$5k', label: 'Under $5,000' },
-  { value: '$5k-$20k', label: '$5,000 - $20,000' },
-  { value: '$20k-$50k', label: '$20,000 - $50,000' },
-  { value: '$50k+', label: '$50,000+' },
-];
+function getBudgetOptions(currency: CurrencyCode) {
+  const symbol = getCurrencySymbol(currency);
+  const fmt = (n: number) => formatNumber(Math.round(convertPrice(n, currency)));
+  return [
+    { value: '<5k', label: `Under ${symbol}${fmt(5000)}` },
+    { value: '5k-20k', label: `${symbol}${fmt(5000)} - ${symbol}${fmt(20000)}` },
+    { value: '20k-50k', label: `${symbol}${fmt(20000)} - ${symbol}${fmt(50000)}` },
+    { value: '50k+', label: `${symbol}${fmt(50000)}+` },
+  ];
+}
 
 const socialLinks = [
   { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/966501234567', color: 'bg-green-500' },
@@ -50,8 +57,13 @@ export default function ContactNews() {
   const { showToast } = useToast();
   const { currency } = useSettings();
   const isRTL = i18n.language === 'ar';
+  const [searchParams] = useSearchParams();
 
-  const [activeForm, setActiveForm] = useState<'contact' | 'consultation'>('contact');
+  const [activeForm, setActiveForm] = useState<'contact' | 'consultation'>(
+    searchParams.get('form') === 'consultation' ? 'consultation' : 'contact'
+  );
+
+  const budgetOptions = useMemo(() => getBudgetOptions(currency as CurrencyCode), [currency]);
 
   const [contactData, setContactData] = useState({
     name: '',
@@ -66,10 +78,14 @@ export default function ContactNews() {
     phone: '',
     company: '',
     serviceInterest: 'KaatibPOS',
-    budget: '<$5k',
+    budget: budgetOptions[0].value,
     country: 'Saudi Arabia',
     projectDetails: ''
   });
+
+  useEffect(() => {
+    setConsultationData(prev => ({ ...prev, budget: budgetOptions[0].value }));
+  }, [budgetOptions]);
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();

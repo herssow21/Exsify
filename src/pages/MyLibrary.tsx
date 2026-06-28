@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Download, Star, ExternalLink, Package, Clock } from 'lucide-react';
+import { Download, Star, ExternalLink, Package, Clock, Heart } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useDownloads, useApps } from '../hooks/useDatabase';
 import { useSettings } from '../context/SettingsContext';
 import { convertPrice, formatPrice } from '../utils/currencyConverter';
+import { isFavorite } from '../utils/dbOperations';
 
 export default function MyLibrary() {
   const { t, i18n } = useTranslation();
@@ -89,6 +90,7 @@ export default function MyLibrary() {
               const description = isRTL ? app.description_ar : app.description_en;
               const convertedPrice = convertPrice(app.price_usd, currency);
               const downloadDate = userDownloads.find(d => d.appId === app.id)?.downloadedAt;
+              const liked = user ? isFavorite(user.id, app.id) : false;
 
               return (
                 <motion.div
@@ -105,9 +107,17 @@ export default function MyLibrary() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--exsify-dark))] via-transparent to-transparent" />
-                    <div className="absolute top-3 right-3 px-3 py-1 bg-green-500/20 text-green-400 text-xs font-medium rounded-full flex items-center gap-1">
-                      <Download className="w-3 h-3" />
-                      Downloaded
+                    <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
+                      <div className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-medium rounded-full flex items-center gap-1">
+                        <Download className="w-3 h-3" />
+                        Downloaded
+                      </div>
+                      {liked && (
+                        <div className="px-3 py-1 bg-red-500/20 text-red-400 text-xs font-medium rounded-full flex items-center gap-1">
+                          <Heart className="w-3 h-3 fill-current" />
+                          Loved
+                        </div>
+                      )}
                     </div>
                   </div>
 

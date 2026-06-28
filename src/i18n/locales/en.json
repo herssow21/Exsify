@@ -44,7 +44,7 @@
       },
       "newUser": {
         "title": "New User",
-        "subtitle": "Just joined from UAE"
+        "subtitle": "Just joined from {{country}}"
       }
     }
   },
@@ -80,6 +80,10 @@
     "countryNote": {
       "title": "Trusted across {{count}}+ countries",
       "subtitle": "Join businesses scaling across Africa & the Middle East"
+    },
+    "kenyanMarket": {
+      "title": "Our Active Kenyan Market",
+      "subtitle": "Clients across Kenya by county"
     }
   },
   "apps": {
@@ -99,6 +103,7 @@
     },
     "viewDetails": "View Details",
     "download": "Download",
+    "tryNow": "Try Now",
     "price": "Price",
     "rating": "Rating",
     "downloads": "Downloads",

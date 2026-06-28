@@ -179,6 +179,42 @@ export function addDownload(userId: string, appId: string): Download {
   return newDownload;
 }
 
+// ============ FAVORITE OPERATIONS ============
+
+function favoritesKey(userId: string): string {
+  return `exsify_favorites_${userId}`;
+}
+
+export function getFavorites(userId: string): string[] {
+  return getItem<string[]>(favoritesKey(userId), []);
+}
+
+export function isFavorite(userId: string, appId: string): boolean {
+  return getFavorites(userId).includes(appId);
+}
+
+export function addFavorite(userId: string, appId: string): void {
+  const favorites = getFavorites(userId);
+  if (!favorites.includes(appId)) {
+    favorites.push(appId);
+    setItem(favoritesKey(userId), favorites);
+  }
+}
+
+export function removeFavorite(userId: string, appId: string): void {
+  const favorites = getFavorites(userId).filter(id => id !== appId);
+  setItem(favoritesKey(userId), favorites);
+}
+
+export function toggleFavorite(userId: string, appId: string): boolean {
+  if (isFavorite(userId, appId)) {
+    removeFavorite(userId, appId);
+    return false;
+  }
+  addFavorite(userId, appId);
+  return true;
+}
+
 // ============ CONSULTATION OPERATIONS ============
 
 export function getConsultations(): Consultation[] {

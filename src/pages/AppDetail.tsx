@@ -11,11 +11,12 @@ import {
   Tag,
   ExternalLink,
   Share2,
-  Heart
+  Heart,
+  Play
 } from 'lucide-react';
 import type { App } from '../types';
 import { useApps, useReviews } from '../hooks/useDatabase';
-import { addDownload } from '../utils/dbOperations';
+import { addDownload, isFavorite, toggleFavorite, hasUserDownloaded } from '../utils/dbOperations';
 import { useSettings } from '../context/SettingsContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -33,9 +34,13 @@ export default function AppDetail() {
   const { showToast } = useToast();
   const isRTL = i18n.language === 'ar';
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
 
   const app = apps.find(a => a.slug === slug);
+
+  const isInLibrary = isAuthenticated && user ? hasUserDownloaded(user.id, app?.id || '') : false;
+  const [isLiked, setIsLiked] = useState(() =>
+    isAuthenticated && user && app ? isFavorite(user.id, app.id) : false
+  );
 
   if (!app) {
     return (
@@ -81,6 +86,18 @@ export default function AppDetail() {
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     showToast('Link copied to clipboard', 'success');
+  };
+
+  const handleLike = () => {
+    if (!isAuthenticated || !user) {
+      showToast('Please sign in to favorite apps', 'error');
+      navigate('/auth?mode=login');
+      return;
+    }
+    if (!app) return;
+    const next = toggleFavorite(user.id, app.id);
+    setIsLiked(next);
+    showToast(next ? 'Added to favorites' : 'Removed from favorites', 'success');
   };
 
   return (
@@ -158,7 +175,7 @@ export default function AppDetail() {
                 />
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setIsLiked(!isLiked)}
+                    onClick={handleLike}
                     className={`p-3 rounded-xl transition-colors ${
                       isLiked
                         ? 'bg-red-500/20 text-red-400'
@@ -222,7 +239,7 @@ export default function AppDetail() {
                 className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[hsl(var(--exsify-primary))] text-white rounded-xl font-semibold hover:bg-[hsl(var(--exsify-primary-dark))] transition-colors"
               >
                 <Download className="w-5 h-5" />
-                {t('apps.download')}
+                {isInLibrary ? t('apps.tryNow') : t('apps.download')}
               </button>
               {app.downloadUrl && (
                 <a
@@ -263,7 +280,16 @@ export default function AppDetail() {
         >
           <div>
             <h2 className="text-2xl font-bold text-[#1E293B] mb-4">About</h2>
-            <p className="text-gray-400 leading-relaxed">{description}</p>
+            <p className="text-gray-400 leading-relaxed mb-6">{description}</p>
+
+            {/* YouTube video placeholder */}
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center group hover:border-[hsl(var(--exsify-primary))]/40 transition-colors">
+              <div className="w-16 h-16 rounded-full bg-[hsl(var(--exsify-primary))]/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                <Play className="w-8 h-8 text-[hsl(var(--exsify-primary))] ml-1" />
+              </div>
+              <p className="text-gray-500 font-medium">YouTube video placeholder</p>
+              <p className="text-gray-400 text-sm">Paste embed URL here</p>
+            </div>
           </div>
           <div>
             <h2 className="text-2xl font-bold text-[#1E293B] mb-4">{t('apps.features')}</h2>

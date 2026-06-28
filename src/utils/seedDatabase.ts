@@ -356,6 +356,7 @@ export const seedUsers: User[] = [
     password: encodePassword('Admin123!'),
     role: 'admin',
     country: 'Saudi Arabia',
+    region: 'Riyadh',
     currency: 'SAR',
     createdAt: '2024-01-01T00:00:00Z'
   },
@@ -366,6 +367,7 @@ export const seedUsers: User[] = [
     password: encodePassword('Password123!'),
     role: 'customer',
     country: 'Egypt',
+    region: 'Cairo',
     currency: 'USD',
     createdAt: '2024-02-15T10:30:00Z'
   },
@@ -376,6 +378,7 @@ export const seedUsers: User[] = [
     password: encodePassword('Password123!'),
     role: 'customer',
     country: 'Saudi Arabia',
+    region: 'Jeddah',
     currency: 'SAR',
     createdAt: '2024-02-20T14:45:00Z'
   },
@@ -386,6 +389,7 @@ export const seedUsers: User[] = [
     password: encodePassword('Password123!'),
     role: 'customer',
     country: 'Kenya',
+    region: 'Nairobi',
     currency: 'KES',
     createdAt: '2024-03-01T09:15:00Z'
   },
@@ -396,6 +400,7 @@ export const seedUsers: User[] = [
     password: encodePassword('Password123!'),
     role: 'customer',
     country: 'Nigeria',
+    region: 'Lagos',
     currency: 'USD',
     createdAt: '2024-03-10T16:20:00Z'
   },
@@ -406,8 +411,42 @@ export const seedUsers: User[] = [
     password: encodePassword('Password123!'),
     role: 'customer',
     country: 'UAE',
+    region: 'Dubai',
     currency: 'USD',
     createdAt: '2024-03-15T11:00:00Z'
+  },
+  {
+    id: 'user-006',
+    fullName: 'Grace Odhiambo',
+    email: 'grace@example.com',
+    password: encodePassword('Password123!'),
+    role: 'customer',
+    country: 'Kenya',
+    region: 'Mombasa',
+    currency: 'KES',
+    createdAt: '2024-03-18T12:00:00Z'
+  },
+  {
+    id: 'user-007',
+    fullName: 'Peter Njoroge',
+    email: 'peter@example.com',
+    password: encodePassword('Password123!'),
+    role: 'customer',
+    country: 'Kenya',
+    region: 'Nakuru',
+    currency: 'KES',
+    createdAt: '2024-03-20T08:30:00Z'
+  },
+  {
+    id: 'user-008',
+    fullName: 'Wanjiku Mwangi',
+    email: 'wanjiku@example.com',
+    password: encodePassword('Password123!'),
+    role: 'customer',
+    country: 'Kenya',
+    region: 'Kiambu',
+    currency: 'KES',
+    createdAt: '2024-03-22T14:15:00Z'
   }
 ];
 
@@ -661,6 +700,42 @@ export function seedDatabase(): void {
   }
   if (!localStorage.getItem('exsify_region_stats')) {
     localStorage.setItem('exsify_region_stats', JSON.stringify(seedRegionStats));
+  }
+
+  // Migration: ensure legacy users have a region so county/region features work
+  try {
+    const usersRaw = localStorage.getItem('exsify_users');
+    if (usersRaw) {
+      const users = JSON.parse(usersRaw) as User[];
+      const defaultRegion: Record<string, string> = {
+        'Saudi Arabia': 'Riyadh',
+        'UAE': 'Dubai',
+        'Egypt': 'Cairo',
+        'Nigeria': 'Lagos',
+        'Kenya': 'Nairobi',
+        'South Africa': 'Johannesburg',
+        'Qatar': 'Doha',
+        'Morocco': 'Casablanca',
+        'Tunisia': 'Tunis',
+        'Algeria': 'Algiers',
+        'Jordan': 'Amman',
+        'Kuwait': 'Kuwait City',
+        'Bahrain': 'Manama',
+        'Oman': 'Muscat'
+      };
+      let changed = false;
+      for (const user of users) {
+        if (!user.region && defaultRegion[user.country]) {
+          user.region = defaultRegion[user.country];
+          changed = true;
+        }
+      }
+      if (changed) {
+        localStorage.setItem('exsify_users', JSON.stringify(users));
+      }
+    }
+  } catch {
+    // ignore migration errors
   }
 }
 

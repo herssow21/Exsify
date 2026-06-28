@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Globe, WifiOff, HeadphonesIcon, Shield, Zap, Clock } from 'lucide-react';
 import { partnerCountries } from '../../utils/countryFlags';
+import { getKenyanMarketStats } from '../../utils/kenyanMarket';
 
 const features = [
   {
@@ -45,6 +46,7 @@ const features = [
 
 export default function ValueProposition() {
   const { t } = useTranslation();
+  const kenyanStats = getKenyanMarketStats();
 
   return (
     <section className="py-20 relative overflow-hidden">
@@ -123,6 +125,39 @@ export default function ValueProposition() {
                 </div>
               ))}
             </div>
+          </div>
+        </motion.div>
+
+        {/* Kenyan market */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.7 }}
+          className="mt-16"
+        >
+          <h3 className="section-title-left text-xl font-bold text-[#1E293B] mb-2">
+            {t('features.kenyanMarket.title')}
+          </h3>
+          <p className="text-gray-500 text-sm mb-6">
+            {t('features.kenyanMarket.subtitle')}
+          </p>
+
+          <div className="flex flex-wrap gap-4">
+            {kenyanStats.map((county) => (
+              <div
+                key={county.code}
+                title={`${county.name} — ${county.clients} clients`}
+                className="relative w-16 h-16 rounded-full bg-white border border-gray-200 flex items-center justify-center hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-md transition-all"
+              >
+                <span className="text-xs font-bold text-[#1E293B]">{county.code}</span>
+                {county.clients > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[1.25rem] h-5 px-1 bg-[hsl(var(--exsify-accent))] text-[#1E293B] text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                    {county.clients}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </motion.div>
       </div>

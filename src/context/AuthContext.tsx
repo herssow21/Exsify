@@ -19,6 +19,7 @@ interface SignupData {
   email: string;
   password: string;
   country: string;
+  region?: string;
   currency: string;
 }
 
@@ -82,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password: encodePassword(userData.password),
         role: 'customer' as UserRole,
         country: userData.country,
+        region: userData.region,
         currency: userData.currency as CurrencyCode,
         createdAt: new Date().toISOString()
       };

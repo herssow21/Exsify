@@ -210,14 +210,6 @@ body {
   overflow: hidden;
 }
 
-.box-face::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(58,107,155,0.06), transparent 60%);
-  pointer-events: none;
-}
-
 .cube-face-content {
   position: relative;
   display: flex;
@@ -265,14 +257,16 @@ body {
 .box-bottom { transform: rotateX(-90deg) translateZ(120px); }
 
 /* Keep text readable on every face */
-.box-back .cube-face-content  { transform: rotateY(180deg); }
+.box-back .cube-face-content  { transform: scaleX(-1); }
 .box-top .cube-face-content   { transform: rotateZ(180deg); }
 
 @keyframes rotateBox {
   0%   { transform: rotateX(-12deg) rotateY(0deg); }
-  25%  { transform: rotateX(-12deg) rotateY(90deg); }
-  50%  { transform: rotateX(-12deg) rotateY(180deg); }
-  75%  { transform: rotateX(-12deg) rotateY(270deg); }
+  18%  { transform: rotateX(-12deg) rotateY(90deg); }
+  36%  { transform: rotateX(-12deg) rotateY(180deg); }
+  52%  { transform: rotateX(80deg) rotateY(270deg); }   /* show top face */
+  68%  { transform: rotateX(-12deg) rotateY(270deg); }
+  84%  { transform: rotateX(-80deg) rotateY(360deg); }  /* show bottom face */
   100% { transform: rotateX(-12deg) rotateY(360deg); }
 }
 

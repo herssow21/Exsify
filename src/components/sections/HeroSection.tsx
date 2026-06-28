@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -12,6 +12,19 @@ export default function HeroSection() {
   const isRTL = i18n.language === 'ar';
 
   const heroCountries = partnerCountries;
+
+  const [newUserCountry, setNewUserCountry] = useState(() =>
+    partnerCountries[Math.floor(Math.random() * partnerCountries.length)]
+  );
+
+  useEffect(() => {
+    const pickRandomCountry = () =>
+      setNewUserCountry(partnerCountries[Math.floor(Math.random() * partnerCountries.length)]);
+
+    pickRandomCountry();
+    const interval = setInterval(pickRandomCountry, 20 * 60 * 1000); // every 20 minutes
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-to-br from-[#F8FAFC] via-white to-[#EDF5F1]">
@@ -107,7 +120,7 @@ export default function HeroSection() {
                 <ArrowRight className={`w-5 h-5 transition-transform group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`} />
               </Link>
               <Link
-                to="/contact"
+                to="/contact?form=consultation"
                 className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white border-2 border-[hsl(var(--exsify-primary))] text-[hsl(var(--exsify-primary))] rounded-xl font-semibold hover:bg-[hsl(var(--exsify-primary))] hover:text-white transition-all"
               >
                 <Briefcase className="w-5 h-5" />
@@ -180,7 +193,7 @@ export default function HeroSection() {
                 </div>
                 <div>
                   <p className="text-[#1E293B] font-bold text-sm">{t('hero.badges.newUser.title')}</p>
-                  <p className="text-gray-500 text-xs">{t('hero.badges.newUser.subtitle')}</p>
+                  <p className="text-gray-500 text-xs">{t('hero.badges.newUser.subtitle', { country: newUserCountry.name })}</p>
                 </div>
               </div>
             </motion.div>

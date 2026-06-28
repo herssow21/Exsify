@@ -20,6 +20,7 @@ export interface User {
   password: string; // base64 encoded for demo
   role: UserRole;
   country: string;
+  region?: string;
   currency: CurrencyCode;
   createdAt: string;
   profileImage?: string;
