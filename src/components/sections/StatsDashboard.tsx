@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Download, Users, Globe, Star, TrendingUp } from 'lucide-react';
 import { useStats } from '../../hooks/useDatabase';
+import { seedRegionStats } from '../../utils/seedDatabase';
+import { partnerCountries } from '../../utils/countryFlags';
+import { formatNumber } from '../../utils/currencyConverter';
 import StatCounter from '../ui/StatCounter';
 
 export default function StatsDashboard() {
@@ -25,7 +28,7 @@ export default function StatsDashboard() {
       color: 'bg-[hsl(var(--exsify-accent))]'
     },
     {
-      value: 14,
+      value: partnerCountries.length,
       suffix: '+',
       label: t('hero.stats.countries'),
       icon: Globe,
@@ -40,11 +43,18 @@ export default function StatsDashboard() {
     }
   ];
 
+  const activeMarkets = partnerCountries
+    .map((country) => {
+      const region = seedRegionStats.find((r) => r.country === country.name);
+      return { ...country, users: region?.userCount || 0 };
+    })
+    .filter((country) => country.users > 0);
+
   return (
     <section className="py-20 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[hsl(var(--exsify-primary))]/5 to-transparent" />
-      
+
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -53,14 +63,14 @@ export default function StatsDashboard() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
-            Trusted by Businesses Across{' '}
+          <h2 className="section-title inline-block text-2xl sm:text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
+            {t('stats.title')}{' '}
             <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-primary-dark))] bg-clip-text text-transparent">
-              Africa & Middle East
+              {t('stats.titleHighlight')}
             </span>
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto">
-            Join thousands of businesses that have transformed their operations with EXSIFY solutions
+            {t('stats.subtitle')}
           </p>
         </motion.div>
 
@@ -79,35 +89,34 @@ export default function StatsDashboard() {
           ))}
         </div>
 
-        {/* Regional Stats */}
+        {/* Active Markets */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
-          className="mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+          className="mt-16"
         >
-          {[
-            { country: 'Saudi Arabia', flag: '🇸🇦', users: '3,200' },
-            { country: 'UAE', flag: '🇦🇪', users: '2,800' },
-            { country: 'Nigeria', flag: '🇳🇬', users: '3,100' },
-            { country: 'Kenya', flag: '🇰🇪', users: '2,400' },
-            { country: 'Egypt', flag: '🇪🇬', users: '2,100' },
-            { country: 'South Africa', flag: '🇿🇦', users: '1,800' },
-          ].map((region, index) => (
-            <motion.div
-              key={region.country}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 + index * 0.1 }}
-              className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-md transition-all"
-            >
-              <span className="text-3xl mb-2 block">{region.flag}</span>
-              <p className="text-[#1E293B] text-sm font-medium">{region.country}</p>
-              <p className="text-[hsl(var(--exsify-primary))] text-xs">{region.users} users</p>
-            </motion.div>
-          ))}
+          <h3 className="section-title-left text-xl font-bold text-[#1E293B] mb-4">
+            {t('stats.activeMarkets')}
+          </h3>
+          <div className="flex items-stretch gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
+            {activeMarkets.map((country) => (
+              <motion.div
+                key={country.name}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="flex-shrink-0 snap-start w-36 bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-md transition-all"
+              >
+                <span className="text-3xl mb-2 block">{country.flag}</span>
+                <p className="text-[#1E293B] text-sm font-semibold truncate">{country.name}</p>
+                <p className="text-[hsl(var(--exsify-primary))] text-xs">
+                  {formatNumber(country.users)} users
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

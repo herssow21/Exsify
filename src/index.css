@@ -80,6 +80,38 @@ body {
   outline-offset: 2px;
 }
 
+/* Section title accents */
+.section-title {
+  position: relative;
+  display: inline-block;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -0.5rem;
+  transform: translateX(-50%);
+  width: 4rem;
+  height: 0.25rem;
+  border-radius: 9999px;
+  background: hsl(var(--exsify-accent));
+}
+
+.section-title-left {
+  position: relative;
+  display: inline-block;
+}
+.section-title-left::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.5rem;
+  width: 3rem;
+  height: 0.25rem;
+  border-radius: 9999px;
+  background: hsl(var(--exsify-accent));
+}
+
 /* Line Clamp Utilities */
 .line-clamp-1 {
   display: -webkit-box;
@@ -149,9 +181,9 @@ body {
    ============================================ */
 
 .scene {
-  width: 220px;
-  height: 220px;
-  perspective: 800px;
+  width: 240px;
+  height: 240px;
+  perspective: 1000px;
 }
 
 .rotating-box {
@@ -159,41 +191,107 @@ body {
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  animation: rotateBox 12s infinite linear;
+  animation: rotateBox 16s infinite linear;
 }
 
 .box-face {
   position: absolute;
-  width: 220px;
-  height: 220px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(58, 107, 155, 0.3);
-  border-radius: 16px;
+  width: 240px;
+  height: 240px;
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 30px rgba(58, 107, 155, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  color: #1e293b;
+  backface-visibility: hidden;
+  overflow: hidden;
 }
 
-.box-front  { transform: translateZ(110px); }
-.box-back   { transform: rotateY(180deg) translateZ(110px); }
-.box-right  { transform: rotateY(90deg) translateZ(110px); }
-.box-left   { transform: rotateY(-90deg) translateZ(110px); }
-.box-top    { transform: rotateX(90deg) translateZ(110px); background: rgba(58, 107, 155, 0.08); }
-.box-bottom { transform: rotateX(-90deg) translateZ(110px); background: rgba(248, 250, 252, 0.95); }
+.box-face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(58,107,155,0.06), transparent 60%);
+  pointer-events: none;
+}
+
+.cube-face-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.cube-badge {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: hsl(var(--exsify-primary));
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 10px 25px rgba(58, 107, 155, 0.35);
+}
+
+.cube-face-content h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #1e293b;
+}
+
+.cube-face-content p {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.box-front  { transform: translateZ(120px); }
+.box-back   { transform: rotateY(180deg) translateZ(120px); }
+.box-right  { transform: rotateY(90deg) translateZ(120px); }
+.box-left   { transform: rotateY(-90deg) translateZ(120px); }
+.box-top    { transform: rotateX(90deg) translateZ(120px); }
+.box-bottom { transform: rotateX(-90deg) translateZ(120px); }
+
+/* Keep text readable on every face */
+.box-back .cube-face-content  { transform: rotateY(180deg); }
+.box-top .cube-face-content   { transform: rotateZ(180deg); }
 
 @keyframes rotateBox {
-  0%   { transform: rotateX(-15deg) rotateY(0deg); }
-  25%  { transform: rotateX(-15deg) rotateY(90deg); }
-  50%  { transform: rotateX(-15deg) rotateY(180deg); }
-  75%  { transform: rotateX(-15deg) rotateY(270deg); }
-  100% { transform: rotateX(-15deg) rotateY(360deg); }
+  0%   { transform: rotateX(-12deg) rotateY(0deg); }
+  25%  { transform: rotateX(-12deg) rotateY(90deg); }
+  50%  { transform: rotateX(-12deg) rotateY(180deg); }
+  75%  { transform: rotateX(-12deg) rotateY(270deg); }
+  100% { transform: rotateX(-12deg) rotateY(360deg); }
 }
 
 /* Pause rotation on hover */
 .scene:hover .rotating-box {
   animation-play-state: paused;
+}
+
+/* Active Markets flag strip */
+.active-markets-track {
+  animation: active-markets-scroll 40s linear infinite;
+  width: max-content;
+}
+.active-markets-track:hover {
+  animation-play-state: paused;
+}
+@keyframes active-markets-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ============================================

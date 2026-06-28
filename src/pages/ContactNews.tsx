@@ -9,6 +9,7 @@ import {
 import { useNews } from '../hooks/useDatabase';
 import { useToast } from '../context/ToastContext';
 import { useSettings } from '../context/SettingsContext';
+import { partnerCountries } from '../utils/countryFlags';
 
 const serviceOptions = [
   { value: 'KaatibPOS', label: 'KaatibPOS - Retail POS', icon: Briefcase },
@@ -109,7 +110,7 @@ export default function ContactNews() {
     });
     localStorage.setItem('exsify_consultations', JSON.stringify(consultations));
 
-    showToast('Consultation request submitted! Our team will contact you within 24 hours.', 'success');
+    showToast('Consultation request submitted! Our team will contact you under 1 hour.', 'success');
     setConsultationData({
       fullName: '', email: '', phone: '', company: '',
       serviceInterest: 'KaatibPOS', budget: '<$5k',
@@ -213,11 +214,11 @@ export default function ContactNews() {
             {/* Quick stats */}
             <div className="mt-8 grid grid-cols-3 gap-4">
               <div className="bg-white rounded-xl border border-gray-200 p-4 text-center shadow-sm">
-                <p className="text-2xl font-black text-[hsl(var(--exsify-primary))]">24h</p>
+                <p className="text-2xl font-black text-[hsl(var(--exsify-primary))]">&lt;1h</p>
                 <p className="text-gray-500 text-xs">Response Time</p>
               </div>
               <div className="bg-white rounded-xl border border-gray-200 p-4 text-center shadow-sm">
-                <p className="text-2xl font-black text-[hsl(var(--exsify-primary))]">14+</p>
+                <p className="text-2xl font-black text-[hsl(var(--exsify-primary))]">{partnerCountries.length}+</p>
                 <p className="text-gray-500 text-xs">Countries</p>
               </div>
               <div className="bg-white rounded-xl border border-gray-200 p-4 text-center shadow-sm">
@@ -441,7 +442,7 @@ export default function ContactNews() {
                     </button>
 
                     <p className="text-center text-gray-500 text-xs">
-                      Our team will review your request and contact you within 24 hours.
+                      Our team will review your request and contact you under 1 hour.
                     </p>
                   </form>
                 </>

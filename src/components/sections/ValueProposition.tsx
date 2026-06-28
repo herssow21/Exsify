@@ -32,13 +32,13 @@ const features = [
   {
     icon: Zap,
     titleKey: 'features.items.fast.title',
-    descriptionKey: 'Lightning-fast performance optimized for regional infrastructure',
+    descriptionKey: 'features.items.fast.description',
     color: 'from-purple-500 to-purple-500/50'
   },
   {
     icon: Clock,
     titleKey: 'features.items.uptime.title',
-    descriptionKey: '99.9% uptime guarantee with redundant infrastructure',
+    descriptionKey: 'features.items.uptime.description',
     color: 'from-pink-500 to-pink-500/50'
   }
 ];
@@ -56,7 +56,7 @@ export default function ValueProposition() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
+          <h2 className="section-title text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
             {t('features.title')}
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto">
@@ -105,19 +105,21 @@ export default function ValueProposition() {
           className="mt-16"
         >
           <div className="text-center mb-6">
-            <p className="text-[#1E293B] font-bold text-lg">Trusted across {partnerCountries.length}+ countries</p>
-            <p className="text-gray-500 text-sm">Join businesses scaling across Africa & the Middle East</p>
+            <p className="text-[#1E293B] font-bold text-lg">{t('features.countryNote.title', { count: partnerCountries.length })}</p>
+            <p className="text-gray-500 text-sm">{t('features.countryNote.subtitle')}</p>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white py-4">
-            <div className="marquee-track flex items-center gap-6">
+          <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white py-5">
+            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent z-10" />
+            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent z-10" />
+            <div className="marquee-track flex items-center gap-8">
               {[...partnerCountries, ...partnerCountries].map((country, i) => (
                 <div
                   key={`${country.name}-${i}`}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-100 whitespace-nowrap"
+                  className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-gray-50 border border-gray-100 shadow-sm"
+                  title={country.name}
                 >
-                  <span className="text-xl">{country.flag}</span>
-                  <span className="text-sm font-medium text-[#1E293B]">{country.name}</span>
+                  <span className="text-2xl leading-none">{country.flag}</span>
                 </div>
               ))}
             </div>

@@ -622,12 +622,22 @@ export const seedDownloads: Download[] = [
 ];
 
 export const seedRegionStats: RegionStat[] = [
+  { country: 'Kenya', countryCode: 'KE', userCount: 2400, downloadCount: 8900 },
+  { country: 'Tanzania', countryCode: 'TZ', userCount: 1500, downloadCount: 5200 },
+  { country: 'Uganda', countryCode: 'UG', userCount: 1300, downloadCount: 4800 },
+  { country: 'Somalia', countryCode: 'SO', userCount: 700, downloadCount: 2100 },
+  { country: 'Djibouti', countryCode: 'DJ', userCount: 500, downloadCount: 1500 },
+  { country: 'Ethiopia', countryCode: 'ET', userCount: 1600, downloadCount: 5800 },
+  { country: 'Rwanda', countryCode: 'RW', userCount: 900, downloadCount: 3200 },
   { country: 'Saudi Arabia', countryCode: 'SA', userCount: 3200, downloadCount: 12500 },
   { country: 'UAE', countryCode: 'AE', userCount: 2800, downloadCount: 9800 },
-  { country: 'Nigeria', countryCode: 'NG', userCount: 3100, downloadCount: 11200 },
-  { country: 'Kenya', countryCode: 'KE', userCount: 2400, downloadCount: 8900 },
   { country: 'Egypt', countryCode: 'EG', userCount: 2100, downloadCount: 7600 },
-  { country: 'South Africa', countryCode: 'ZA', userCount: 1800, downloadCount: 6500 }
+  { country: 'Nigeria', countryCode: 'NG', userCount: 3100, downloadCount: 11200 },
+  { country: 'South Africa', countryCode: 'ZA', userCount: 1800, downloadCount: 6500 },
+  { country: 'Qatar', countryCode: 'QA', userCount: 1200, downloadCount: 4100 },
+  { country: 'Morocco', countryCode: 'MA', userCount: 1400, downloadCount: 4700 },
+  { country: 'Oman', countryCode: 'OM', userCount: 800, downloadCount: 2800 },
+  { country: 'Bahrain', countryCode: 'BH', userCount: 600, downloadCount: 1900 }
 ];
 
 export function seedDatabase(): void {

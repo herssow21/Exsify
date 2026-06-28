@@ -2,15 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { TrendingUp, Users, Download, Star, Globe, Zap, Award, Shield, CheckCircle } from 'lucide-react';
 import { useStats } from '../../hooks/useDatabase';
 import { formatNumber } from '../../utils/currencyConverter';
+import { partnerCountries } from '../../utils/countryFlags';
 
-const announcements = [
-  { icon: CheckCircle, text: 'All 8 EXSIFY Apps Online & Mobile Optimized' },
-  { icon: Zap, text: 'KaatibPOS v3.2 Deployed' },
-  { icon: Globe, text: 'CargoFlow GPS Active' },
-  { icon: Shield, text: 'M-Pesa Gateway Operational' },
-  { icon: Award, text: '24/7 Support Available' },
-  { icon: TrendingUp, text: '99.9% Uptime Guarantee' },
-];
+const announcementIcons = [CheckCircle, Zap, Globe, Shield, Award, TrendingUp];
 
 export default function SystemTicker() {
   const { t } = useTranslation();
@@ -19,12 +13,12 @@ export default function SystemTicker() {
   const tickerItems = [
     { icon: Download, label: t('hero.stats.downloads'), value: formatNumber(stats.totalDownloads || 0) },
     { icon: Star, label: t('hero.stats.apps'), value: stats.totalApps || 8 },
-    { icon: Users, label: t('hero.stats.countries'), value: '14+' },
+    { icon: Users, label: t('hero.stats.countries'), value: `${partnerCountries.length}+` },
     { icon: TrendingUp, label: t('hero.stats.satisfaction'), value: '96%' },
   ];
 
   // Duplicate for seamless loop
-  const allAnnouncements = [...announcements, ...announcements];
+  const allAnnouncementIcons = [...announcementIcons, ...announcementIcons];
 
   return (
     <>
@@ -32,10 +26,10 @@ export default function SystemTicker() {
       <div className="bg-[hsl(var(--exsify-primary))] overflow-hidden">
         <div className="marquee-container py-2">
           <div className="marquee-track">
-            {allAnnouncements.map((item, index) => (
+            {allAnnouncementIcons.map((Icon, index) => (
               <div key={index} className="marquee-item flex items-center gap-2 px-4">
-                <item.icon className="w-3.5 h-3.5 text-white/90 flex-shrink-0" />
-                <span className="text-white/90 text-xs font-medium whitespace-nowrap">{item.text}</span>
+                <Icon className="w-3.5 h-3.5 text-white/90 flex-shrink-0" />
+                <span className="text-white/90 text-xs font-medium whitespace-nowrap">{t(`announcements.item${index % announcementIcons.length}`)}</span>
                 <span className="text-white/40 mx-2">&#8226;</span>
               </div>
             ))}

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ArrowRight, MessageCircle } from 'lucide-react';
+import { partnerCountries } from '../../utils/countryFlags';
 
 export default function CTABanner() {
   const { t, i18n } = useTranslation();
@@ -35,11 +36,11 @@ export default function CTABanner() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E293B] mb-6 leading-tight"
+                className="section-title text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E293B] mb-6 leading-tight"
               >
-                Ready to Transform{' '}
+                {t('cta.title')}{' '}
                 <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-primary-dark))] bg-clip-text text-transparent">
-                  Your Business?
+                  {t('cta.titleHighlight')}
                 </span>
               </motion.h2>
 
@@ -50,7 +51,7 @@ export default function CTABanner() {
                 transition={{ delay: 0.3 }}
                 className="text-gray-500 text-lg mb-8"
               >
-                Get started with EXSIFY today and join thousands of businesses across Africa and the Middle East that are already benefiting from our solutions.
+                {t('cta.subtitle')}
               </motion.p>
 
               <motion.div
@@ -64,7 +65,7 @@ export default function CTABanner() {
                   to="/services"
                   className="group flex items-center justify-center gap-2 px-8 py-4 bg-[hsl(var(--exsify-primary))] text-white rounded-xl font-semibold hover:bg-[hsl(var(--exsify-primary-dark))] transition-all hover:shadow-lg hover:shadow-[hsl(var(--exsify-primary))]/20"
                 >
-                  Explore Solutions
+                  {t('cta.ctaPrimary')}
                   <ArrowRight className={`w-5 h-5 transition-transform group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`} />
                 </Link>
                 <Link
@@ -72,7 +73,7 @@ export default function CTABanner() {
                   className="flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-[hsl(var(--exsify-primary))] hover:text-[hsl(var(--exsify-primary))] transition-all"
                 >
                   <MessageCircle className="w-5 h-5" />
-                  Contact Sales
+                  {t('cta.ctaSecondary')}
                 </Link>
               </motion.div>
             </div>
@@ -87,19 +88,19 @@ export default function CTABanner() {
             >
               <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 text-center">
                 <p className="text-4xl font-bold text-[hsl(var(--exsify-accent))] mb-2">50K+</p>
-                <p className="text-gray-500 text-sm">Active Users</p>
+                <p className="text-gray-500 text-sm">{t('cta.stats.activeUsers')}</p>
               </div>
               <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 text-center">
                 <p className="text-4xl font-bold text-[hsl(var(--exsify-primary))] mb-2">8</p>
-                <p className="text-gray-500 text-sm">Software Solutions</p>
+                <p className="text-gray-500 text-sm">{t('cta.stats.softwareSolutions')}</p>
               </div>
               <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 text-center">
-                <p className="text-4xl font-bold text-green-600 mb-2">14+</p>
-                <p className="text-gray-500 text-sm">Countries Served</p>
+                <p className="text-4xl font-bold text-green-600 mb-2">{partnerCountries.length}+</p>
+                <p className="text-gray-500 text-sm">{t('cta.stats.countriesServed')}</p>
               </div>
               <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 text-center">
                 <p className="text-4xl font-bold text-purple-600 mb-2">24/7</p>
-                <p className="text-gray-500 text-sm">Support Available</p>
+                <p className="text-gray-500 text-sm">{t('cta.stats.supportAvailable')}</p>
               </div>
             </motion.div>
           </div>

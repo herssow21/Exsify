@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Target, Eye, Heart, Users, Award, Globe } from 'lucide-react';
+import { partnerCountries } from '../utils/countryFlags';
 
 const values = [
   {
@@ -190,7 +191,7 @@ export default function WhoWeAre() {
             { value: '2019', label: 'Founded' },
             { value: '50+', label: 'Team Members' },
             { value: '8', label: 'Products' },
-            { value: '14+', label: 'Countries' }
+            { value: `${partnerCountries.length}+`, label: 'Countries' }
           ].map((stat) => (
             <div
               key={stat.label}

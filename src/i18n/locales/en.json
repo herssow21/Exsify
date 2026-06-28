@@ -18,7 +18,7 @@
   },
   "hero": {
     "title": "Transform Your Business with",
-    "subtitle": "Cutting-edge software solutions designed for the unique challenges of African and Middle Eastern markets",
+    "subtitle": "Trusted by businesses across Africa and the Middle East",
     "ctaPrimary": "Explore Solutions",
     "ctaSecondary": "Get a Demo",
     "stats": {
@@ -26,6 +26,26 @@
       "apps": "Software Solutions",
       "countries": "Countries Served",
       "satisfaction": "Customer Satisfaction"
+    },
+    "badge": "Enterprise Software. African Innovation. Global Scale.",
+    "headline": {
+      "line2": "African Innovation.",
+      "line3": "Global Scale."
+    },
+    "countryNote": "Proudly serving {{count}}+ countries across Africa & the Middle East",
+    "rating": {
+      "from": "from",
+      "reviews": "Verified Reviews"
+    },
+    "badges": {
+      "downloads": {
+        "value": "15K+",
+        "label": "Downloads"
+      },
+      "newUser": {
+        "title": "New User",
+        "subtitle": "Just joined from UAE"
+      }
     }
   },
   "features": {
@@ -47,7 +67,19 @@
       "secure": {
         "title": "Enterprise Security",
         "description": "Bank-grade security with data sovereignty compliance"
+      },
+      "fast": {
+        "title": "Fast Performance",
+        "description": "Lightning-fast performance optimized for regional infrastructure"
+      },
+      "uptime": {
+        "title": "Reliable Uptime",
+        "description": "99.9% uptime guarantee with redundant infrastructure"
       }
+    },
+    "countryNote": {
+      "title": "Trusted across {{count}}+ countries",
+      "subtitle": "Join businesses scaling across Africa & the Middle East"
     }
   },
   "apps": {
@@ -204,7 +236,11 @@
     "USD": "US Dollar",
     "EUR": "Euro",
     "SAR": "Saudi Riyal",
-    "KES": "Kenyan Shilling"
+    "KES": "Kenyan Shilling",
+    "AED": "UAE Dirham",
+    "EGP": "Egyptian Pound",
+    "NGN": "Nigerian Naira",
+    "ZAR": "South African Rand"
   },
   "countries": {
     "Saudi Arabia": "Saudi Arabia",
@@ -221,5 +257,66 @@
     "Kuwait": "Kuwait",
     "Bahrain": "Bahrain",
     "Oman": "Oman"
+  },
+  "stats": {
+    "title": "Trusted by Businesses Across",
+    "titleHighlight": "Africa & Middle East",
+    "subtitle": "Join thousands of businesses that have transformed their operations with EXSIFY solutions",
+    "activeMarkets": "Active Markets"
+  },
+  "announcements": {
+    "item0": "All 8 EXSIFY Apps Online & Mobile Optimized",
+    "item1": "KaatibPOS v3.2 Deployed",
+    "item2": "CargoFlow GPS Active",
+    "item3": "M-Pesa Gateway Operational",
+    "item4": "24/7 Support Available",
+    "item5": "99.9% Uptime Guarantee"
+  },
+  "cta": {
+    "title": "Ready to Transform",
+    "titleHighlight": "Your Business?",
+    "subtitle": "Get started with EXSIFY today and join thousands of businesses across Africa and the Middle East that are already benefiting from our solutions.",
+    "ctaPrimary": "Explore Solutions",
+    "ctaSecondary": "Contact Sales",
+    "stats": {
+      "activeUsers": "Active Users",
+      "softwareSolutions": "Software Solutions",
+      "countriesServed": "Countries Served",
+      "supportAvailable": "Support Available"
+    }
+  },
+  "cube": {
+    "faces": {
+      "front": {
+        "badge": "EX",
+        "title": "EXSIFY",
+        "subtitle": "Software Suite"
+      },
+      "back": {
+        "badge": "CF",
+        "title": "CargoFlow",
+        "subtitle": "Logistics Platform"
+      },
+      "right": {
+        "badge": "POS",
+        "title": "Exsify POS",
+        "subtitle": "Retail Management"
+      },
+      "left": {
+        "badge": "AS",
+        "title": "App Store",
+        "subtitle": "Download & Deploy"
+      },
+      "top": {
+        "badge": "AI",
+        "title": "AI Powered",
+        "subtitle": "Smart Automation"
+      },
+      "bottom": {
+        "badge": "SC",
+        "title": "Secure",
+        "subtitle": "Enterprise Grade"
+      }
+    }
   }
 }
