@@ -8,7 +8,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; requiresPasswordChange?: boolean; error?: string }>;
   signup: (userData: SignupData) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   refreshUser: () => void;
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+  const login = async (email: string, password: string): Promise<{ success: boolean; requiresPasswordChange?: boolean; error?: string }> => {
     try {
       const users = getUsers();
       const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
@@ -58,10 +58,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { success: false, error: 'Invalid email or password' };
       }
 
-      setUser(foundUser);
+      const updatedUser = { ...foundUser };
+      setUser(updatedUser);
       setIsAuthenticated(true);
-      localStorage.setItem('exsify_current_user', JSON.stringify(foundUser));
-      return { success: true };
+      localStorage.setItem('exsify_current_user', JSON.stringify(updatedUser));
+      return { success: true, requiresPasswordChange: !!foundUser.requiresPasswordChange };
     } catch (error) {
       return { success: false, error: 'An error occurred during login' };
     }

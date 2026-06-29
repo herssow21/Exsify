@@ -367,7 +367,10 @@ export function getStats() {
   return {
     totalDownloads: downloads.length,
     activeUsers: users.length,
-    totalRevenue: apps.reduce((acc, app) => acc + (app.price_usd * app.downloadCount), 0),
+    totalRevenue: downloads.reduce((acc, d) => {
+      const app = apps.find(a => a.id === d.appId);
+      return acc + (app ? app.price_usd : 0);
+    }, 0),
     pendingReviews: reviews.filter(r => !r.approved).length,
     newConsultations: consultations.filter(c => c.status === 'new').length,
     growth: 12,

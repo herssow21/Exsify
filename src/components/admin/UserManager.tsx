@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Shield, User, Mail, MapPin, Calendar,
-  Search, Edit3, Trash2, Eye, X, Check
+  Search, Edit3, Trash2, Eye, X, Check, Lock
 } from 'lucide-react';
 import { useUsers } from '../../hooks/useDatabase';
 import { useToast } from '../../context/ToastContext';
@@ -31,6 +31,15 @@ export default function UserManager() {
     u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
     u.country.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleForcePasswordChange = (targetUser: UserType) => {
+    if (targetUser.id === currentUser?.id) {
+      showToast('You cannot force a password change on your own account', 'error');
+      return;
+    }
+    update(targetUser.id, { requiresPasswordChange: true });
+    showToast(`${targetUser.fullName} will be required to change their password on next login`, 'success');
+  };
 
   const handleRoleSave = () => {
     if (!editingUser) return;
@@ -155,6 +164,12 @@ export default function UserManager() {
                 <td className="py-3 px-4 text-gray-400 text-sm hidden lg:table-cell">{formatDate(u.createdAt)}</td>
                 <td className="py-3 px-4">
                   <div className="flex items-center justify-end gap-1">
+                    {u.requiresPasswordChange && (
+                      <span className="mr-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/20 text-amber-400">
+                        <Lock className="w-3 h-3" />
+                        Must change password
+                      </span>
+                    )}
                     <button
                       onClick={() => setViewingUser(u)}
                       className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
@@ -168,6 +183,13 @@ export default function UserManager() {
                       title="Edit role"
                     >
                       <Edit3 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleForcePasswordChange(u)}
+                      className="p-2 text-purple-400 hover:bg-purple-500/10 rounded-lg transition-colors"
+                      title="Force password change on next login"
+                    >
+                      <Lock className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setDeletingUser(u)}

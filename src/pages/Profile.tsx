@@ -12,6 +12,7 @@ import { useToast } from '../context/ToastContext';
 import { useDownloads } from '../hooks/useDatabase';
 import type { CurrencyCode } from '../types';
 import { kenyanCounties } from '../utils/kenyanMarket';
+import { encodePassword, decodePassword } from '../utils/validators';
 
 const countries = [
   'Saudi Arabia', 'UAE', 'Egypt', 'Nigeria', 'Kenya',
@@ -111,21 +112,34 @@ export default function Profile() {
     try {
       const users = JSON.parse(localStorage.getItem('exsify_users') || '[]');
       const foundUser = users.find((u: any) => u.id === user?.id);
+      const currentDecoded = foundUser ? decodePassword(foundUser.password) : '';
 
-      if (!foundUser || foundUser.password !== passwordData.oldPassword) {
+      if (!foundUser || currentDecoded !== passwordData.oldPassword) {
         showToast('Current password is incorrect', 'error');
         setIsLoading(false);
         return;
       }
 
+      if (passwordData.newPassword === passwordData.oldPassword) {
+        showToast('New password must be different from your current password', 'error');
+        setIsLoading(false);
+        return;
+      }
+
+      let updatedUser: any = null;
       const updatedUsers = users.map((u: any) => {
         if (u.id === user?.id) {
-          return { ...u, password: passwordData.newPassword };
+          updatedUser = { ...u, password: encodePassword(passwordData.newPassword), requiresPasswordChange: false };
+          return updatedUser;
         }
         return u;
       });
 
       localStorage.setItem('exsify_users', JSON.stringify(updatedUsers));
+      if (updatedUser) {
+        localStorage.setItem('exsify_current_user', JSON.stringify(updatedUser));
+      }
+      refreshUser();
       setPasswordData({ oldPassword: '', newPassword: '', confirmPassword: '' });
       showToast('Password changed successfully!', 'success');
     } catch {
@@ -190,7 +204,7 @@ export default function Profile() {
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Library className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
-                  <span className="text-gray-600">{downloads.length} downloads</span>
+                  <span className="text-gray-600">{downloads.filter(d => d.userId === user.id).length} downloads</span>
                 </div>
               </div>
             </div>

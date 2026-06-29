@@ -53,6 +53,7 @@ export default function Auth() {
   });
 
   const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotResetLink, setForgotResetLink] = useState<string | null>(null);
 
   const [signupData, setSignupData] = useState({
     fullName: '',
@@ -77,8 +78,13 @@ export default function Auth() {
     const result = await login(loginData.email, loginData.password);
     
     if (result.success) {
-      showToast('Welcome back!', 'success');
-      navigate('/');
+      if (result.requiresPasswordChange) {
+        showToast('Please change your password before continuing.', 'warning');
+        navigate('/change-password');
+      } else {
+        showToast('Welcome back!', 'success');
+        navigate('/');
+      }
     } else {
       showToast(result.error || 'Login failed', 'error');
     }
@@ -107,15 +113,15 @@ export default function Auth() {
 
       const updatedUsers = users.map((u: any) => {
         if (u.email.toLowerCase() === forgotEmail.toLowerCase()) {
-          return { ...u, resetToken, resetExpiry };
+          return { ...u, passwordResetToken: resetToken, passwordResetExpires: resetExpiry };
         }
         return u;
       });
 
       localStorage.setItem('exsify_users', JSON.stringify(updatedUsers));
-      showToast('Reset instructions sent to your email', 'success');
-      setForgotEmail('');
-      setMode('login');
+      const link = `${window.location.origin}/reset-password?token=${resetToken}`;
+      setForgotResetLink(link);
+      showToast('Reset link generated. Use the link below to reset your password.', 'success');
     } catch {
       showToast('Something went wrong. Please try again.', 'error');
     }
@@ -252,11 +258,23 @@ export default function Auth() {
                   )}
                 </button>
 
+                {forgotResetLink && (
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-xs text-green-700 mb-1">Reset link (demo only — in production this is emailed):</p>
+                    <a
+                      href={forgotResetLink}
+                      className="text-xs text-[hsl(var(--exsify-primary))] break-all hover:underline"
+                    >
+                      {forgotResetLink}
+                    </a>
+                  </div>
+                )}
+
                 <p className="text-center text-gray-500 text-sm">
                   Remember your password?{' '}
                   <button
                     type="button"
-                    onClick={() => setMode('login')}
+                    onClick={() => { setMode('login'); setForgotResetLink(null); }}
                     className="text-[hsl(var(--exsify-primary))] hover:underline font-medium"
                   >
                     Back to Login

@@ -10,9 +10,23 @@ import {
   TrendingUp,
   TrendingDown
 } from 'lucide-react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  LineChart,
+  Line
+} from 'recharts';
 import { useStats, useApps } from '../../hooks/useDatabase';
 import { formatPrice } from '../../utils/currencyConverter';
 import { useSettings } from '../../context/SettingsContext';
+import { getUsers } from '../../utils/dbOperations';
+import { getKenyanMarketStats } from '../../utils/kenyanMarket';
+import { getVisitsByDay } from '../../utils/visits';
 
 interface StatCardProps {
   title: string;
@@ -45,6 +59,22 @@ function StatCard({ title, value, icon: Icon, trend, color, index }: StatCardPro
         <div className={`w-12 h-12 ${color} rounded-xl flex items-center justify-center`}>
           <Icon className="w-6 h-6 text-white" />
         </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function ChartCard({ title, children, delay = 0 }: { title: string; children: React.ReactNode; delay?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay }}
+      className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-xl border border-[hsl(var(--exsify-primary))]/20 p-6"
+    >
+      <h3 className="text-lg font-bold text-white mb-4">{title}</h3>
+      <div className="h-64">
+        {children}
       </div>
     </motion.div>
   );
@@ -101,6 +131,29 @@ export default function AdminOverview() {
     }
   ];
 
+  // Country performance (registered users)
+  const users = getUsers();
+  const countryCounts = React.useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const user of users) {
+      counts.set(user.country, (counts.get(user.country) || 0) + 1);
+    }
+    return Array.from(counts.entries())
+      .map(([country, clients]) => ({ country, clients }))
+      .sort((a, b) => b.clients - a.clients)
+      .slice(0, 10);
+  }, [users]);
+
+  // Kenyan counties performance
+  const kenyanCounts = React.useMemo(() => {
+    return getKenyanMarketStats()
+      .filter(c => c.clients > 0)
+      .sort((a, b) => b.clients - a.clients);
+  }, []);
+
+  // Site visitors over the last 14 days
+  const visitorData = React.useMemo(() => getVisitsByDay(14), []);
+
   return (
     <div className="space-y-8">
       {/* Page Title */}
@@ -116,13 +169,67 @@ export default function AdminOverview() {
         ))}
       </div>
 
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ChartCard title="Clients by Country" delay={0.6}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={countryCounts} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="country" stroke="#94a3b8" fontSize={10} angle={-30} textAnchor="end" height={60} />
+              <YAxis stroke="#94a3b8" fontSize={12} />
+              <Tooltip
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                labelStyle={{ color: '#e2e8f0' }}
+                itemStyle={{ color: '#f8c463' }}
+              />
+              <Bar dataKey="clients" fill="hsl(var(--exsify-accent))" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+
+        <ChartCard title="Site Visitors (Last 14 Days)" delay={0.7}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={visitorData} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="date" stroke="#94a3b8" fontSize={10} tickFormatter={(v) => v.slice(5)} />
+              <YAxis stroke="#94a3b8" fontSize={12} allowDecimals={false} />
+              <Tooltip
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                labelStyle={{ color: '#e2e8f0' }}
+                itemStyle={{ color: '#5aa88e' }}
+              />
+              <Line type="monotone" dataKey="visits" stroke="hsl(var(--exsify-primary))" strokeWidth={2} dot={{ r: 3 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      </div>
+
+      {kenyanCounts.length > 0 && (
+        <ChartCard title="Kenyan Counties Performance" delay={0.8}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={kenyanCounts} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="code" stroke="#94a3b8" fontSize={10} />
+              <YAxis stroke="#94a3b8" fontSize={12} allowDecimals={false} />
+              <Tooltip
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                labelStyle={{ color: '#e2e8f0' }}
+                itemStyle={{ color: '#f8c463' }}
+                formatter={(value: any, _name: any, props: any) => [`${value} clients`, props?.payload?.name || 'County']}
+              />
+              <Bar dataKey="clients" fill="hsl(var(--exsify-accent))" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      )}
+
       {/* Recent Activity & Top Apps */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Performing Apps */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.6 }}
+          transition={{ duration: 0.4, delay: 0.9 }}
           className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-xl border border-[hsl(var(--exsify-primary))]/20 p-6"
         >
           <h3 className="text-lg font-bold text-white mb-4">Top Performing Apps</h3>
@@ -157,7 +264,7 @@ export default function AdminOverview() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.7 }}
+          transition={{ duration: 0.4, delay: 1 }}
           className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-xl border border-[hsl(var(--exsify-primary))]/20 p-6"
         >
           <h3 className="text-lg font-bold text-white mb-4">Platform Overview</h3>

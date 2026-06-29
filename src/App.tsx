@@ -7,6 +7,7 @@ import { SettingsProvider } from './context/SettingsContext';
 import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { seedDatabase } from './utils/seedDatabase';
+import { recordVisit } from './utils/visits';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import Services from './pages/Services';
@@ -18,10 +19,13 @@ import AppDetail from './pages/AppDetail';
 import Auth from './pages/Auth';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
+import ResetPassword from './pages/ResetPassword';
+import ChangePassword from './pages/ChangePassword';
 
 function App() {
   useEffect(() => {
     seedDatabase();
+    recordVisit();
   }, []);
 
   return (
@@ -52,6 +56,12 @@ function App() {
 
                 {/* Admin Routes (without Layout) */}
                 <Route path="/admin" element={<AdminDashboard />} />
+
+                {/* Password Reset */}
+                <Route path="/reset-password" element={<ResetPassword />} />
+
+                {/* Force Password Change */}
+                <Route path="/change-password" element={<ChangePassword />} />
 
                 {/* Fallback */}
                 <Route path="*" element={<Navigate to="/" replace />} />

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Star, ArrowRight } from 'lucide-react';
 import { useApps } from '../../hooks/useDatabase';
 import { useSettings } from '../../context/SettingsContext';
-import { convertPrice, formatPrice } from '../../utils/currencyConverter';
+import { formatPrice } from '../../utils/currencyConverter';
 
 export default function FeaturedAppsCarousel() {
   const { t, i18n } = useTranslation();
@@ -74,7 +74,7 @@ export default function FeaturedAppsCarousel() {
           {featuredApps.map((app, index) => {
             const name = isRTL ? app.name_ar : app.name_en;
             const description = isRTL ? app.description_ar : app.description_en;
-            const convertedPrice = convertPrice(app.price_usd, currency);
+            const formattedPrice = formatPrice(app.price_usd, currency);
 
             return (
               <motion.div
@@ -124,7 +124,7 @@ export default function FeaturedAppsCarousel() {
 
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                       <div className="text-[hsl(var(--exsify-primary))] font-bold text-lg">
-                        {formatPrice(convertedPrice, currency)}
+                        {formattedPrice}
                       </div>
                       <Link
                         to={`/app/${app.slug}`}

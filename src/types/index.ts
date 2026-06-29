@@ -24,6 +24,9 @@ export interface User {
   currency: CurrencyCode;
   createdAt: string;
   profileImage?: string;
+  passwordResetToken?: string;
+  passwordResetExpires?: string;
+  requiresPasswordChange?: boolean;
 }
 
 /**

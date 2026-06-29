@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Star, Download, ExternalLink } from 'lucide-react';
 import type { App } from '../../types';
 import { useSettings } from '../../context/SettingsContext';
-import { convertPrice, formatPrice, formatNumber } from '../../utils/currencyConverter';
+import { formatPrice, formatNumber } from '../../utils/currencyConverter';
 
 interface AppCardProps {
   app: App;
@@ -19,7 +19,7 @@ export default function AppCard({ app, index = 0 }: AppCardProps) {
 
   const name = isRTL ? app.name_ar : app.name_en;
   const description = isRTL ? app.description_ar : app.description_en;
-  const convertedPrice = convertPrice(app.price_usd, currency);
+  const formattedPrice = formatPrice(app.price_usd, currency);
 
   return (
     <motion.div
@@ -73,7 +73,7 @@ export default function AppCard({ app, index = 0 }: AppCardProps) {
               <span>{formatNumber(app.downloadCount)}</span>
             </div>
             <div className="text-[hsl(var(--exsify-accent))] font-bold">
-              {formatPrice(convertedPrice, currency)}
+              {formattedPrice}
             </div>
           </div>
 

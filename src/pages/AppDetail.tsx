@@ -20,7 +20,7 @@ import { addDownload, isFavorite, toggleFavorite, hasUserDownloaded } from '../u
 import { useSettings } from '../context/SettingsContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { convertPrice, formatPrice, formatNumber } from '../utils/currencyConverter';
+import { formatPrice, formatNumber } from '../utils/currencyConverter';
 import ReviewCard from '../components/ui/ReviewCard';
 
 export default function AppDetail() {
@@ -62,7 +62,7 @@ export default function AppDetail() {
   const name = isRTL ? app.name_ar : app.name_en;
   const description = isRTL ? app.description_ar : app.description_en;
   const features = isRTL ? app.features_ar : app.features_en;
-  const convertedPrice = convertPrice(app.price_usd, currency);
+  const formattedPrice = formatPrice(app.price_usd, currency);
 
   const appReviews = reviews.filter(r => r.appId === app.id && r.status === 'approved');
   const relatedApps = apps
@@ -232,7 +232,7 @@ export default function AppDetail() {
             {/* Price & CTA */}
             <div className="p-6 bg-gradient-to-br from-[hsl(var(--exsify-primary))]/20 to-[hsl(var(--exsify-primary))]/5 rounded-xl border border-gray-200">
               <p className="text-3xl font-bold text-[#1E293B] mb-4">
-                {formatPrice(convertedPrice, currency)}
+                {formattedPrice}
               </p>
               <button
                 onClick={handleDownload}
@@ -334,7 +334,7 @@ export default function AppDetail() {
             <div className="grid md:grid-cols-3 gap-6">
               {relatedApps.map(relatedApp => {
                 const relatedName = isRTL ? relatedApp.name_ar : relatedApp.name_en;
-                const relatedPrice = convertPrice(relatedApp.price_usd, currency);
+                const relatedPriceFormatted = formatPrice(relatedApp.price_usd, currency);
 
                 return (
                   <Link
@@ -353,7 +353,7 @@ export default function AppDetail() {
                           {relatedName}
                         </h3>
                         <p className="text-[hsl(var(--exsify-accent))] text-sm">
-                          {formatPrice(relatedPrice, currency)}
+                          {relatedPriceFormatted}
                         </p>
                       </div>
                       <ExternalLink className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />

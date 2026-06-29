@@ -28,11 +28,15 @@ export default function AdminDashboard() {
       navigate('/auth?mode=login');
       return;
     }
+    if (user?.requiresPasswordChange) {
+      navigate('/change-password');
+      return;
+    }
     if (!isAdmin) {
       navigate('/');
       return;
     }
-  }, [isAuthenticated, isAdmin, isLoading, navigate]);
+  }, [isAuthenticated, isAdmin, isLoading, navigate, user]);
 
   if (isLoading || !isAuthenticated || !isAdmin) {
     return (

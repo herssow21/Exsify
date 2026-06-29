@@ -290,37 +290,38 @@
       "supportAvailable": "الدعم المتاح"
     }
   },
+  
   "cube": {
     "faces": {
       "front": {
         "badge": "EX",
-        "title": "EXSIFY",
-        "subtitle": "Software Suite"
+        "title": "إكسسيفاي",
+        "subtitle": "مجموعة برامج"
       },
       "back": {
         "badge": "CF",
-        "title": "CargoFlow",
-        "subtitle": "Logistics Platform"
+        "title": "كارغو فلو",
+        "subtitle": "منصة لوجستية"
       },
       "right": {
         "badge": "POS",
-        "title": "Exsify POS",
-        "subtitle": "Retail Management"
+        "title": "إكسسيفاي بي أو إس",
+        "subtitle": "إدارة البيع بالتجزئة"
       },
       "left": {
         "badge": "ExB",
-        "title": "ExBUY",
-        "subtitle": "E-Market"
+        "title": "إكس باي",
+        "subtitle": "سوق إلكتروني"
       },
       "top": {
         "badge": "EXfy",
-        "title": "EXSIFY",
-        "subtitle": "Software Suite"
+        "title": "إكسسيفاي",
+        "subtitle": "مجموعة برامج"
       },
       "bottom": {
         "badge": "ExCl",
-        "title": "Exfy Clinic",
-        "subtitle": "Hospital and Pharmacy management"
+        "title": "إكسفي كلينك",
+        "subtitle": "إدارة المستشفيات والصيدليات"
       }
     }
   }
