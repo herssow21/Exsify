@@ -294,33 +294,33 @@
     "faces": {
       "front": {
         "badge": "EX",
-        "title": "إكسيفي",
-        "subtitle": "حزمة البرمجيات"
+        "title": "EXSIFY",
+        "subtitle": "Software Suite"
       },
       "back": {
         "badge": "CF",
-        "title": "كارغو فلو",
-        "subtitle": "منصة اللوجستيات"
+        "title": "CargoFlow",
+        "subtitle": "Logistics Platform"
       },
       "right": {
         "badge": "POS",
-        "title": "نقاط البيع",
-        "subtitle": "إدارة التجزئة"
+        "title": "Exsify POS",
+        "subtitle": "Retail Management"
       },
       "left": {
-        "badge": "AS",
-        "title": "متجر التطبيقات",
-        "subtitle": "تحميل ونشر"
+        "badge": "ExB",
+        "title": "ExBUY",
+        "subtitle": "E-Market"
       },
       "top": {
-        "badge": "AI",
-        "title": "مدعوم بالذكاء الاصطناعي",
-        "subtitle": "أتمتة ذكية"
+        "badge": "EXfy",
+        "title": "EXSIFY",
+        "subtitle": "Software Suite"
       },
       "bottom": {
-        "badge": "SC",
-        "title": "آمن",
-        "subtitle": "مستوى المؤسسات"
+        "badge": "ExCl",
+        "title": "Exfy Clinic",
+        "subtitle": "Hospital and Pharmacy management"
       }
     }
   }

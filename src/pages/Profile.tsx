@@ -11,6 +11,7 @@ import { useSettings } from '../context/SettingsContext';
 import { useToast } from '../context/ToastContext';
 import { useDownloads } from '../hooks/useDatabase';
 import type { CurrencyCode } from '../types';
+import { kenyanCounties } from '../utils/kenyanMarket';
 
 const countries = [
   'Saudi Arabia', 'UAE', 'Egypt', 'Nigeria', 'Kenya',
@@ -43,6 +44,7 @@ export default function Profile() {
     fullName: user?.fullName || '',
     email: user?.email || '',
     country: user?.country || 'Saudi Arabia',
+    region: user?.region || '',
     currency: user?.currency || 'USD'
   });
 
@@ -67,14 +69,14 @@ export default function Profile() {
       const users = JSON.parse(localStorage.getItem('exsify_users') || '[]');
       const updatedUsers = users.map((u: any) => {
         if (u.id === user?.id) {
-          return { ...u, fullName: profileData.fullName, country: profileData.country, currency: profileData.currency };
+          return { ...u, fullName: profileData.fullName, country: profileData.country, region: profileData.region, currency: profileData.currency };
         }
         return u;
       });
       localStorage.setItem('exsify_users', JSON.stringify(updatedUsers));
 
       // Update current user in session
-      const currentUser = { ...user, fullName: profileData.fullName, country: profileData.country, currency: profileData.currency };
+      const currentUser = { ...user, fullName: profileData.fullName, country: profileData.country, region: profileData.region, currency: profileData.currency };
       localStorage.setItem('exsify_current_user', JSON.stringify(currentUser));
 
       // Update global currency setting
@@ -176,7 +178,7 @@ export default function Profile() {
               <div className="mt-6 pt-6 border-t border-gray-200 space-y-3 text-left">
                 <div className="flex items-center gap-3 text-sm">
                   <MapPin className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
-                  <span className="text-gray-600">{user.country}</span>
+                  <span className="text-gray-600">{user.country}{user.region ? `, ${user.region}` : ''}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <DollarSign className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
@@ -264,7 +266,7 @@ export default function Profile() {
                       <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <select
                         value={profileData.country}
-                        onChange={e => setProfileData(prev => ({ ...prev, country: e.target.value }))}
+                        onChange={e => setProfileData(prev => ({ ...prev, country: e.target.value, region: e.target.value === 'Kenya' ? prev.region : '' }))}
                         className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1E293B] focus:border-[hsl(var(--exsify-primary))] focus:outline-none appearance-none"
                       >
                         {countries.map(c => (
@@ -289,6 +291,26 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
+
+                {profileData.country === 'Kenya' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">County / Region</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <select
+                        value={profileData.region}
+                        onChange={e => setProfileData(prev => ({ ...prev, region: e.target.value }))}
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1E293B] focus:border-[hsl(var(--exsify-primary))] focus:outline-none appearance-none"
+                        required
+                      >
+                        <option value="">Select county</option>
+                        {kenyanCounties.map(county => (
+                          <option key={county.code} value={county.name}>{county.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
 
                 <button
                   type="submit"

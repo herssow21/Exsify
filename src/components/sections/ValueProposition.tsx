@@ -144,7 +144,7 @@ export default function ValueProposition() {
           </p>
 
           <div className="flex flex-wrap gap-4">
-            {kenyanStats.map((county) => (
+            {kenyanStats.filter((county) => county.clients > 0).map((county) => (
               <div
                 key={county.code}
                 title={`${county.name} — ${county.clients} clients`}

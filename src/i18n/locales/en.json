@@ -308,19 +308,19 @@
         "subtitle": "Retail Management"
       },
       "left": {
-        "badge": "AS",
-        "title": "App Store",
-        "subtitle": "Download & Deploy"
+        "badge": "ExB",
+        "title": "ExBUY",
+        "subtitle": "E-Market"
       },
       "top": {
-        "badge": "AI",
-        "title": "AI Powered",
-        "subtitle": "Smart Automation"
+        "badge": "EXfy",
+        "title": "EXSIFY",
+        "subtitle": "Software Suite"
       },
       "bottom": {
-        "badge": "SC",
-        "title": "Secure",
-        "subtitle": "Enterprise Grade"
+        "badge": "ExCl",
+        "title": "Exfy Clinic",
+        "subtitle": "Hospital and Pharmacy management"
       }
     }
   }

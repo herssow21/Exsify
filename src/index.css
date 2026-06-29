@@ -257,7 +257,7 @@ body {
 .box-bottom { transform: rotateX(-90deg) translateZ(120px); }
 
 /* Keep text readable on every face */
-.box-back .cube-face-content  { transform: scaleX(-1); }
+.box-back .cube-face-content  { transform: none; }
 .box-top .cube-face-content   { transform: rotateZ(180deg); }
 
 @keyframes rotateBox {
