@@ -21,6 +21,8 @@ import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import ResetPassword from './pages/ResetPassword';
 import ChangePassword from './pages/ChangePassword';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 function App() {
   useEffect(() => {
@@ -62,6 +64,14 @@ function App() {
 
                 {/* Force Password Change */}
                 <Route path="/change-password" element={<ChangePassword />} />
+
+                {/* Legal Pages */}
+                <Route path="/privacy-policy" element={<Layout />}>
+                  <Route index element={<PrivacyPolicy />} />
+                </Route>
+                <Route path="/terms-of-service" element={<Layout />}>
+                  <Route index element={<TermsOfService />} />
+                </Route>
 
                 {/* Fallback */}
                 <Route path="*" element={<Navigate to="/" replace />} />

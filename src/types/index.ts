@@ -55,6 +55,9 @@ export interface App {
   status: AppStatus;
   featured: boolean;
   downloadUrl: string;
+  playStoreUrl?: string;
+  appStoreUrl?: string;
+  desktopUrl?: string;
   tags?: string[];
 }
 

@@ -188,7 +188,7 @@ export default function HeroSection() {
               className="absolute -bottom-4 left-4 bg-white backdrop-blur-xl p-4 rounded-xl shadow-xl border border-gray-100 z-10"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-dark-100 rounded-full flex items-center justify-center">
                   <span className="text-green-600 text-lg font-bold">+</span>
                 </div>
                 <div>

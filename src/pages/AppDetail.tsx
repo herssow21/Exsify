@@ -22,6 +22,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { formatPrice, formatNumber } from '../utils/currencyConverter';
 import ReviewCard from '../components/ui/ReviewCard';
+import StoreDownloadButtons from '../components/apps/StoreDownloadButtons';
 
 export default function AppDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -293,7 +294,7 @@ export default function AppDetail() {
           </div>
           <div>
             <h2 className="text-2xl font-bold text-[#1E293B] mb-4">{t('apps.features')}</h2>
-            <ul className="space-y-3">
+            <ul className="space-y-3 mb-8">
               {features.map((feature, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-[hsl(var(--exsify-primary))] flex-shrink-0 mt-0.5" />
@@ -301,6 +302,8 @@ export default function AppDetail() {
                 </li>
               ))}
             </ul>
+
+            <StoreDownloadButtons app={app} />
           </div>
         </motion.div>
 

@@ -144,10 +144,10 @@ export default function Footer() {
             &copy; {currentYear} {t('app.name')}. {t('footer.rights')}.
           </p>
           <div className="flex items-center gap-6">
-            <Link to="#" className="text-gray-500 hover:text-[hsl(var(--exsify-primary))] transition-colors text-sm">
+            <Link to="/privacy-policy" className="text-gray-500 hover:text-[hsl(var(--exsify-primary))] transition-colors text-sm">
               {t('footer.privacy')}
             </Link>
-            <Link to="#" className="text-gray-500 hover:text-[hsl(var(--exsify-primary))] transition-colors text-sm">
+            <Link to="/terms-of-service" className="text-gray-500 hover:text-[hsl(var(--exsify-primary))] transition-colors text-sm">
               {t('footer.terms')}
             </Link>
           </div>

@@ -702,6 +702,34 @@ export function seedDatabase(): void {
     localStorage.setItem('exsify_region_stats', JSON.stringify(seedRegionStats));
   }
 
+  // Migration: ensure legacy apps have store download URLs
+  try {
+    const appsRaw = localStorage.getItem('exsify_apps');
+    if (appsRaw) {
+      const apps = JSON.parse(appsRaw) as App[];
+      let changed = false;
+      for (const app of apps) {
+        if (!app.playStoreUrl) {
+          app.playStoreUrl = `https://play.google.com/store/apps/details?id=com.exsify.${app.slug}`;
+          changed = true;
+        }
+        if (!app.appStoreUrl) {
+          app.appStoreUrl = `https://apps.apple.com/app/exsify-${app.slug}/id0000000000`;
+          changed = true;
+        }
+        if (!app.desktopUrl) {
+          app.desktopUrl = `https://exsify.com/downloads/${app.slug}-setup.exe`;
+          changed = true;
+        }
+      }
+      if (changed) {
+        localStorage.setItem('exsify_apps', JSON.stringify(apps));
+      }
+    }
+  } catch {
+    // ignore migration errors
+  }
+
   // Migration: ensure legacy users have a region so county/region features work
   try {
     const usersRaw = localStorage.getItem('exsify_users');

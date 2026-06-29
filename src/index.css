@@ -236,6 +236,25 @@ body {
   box-shadow: 0 10px 25px rgba(58, 107, 155, 0.35);
 }
 
+/* Opposite cube faces share badge colors */
+.box-front .cube-badge,
+.box-back .cube-badge {
+  background: hsl(var(--exsify-primary));
+  box-shadow: 0 10px 25px hsl(var(--exsify-primary) / 0.45);
+}
+
+.box-right .cube-badge,
+.box-left .cube-badge {
+  background: hsl(var(--exsify-accent));
+  box-shadow: 0 10px 25px hsl(var(--exsify-accent) / 0.45);
+}
+
+.box-top .cube-badge,
+.box-bottom .cube-badge {
+  background: #8b5cf6;
+  box-shadow: 0 10px 25px rgba(139, 92, 246, 0.45);
+}
+
 .cube-face-content h3 {
   font-size: 1.25rem;
   font-weight: 800;

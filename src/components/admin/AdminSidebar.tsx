@@ -60,10 +60,11 @@ export default function AdminSidebar({ activeTab, onTabChange, mobileOpen, onMob
           {/* Logo & Close Button */}
           <div className="flex items-center justify-between mb-8">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-accent))] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">E</span>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
+                <img src="/Exfy_Logo.png" alt="EXSIFY" className="w-10 h-10 object-contain" />
               </div>
-              <span className="text-white font-bold text-xl">{t('app.name')}</span>
+              <span className="text-white font-bold text-xl tracking-tight">{t('app.name')}</span>
+              <span className="text-[hsl(var(--exsify-accent))] font-bold text-xl tracking-tight">SOFTWARE</span>
             </Link>
             <button 
               onClick={onMobileClose}
