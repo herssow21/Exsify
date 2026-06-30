@@ -32,14 +32,18 @@ export type InsertUser = typeof users.$inferInsert;
 
 // ── Local Auth Users (email/password for EXSIFY app) ──
 export const localUsers = mysqlTable("local_users", {
-  id: serial("id").primaryKey(),
+  id: varchar("id", { length: 100 }).primaryKey(),
   fullName: varchar("full_name", { length: 255 }).notNull(),
   email: varchar("email", { length: 320 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
   role: mysqlEnum("role", ["customer", "admin"]).default("customer").notNull(),
   country: varchar("country", { length: 100 }),
+  region: varchar("region", { length: 100 }),
   currency: varchar("currency", { length: 10 }).default("USD"),
   profileImage: text("profile_image"),
+  passwordResetToken: varchar("password_reset_token", { length: 255 }),
+  passwordResetExpires: varchar("password_reset_expires", { length: 100 }),
+  requiresPasswordChange: boolean("requires_password_change").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -48,7 +52,7 @@ export type InsertLocalUser = typeof localUsers.$inferInsert;
 
 // ── Software Apps ──
 export const apps = mysqlTable("apps", {
-  id: serial("id").primaryKey(),
+  id: varchar("id", { length: 100 }).primaryKey(),
   slug: varchar("slug", { length: 100 }).notNull().unique(),
   nameEn: varchar("name_en", { length: 255 }).notNull(),
   nameAr: varchar("name_ar", { length: 255 }),
@@ -78,9 +82,9 @@ export type InsertApp = typeof apps.$inferInsert;
 
 // ── Reviews ──
 export const reviews = mysqlTable("reviews", {
-  id: serial("id").primaryKey(),
+  id: varchar("id", { length: 100 }).primaryKey(),
   userId: varchar("user_id", { length: 100 }).notNull(),
-  appId: int("app_id"),
+  appId: varchar("app_id", { length: 100 }),
   userName: varchar("user_name", { length: 255 }).notNull(),
   userCompany: varchar("user_company", { length: 255 }),
   userCountry: varchar("user_country", { length: 100 }),
@@ -99,7 +103,7 @@ export type InsertReview = typeof reviews.$inferInsert;
 
 // ── Consultations (contact form submissions) ──
 export const consultations = mysqlTable("consultations", {
-  id: serial("id").primaryKey(),
+  id: varchar("id", { length: 100 }).primaryKey(),
   fullName: varchar("full_name", { length: 255 }).notNull(),
   email: varchar("email", { length: 320 }).notNull(),
   phone: varchar("phone", { length: 50 }),
@@ -117,7 +121,7 @@ export type InsertConsultation = typeof consultations.$inferInsert;
 
 // ── News Posts ──
 export const newsPosts = mysqlTable("news_posts", {
-  id: serial("id").primaryKey(),
+  id: varchar("id", { length: 100 }).primaryKey(),
   titleEn: varchar("title_en", { length: 255 }).notNull(),
   titleAr: varchar("title_ar", { length: 255 }),
   contentEn: text("content_en"),
@@ -133,9 +137,9 @@ export type InsertNewsPost = typeof newsPosts.$inferInsert;
 
 // ── App Downloads tracking ──
 export const downloads = mysqlTable("downloads", {
-  id: serial("id").primaryKey(),
+  id: varchar("id", { length: 100 }).primaryKey(),
   userId: varchar("user_id", { length: 100 }).notNull(),
-  appId: int("app_id").notNull(),
+  appId: varchar("app_id", { length: 100 }).notNull(),
   downloadedAt: timestamp("downloaded_at").defaultNow().notNull(),
 });
 

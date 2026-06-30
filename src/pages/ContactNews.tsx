@@ -44,11 +44,11 @@ function getBudgetOptions(currency: CurrencyCode) {
 }
 
 const socialLinks = [
-  { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/966501234567', color: 'bg-green-500' },
+  { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/254727880041', color: 'bg-green-500' },
   { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/company/exsify', color: 'bg-blue-700' },
   { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/exsify', color: 'bg-sky-500' },
   { icon: Facebook, label: 'Facebook', href: 'https://facebook.com/exsify', color: 'bg-blue-600' },
-  { icon: Instagram, label: 'Instagram', href: 'https://instagram.com/exsify', color: 'bg-pink-600' },
+  { icon: Instagram, label: 'Instagram', href: 'https://instagram.com/exsifysoftware', color: 'bg-pink-600' },
 ];
 
 export default function ContactNews() {
@@ -189,7 +189,7 @@ export default function ContactNews() {
                     +966 50 123 4567 (KSA)
                   </a>
                   <a href="tel:+254712345678" className="text-gray-600 hover:text-[hsl(var(--exsify-primary))] transition-colors block">
-                    +254 712 345 678 (Kenya)
+                    +254 727 880 041 (Kenya)
                   </a>
                 </div>
               </div>

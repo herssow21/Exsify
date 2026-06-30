@@ -3,6 +3,7 @@ import { createRouter, publicQuery, adminQuery } from "./middleware";
 import { getDb } from "./queries/connection";
 import { apps } from "@db/schema";
 import { eq, desc, sql } from "drizzle-orm";
+import { generateId } from "../src/utils/validators";
 
 export const appRouter = createRouter({
   list: publicQuery.query(async () => {
@@ -26,6 +27,7 @@ export const appRouter = createRouter({
   create: adminQuery
     .input(
       z.object({
+        id: z.string().min(1).optional(),
         slug: z.string().min(1),
         nameEn: z.string().min(1),
         nameAr: z.string().optional(),
@@ -39,6 +41,9 @@ export const appRouter = createRouter({
         priceUsd: z.string().optional(),
         screenshots: z.array(z.string()).optional(),
         icon: z.string().optional(),
+        downloadCount: z.number().optional(),
+        rating: z.string().optional(),
+        totalReviews: z.number().optional(),
         regionsAvailable: z.array(z.string()).optional(),
         status: z.enum(["active", "inactive"]).optional(),
         featured: z.boolean().optional(),
@@ -47,7 +52,9 @@ export const appRouter = createRouter({
     )
     .mutation(async ({ input }) => {
       const db = getDb();
-      const result = await db.insert(apps).values({
+      const id = input.id ?? generateId();
+      await db.insert(apps).values({
+        id,
         slug: input.slug,
         nameEn: input.nameEn,
         nameAr: input.nameAr,
@@ -61,18 +68,21 @@ export const appRouter = createRouter({
         priceUsd: input.priceUsd,
         screenshots: input.screenshots,
         icon: input.icon,
+        downloadCount: input.downloadCount,
+        rating: input.rating,
+        totalReviews: input.totalReviews,
         regionsAvailable: input.regionsAvailable,
         status: input.status,
         featured: input.featured,
         downloadUrl: input.downloadUrl,
       });
-      return { id: Number(result[0].insertId) };
+      return { id };
     }),
 
   update: adminQuery
     .input(
       z.object({
-        id: z.number(),
+        id: z.string().min(1),
         data: z.object({
           slug: z.string().optional(),
           nameEn: z.string().optional(),
@@ -104,7 +114,7 @@ export const appRouter = createRouter({
     }),
 
   delete: adminQuery
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string().min(1) }))
     .mutation(async ({ input }) => {
       const db = getDb();
       await db.delete(apps).where(eq(apps.id, input.id));

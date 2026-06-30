@@ -74,7 +74,10 @@ export function generateId(): string {
  * @returns Base64 encoded password
  */
 export function encodePassword(password: string): string {
-  return btoa(password);
+  if (typeof btoa !== 'undefined') {
+    return btoa(password);
+  }
+  return Buffer.from(password).toString('base64');
 }
 
 /**
@@ -84,7 +87,10 @@ export function encodePassword(password: string): string {
  */
 export function decodePassword(encodedPassword: string): string {
   try {
-    return atob(encodedPassword);
+    if (typeof atob !== 'undefined') {
+      return atob(encodedPassword);
+    }
+    return Buffer.from(encodedPassword, 'base64').toString('utf-8');
   } catch {
     return '';
   }

@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { getUsers } from '../utils/dbOperations';
 import { encodePassword, decodePassword } from '../utils/validators';
+import { trpcClient } from '../utils/trpcVanilla';
 
 const STORAGE_KEY = 'exsify_users';
 
@@ -65,6 +66,10 @@ export default function ChangePassword() {
 
       users[userIndex] = updatedUser;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+
+      trpcClient.localAuth.changePassword
+        .mutate({ id: user?.id ?? '', password })
+        .catch(() => {});
 
       showToast('Password updated successfully! Please sign in with your new password.', 'success');
       logout();

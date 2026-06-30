@@ -16,6 +16,19 @@ import type {
   NewsPost, 
 } from '@/types';
 import { generateId } from './validators';
+import { trpcClient } from './trpcVanilla';
+import {
+  toApiApp,
+  toApiAppUpdates,
+  toApiSignup,
+  toApiUserUpdates,
+  toApiReview,
+  toApiReviewUpdates,
+  toApiConsultation,
+  toApiNews,
+  toApiNewsUpdates,
+  toApiDownload,
+} from './backendMappers';
 
 // ============ HELPERS ============
 
@@ -65,6 +78,12 @@ export function addUser(user: Omit<User, 'id' | 'createdAt'>): User {
   };
   users.push(newUser);
   setItem(KEYS.users, users);
+
+  // Sync to backend
+  trpcClient.localAuth.signup
+    .mutate({ ...toApiSignup(newUser as any), passwordIsEncoded: true, skipCookie: true })
+    .catch(() => {});
+
   return newUser;
 }
 
@@ -74,6 +93,11 @@ export function updateUser(id: string, updates: Partial<User>): User | null {
   if (index === -1) return null;
   users[index] = { ...users[index], ...updates };
   setItem(KEYS.users, users);
+
+  trpcClient.localAuth.update
+    .mutate({ id, data: toApiUserUpdates(updates) })
+    .catch(() => {});
+
   return users[index];
 }
 
@@ -83,6 +107,8 @@ export function deleteUser(id: string): boolean {
   if (index === -1) return false;
   users.splice(index, 1);
   setItem(KEYS.users, users);
+
+  trpcClient.localAuth.delete.mutate({ id }).catch(() => {});
   return true;
 }
 
@@ -118,6 +144,8 @@ export function addApp(app: Omit<App, 'id'>): App {
   const newApp: App = { ...app, id: generateId() };
   apps.push(newApp);
   setItem(KEYS.apps, apps);
+
+  trpcClient.apps.create.mutate(toApiApp(newApp)).catch(() => {});
   return newApp;
 }
 
@@ -127,6 +155,10 @@ export function updateApp(id: string, updates: Partial<App>): App | null {
   if (index === -1) return null;
   apps[index] = { ...apps[index], ...updates };
   setItem(KEYS.apps, apps);
+
+  trpcClient.apps.update
+    .mutate({ id, data: toApiAppUpdates(updates) })
+    .catch(() => {});
   return apps[index];
 }
 
@@ -136,6 +168,8 @@ export function deleteApp(id: string): boolean {
   if (index === -1) return false;
   apps.splice(index, 1);
   setItem(KEYS.apps, apps);
+
+  trpcClient.apps.delete.mutate({ id }).catch(() => {});
   return true;
 }
 
@@ -176,6 +210,8 @@ export function addDownload(userId: string, appId: string): Download {
     setItem(KEYS.apps, apps);
   }
   setItem(KEYS.downloads, downloads);
+
+  trpcClient.download.create.mutate(toApiDownload(newDownload)).catch(() => {});
   return newDownload;
 }
 
@@ -231,6 +267,8 @@ export function addConsultation(consultation: Omit<Consultation, 'id' | 'submitt
   };
   consultations.push(newConsultation);
   setItem(KEYS.consultations, consultations);
+
+  trpcClient.consultation.create.mutate(toApiConsultation(newConsultation)).catch(() => {});
   return newConsultation;
 }
 
@@ -240,6 +278,8 @@ export function updateConsultationStatus(id: string, status: 'new' | 'contacted'
   if (index === -1) return null;
   consultations[index].status = status;
   setItem(KEYS.consultations, consultations);
+
+  trpcClient.consultation.updateStatus.mutate({ id, status }).catch(() => {});
   return consultations[index];
 }
 
@@ -249,6 +289,8 @@ export function deleteConsultation(id: string): boolean {
   if (index === -1) return false;
   consultations.splice(index, 1);
   setItem(KEYS.consultations, consultations);
+
+  trpcClient.consultation.delete.mutate({ id }).catch(() => {});
   return true;
 }
 
@@ -279,6 +321,8 @@ export function addReview(review: Omit<Review, 'id' | 'createdAt'>): Review {
   };
   reviews.push(newReview);
   setItem(KEYS.reviews, reviews);
+
+  trpcClient.review.create.mutate(toApiReview(newReview)).catch(() => {});
   return newReview;
 }
 
@@ -288,6 +332,26 @@ export function updateReview(id: string, updates: Partial<Review>): Review | nul
   if (index === -1) return null;
   reviews[index] = { ...reviews[index], ...updates };
   setItem(KEYS.reviews, reviews);
+
+  // Use the dedicated status update when only moderation fields changed
+  const onlyStatus =
+    Object.keys(updates).every((k) =>
+      ['status', 'approved', 'featured'].includes(k)
+    );
+  if (onlyStatus) {
+    trpcClient.review.updateStatus
+      .mutate({
+        id,
+        status: updates.status,
+        approved: updates.approved,
+        featured: updates.featured,
+      })
+      .catch(() => {});
+  } else {
+    trpcClient.review.update
+      .mutate({ id, data: toApiReviewUpdates(updates) })
+      .catch(() => {});
+  }
   return reviews[index];
 }
 
@@ -297,6 +361,8 @@ export function deleteReview(id: string): boolean {
   if (index === -1) return false;
   reviews.splice(index, 1);
   setItem(KEYS.reviews, reviews);
+
+  trpcClient.review.delete.mutate({ id }).catch(() => {});
   return true;
 }
 
@@ -327,6 +393,8 @@ export function addNews(news: Omit<NewsPost, 'id' | 'publishedAt'>): NewsPost {
   };
   allNews.push(newItem);
   setItem(KEYS.news, allNews);
+
+  trpcClient.news.create.mutate(toApiNews(newItem)).catch(() => {});
   return newItem;
 }
 
@@ -336,6 +404,10 @@ export function updateNews(id: string, updates: Partial<NewsPost>): NewsPost | n
   if (index === -1) return null;
   allNews[index] = { ...allNews[index], ...updates };
   setItem(KEYS.news, allNews);
+
+  trpcClient.news.update
+    .mutate({ id, data: toApiNewsUpdates(updates) })
+    .catch(() => {});
   return allNews[index];
 }
 
@@ -345,6 +417,8 @@ export function deleteNews(id: string): boolean {
   if (index === -1) return false;
   allNews.splice(index, 1);
   setItem(KEYS.news, allNews);
+
+  trpcClient.news.delete.mutate({ id }).catch(() => {});
   return true;
 }
 
@@ -367,10 +441,7 @@ export function getStats() {
   return {
     totalDownloads: downloads.length,
     activeUsers: users.length,
-    totalRevenue: downloads.reduce((acc, d) => {
-      const app = apps.find(a => a.id === d.appId);
-      return acc + (app ? app.price_usd : 0);
-    }, 0),
+    totalRevenue: apps.reduce((acc, app) => acc + (app.price_usd * app.downloadCount), 0),
     pendingReviews: reviews.filter(r => !r.approved).length,
     newConsultations: consultations.filter(c => c.status === 'new').length,
     growth: 12,

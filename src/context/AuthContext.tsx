@@ -1,7 +1,9 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { User, UserRole, CurrencyCode } from '../types';
-import { getUsers, addUser as dbAddUser } from '../utils/dbOperations';
-import { encodePassword, decodePassword } from '../utils/validators';
+import { getUsers } from '../utils/dbOperations';
+import { encodePassword, decodePassword, generateId } from '../utils/validators';
+import { trpcClient } from '../utils/trpcVanilla';
+import { fromApiUser } from '../utils/backendMappers';
 
 interface AuthContextType {
   user: User | null;
@@ -44,41 +46,83 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
+  const persistCurrentUser = (u: User) => {
+    setUser(u);
+    setIsAuthenticated(true);
+    localStorage.setItem('exsify_current_user', JSON.stringify(u));
+  };
+
   const login = async (email: string, password: string): Promise<{ success: boolean; requiresPasswordChange?: boolean; error?: string }> => {
+    try {
+      // Try backend first
+      const result = await trpcClient.localAuth.login.mutate({ email, password });
+      if (result.user) {
+        const loggedInUser = fromApiUser(result.user);
+        // Preserve password locally so profile password change works offline
+        const localUsers = getUsers();
+        const existing = localUsers.find(u => u.email.toLowerCase() === loggedInUser.email.toLowerCase());
+        loggedInUser.password = existing?.password ?? encodePassword(password);
+        persistCurrentUser(loggedInUser);
+        return { success: true, requiresPasswordChange: loggedInUser.requiresPasswordChange };
+      }
+    } catch (err) {
+      // Backend unavailable or invalid credentials — fall back to localStorage
+    }
+
     try {
       const users = getUsers();
       const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-      
       if (!foundUser) {
         return { success: false, error: 'Invalid email or password' };
       }
-
       const decodedPassword = decodePassword(foundUser.password);
       if (decodedPassword !== password) {
         return { success: false, error: 'Invalid email or password' };
       }
-
-      const updatedUser = { ...foundUser };
-      setUser(updatedUser);
-      setIsAuthenticated(true);
-      localStorage.setItem('exsify_current_user', JSON.stringify(updatedUser));
+      persistCurrentUser(foundUser);
       return { success: true, requiresPasswordChange: !!foundUser.requiresPasswordChange };
-    } catch (error) {
+    } catch {
       return { success: false, error: 'An error occurred during login' };
     }
   };
 
   const signup = async (userData: SignupData): Promise<{ success: boolean; error?: string }> => {
     try {
-      const users = getUsers();
-      const existingUser = users.find(u => u.email.toLowerCase() === userData.email.toLowerCase());
-      
-      if (existingUser) {
+      // Try backend first
+      const result = await trpcClient.localAuth.signup.mutate({
+        fullName: userData.fullName,
+        email: userData.email,
+        password: userData.password,
+        country: userData.country,
+        region: userData.region,
+        currency: userData.currency,
+      });
+      if (result.user) {
+        const newUser: User = {
+          ...fromApiUser(result.user),
+          password: encodePassword(userData.password),
+        };
+        const users = getUsers();
+        users.push(newUser);
+        localStorage.setItem('exsify_users', JSON.stringify(users));
+        persistCurrentUser(newUser);
+        return { success: true };
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '';
+      if (message.includes('already exists')) {
         return { success: false, error: 'An account with this email already exists' };
       }
+      // Backend unavailable — fall back to localStorage
+    }
 
+    try {
+      let users = getUsers();
+      if (users.some(u => u.email.toLowerCase() === userData.email.toLowerCase())) {
+        return { success: false, error: 'An account with this email already exists' };
+      }
       const newUser: User = {
-        id: `user-${Date.now()}`,
+        id: generateId(),
         fullName: userData.fullName,
         email: userData.email,
         password: encodePassword(userData.password),
@@ -86,20 +130,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         country: userData.country,
         region: userData.region,
         currency: userData.currency as CurrencyCode,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
-
-      dbAddUser(newUser);
-      setUser(newUser);
-      setIsAuthenticated(true);
-      localStorage.setItem('exsify_current_user', JSON.stringify(newUser));
+      users = getUsers();
+      users.push(newUser);
+      localStorage.setItem('exsify_users', JSON.stringify(users));
+      persistCurrentUser(newUser);
       return { success: true };
-    } catch (error) {
+    } catch {
       return { success: false, error: 'An error occurred during signup' };
     }
   };
 
   const logout = () => {
+    trpcClient.localAuth.logout.mutate().catch(() => {});
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('exsify_current_user');

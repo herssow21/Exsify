@@ -8,6 +8,7 @@ import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { seedDatabase } from './utils/seedDatabase';
 import { recordVisit } from './utils/visits';
+import { syncAll } from './utils/syncEngine';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import Services from './pages/Services';
@@ -28,6 +29,7 @@ function App() {
   useEffect(() => {
     seedDatabase();
     recordVisit();
+    syncAll().catch(() => {});
   }, []);
 
   return (

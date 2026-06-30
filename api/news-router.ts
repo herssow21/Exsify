@@ -3,6 +3,7 @@ import { createRouter, publicQuery, adminQuery } from "./middleware";
 import { getDb } from "./queries/connection";
 import { newsPosts } from "@db/schema";
 import { eq, desc, sql } from "drizzle-orm";
+import { generateId } from "@/utils/validators";
 
 export const newsRouter = createRouter({
   list: publicQuery.query(async () => {
@@ -22,6 +23,7 @@ export const newsRouter = createRouter({
   create: adminQuery
     .input(
       z.object({
+        id: z.string().min(1).optional(),
         titleEn: z.string().min(1),
         titleAr: z.string().optional(),
         contentEn: z.string().optional(),
@@ -29,11 +31,14 @@ export const newsRouter = createRouter({
         category: z.string().optional(),
         imageUrl: z.string().optional(),
         featured: z.boolean().optional(),
+        publishedAt: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
       const db = getDb();
-      const result = await db.insert(newsPosts).values({
+      const id = input.id ?? generateId();
+      await db.insert(newsPosts).values({
+        id,
         titleEn: input.titleEn,
         titleAr: input.titleAr,
         contentEn: input.contentEn,
@@ -41,14 +46,15 @@ export const newsRouter = createRouter({
         category: input.category,
         imageUrl: input.imageUrl,
         featured: input.featured,
+        publishedAt: input.publishedAt ? new Date(input.publishedAt) : new Date(),
       });
-      return { id: Number(result[0].insertId) };
+      return { id };
     }),
 
   update: adminQuery
     .input(
       z.object({
-        id: z.number(),
+        id: z.string().min(1),
         data: z.object({
           titleEn: z.string().optional(),
           titleAr: z.string().optional(),
@@ -70,7 +76,7 @@ export const newsRouter = createRouter({
     }),
 
   delete: adminQuery
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string().min(1) }))
     .mutation(async ({ input }) => {
       const db = getDb();
       await db.delete(newsPosts).where(eq(newsPosts.id, input.id));

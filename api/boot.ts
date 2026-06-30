@@ -5,6 +5,7 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "./router";
 import { createContext } from "./context";
 import { env } from "./lib/env";
+import { seedDatabaseIfEmpty } from "./seed";
 import { createOAuthCallbackHandler } from "./kimi/auth";
 import { Paths } from "@contracts/constants";
 import { getDb } from "./queries/connection";
@@ -27,6 +28,9 @@ function getMimeCategory(mime: string): "image" | "document" | "archive" | "othe
 }
 
 const app = new Hono<{ Bindings: HttpBindings }>();
+
+// Seed the database with demo data on startup if tables are empty
+seedDatabaseIfEmpty().catch((err) => console.error("[seed] Failed:", err));
 
 // Custom file serving for uploads (works on all platforms, dev + production)
 app.get("/uploads/*", async (c) => {

@@ -5,6 +5,7 @@ import { Lock, ArrowRight, CheckCircle } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { getUsers } from '../utils/dbOperations';
 import { encodePassword, decodePassword } from '../utils/validators';
+import { trpcClient } from '../utils/trpcVanilla';
 
 const STORAGE_KEY = 'exsify_users';
 
@@ -66,6 +67,10 @@ export default function ResetPassword() {
         requiresPasswordChange: false
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+
+      trpcClient.localAuth.changePassword
+        .mutate({ id: users[userIndex].id, password })
+        .catch(() => {});
 
       showToast('Password reset successfully! Please sign in.', 'success');
       navigate('/auth?mode=login');

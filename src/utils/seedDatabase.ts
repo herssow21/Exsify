@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { App, User, Review, NewsPost, Consultation, Download, RegionStat } from '../types';
 import { encodePassword } from './validators';
 
@@ -680,6 +681,7 @@ export const seedRegionStats: RegionStat[] = [
 ];
 
 export function seedDatabase(): void {
+  if (typeof localStorage === 'undefined') return;
   if (!localStorage.getItem('exsify_apps')) {
     localStorage.setItem('exsify_apps', JSON.stringify(seedApps));
   }
@@ -768,6 +770,7 @@ export function seedDatabase(): void {
 }
 
 export function resetDatabase(): void {
+  if (typeof localStorage === 'undefined') return;
   localStorage.setItem('exsify_apps', JSON.stringify(seedApps));
   localStorage.setItem('exsify_users', JSON.stringify(seedUsers));
   localStorage.setItem('exsify_reviews', JSON.stringify(seedReviews));

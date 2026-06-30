@@ -13,6 +13,7 @@ import { useDownloads } from '../hooks/useDatabase';
 import type { CurrencyCode } from '../types';
 import { kenyanCounties } from '../utils/kenyanMarket';
 import { encodePassword, decodePassword } from '../utils/validators';
+import { trpcClient } from '../utils/trpcVanilla';
 
 const countries = [
   'Saudi Arabia', 'UAE', 'Egypt', 'Nigeria', 'Kenya',
@@ -140,6 +141,9 @@ export default function Profile() {
         localStorage.setItem('exsify_current_user', JSON.stringify(updatedUser));
       }
       refreshUser();
+      trpcClient.localAuth.changePassword
+        .mutate({ id: user?.id ?? '', password: passwordData.newPassword })
+        .catch(() => {});
       setPasswordData({ oldPassword: '', newPassword: '', confirmPassword: '' });
       showToast('Password changed successfully!', 'success');
     } catch {
