@@ -99,34 +99,7 @@ export default function ValueProposition() {
         </div>
 
         {/* Country marquee */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6 }}
-          className="mt-16"
-        >
-          <div className="text-center mb-6">
-            <p className="text-[#1E293B] font-bold text-lg">{t('features.countryNote.title', { count: partnerCountries.length })}</p>
-            <p className="text-gray-500 text-sm">{t('features.countryNote.subtitle')}</p>
-          </div>
-
-          <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white py-5">
-            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent z-10" />
-            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent z-10" />
-            <div className="marquee-track flex items-center gap-8">
-              {[...partnerCountries, ...partnerCountries].map((country, i) => (
-                <div
-                  key={`${country.name}-${i}`}
-                  className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-gray-50 border border-gray-100 shadow-sm"
-                  title={country.name}
-                >
-                  <span className="text-2xl leading-none">{country.flag}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
+        
 
         {/* Kenyan market */}
         <motion.div
