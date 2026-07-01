@@ -148,13 +148,13 @@ export default function Careers() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-16 text-start"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1E293B] mb-6 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1E293B] dark:text-white mb-6 tracking-tight">
             Join Our{' '}
             <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-accent))] bg-clip-text text-transparent">
               Team
             </span>
           </h1>
-          <p className="text-gray-600 max-w-2xl text-base sm:text-lg">
+          <p className="text-gray-600 dark:text-gray-300 max-w-2xl text-base sm:text-lg">
             Help us build the future of business software in Africa and the Middle East.
             We are always looking for talented individuals who share our passion.
           </p>
@@ -167,7 +167,7 @@ export default function Careers() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-2xl font-bold text-[#1E293B] mb-8">Why Work at EXSIFY?</h2>
+          <h2 className="text-2xl font-bold text-[#1E293B] dark:text-white mb-8">Why Work at EXSIFY?</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {benefits.map((benefit, index) => (
               <motion.div
@@ -176,13 +176,13 @@ export default function Careers() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md hover:border-[hsl(var(--exsify-primary))]/30 transition-all"
+                className="bg-white dark:bg-[#1E293B] rounded-xl border border-gray-200 dark:border-white/10 p-6 shadow-sm hover:shadow-md hover:border-[hsl(var(--exsify-primary))]/30 transition-all"
               >
                 <div className="w-10 h-10 bg-[hsl(var(--exsify-primary))]/10 rounded-lg flex items-center justify-center mb-4">
                   <benefit.icon className="w-5 h-5 text-[hsl(var(--exsify-primary))]" />
                 </div>
-                <h3 className="text-[#1E293B] font-bold mb-2">{benefit.title}</h3>
-                <p className="text-gray-500 text-sm">{benefit.description}</p>
+                <h3 className="text-[#1E293B] dark:text-white font-bold mb-2">{benefit.title}</h3>
+                <p className="text-gray-500 dark:text-gray-300 text-sm">{benefit.description}</p>
               </motion.div>
             ))}
           </div>
@@ -194,7 +194,7 @@ export default function Careers() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl font-bold text-[#1E293B] mb-8">Open Positions</h2>
+          <h2 className="text-2xl font-bold text-[#1E293B] dark:text-white mb-8">Open Positions</h2>
           <div className="space-y-4">
             {jobOpenings.map((job) => (
               <motion.div
@@ -202,15 +202,15 @@ export default function Careers() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+                className="bg-white dark:bg-[#1E293B] rounded-xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden"
               >
                 <button
                   onClick={() => toggleJob(job.id)}
-                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
                 >
                   <div className="flex-1">
-                    <h3 className="text-[#1E293B] font-bold text-lg mb-2">{job.title}</h3>
-                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-500">
+                    <h3 className="text-[#1E293B] dark:text-white font-bold text-lg mb-2">{job.title}</h3>
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-500 dark:text-gray-300">
                       <span className="flex items-center gap-1">
                         <Briefcase className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
                         {job.department}
@@ -238,12 +238,12 @@ export default function Careers() {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="px-5 sm:px-6 pb-6 border-t border-gray-100"
+                      className="px-5 sm:px-6 pb-6 border-t border-gray-100 dark:border-white/10"
                     >
                       <div className="pt-4">
-                        <p className="text-gray-600 mb-4">{job.description}</p>
-                        <h4 className="text-[#1E293B] font-bold mb-2">Requirements:</h4>
-                        <ul className="list-disc list-inside text-gray-600 mb-6 space-y-1">
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">{job.description}</p>
+                        <h4 className="text-[#1E293B] dark:text-white font-bold mb-2">Requirements:</h4>
+                        <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 space-y-1">
                           {job.requirements.map((req, index) => (
                             <li key={index}>{req}</li>
                           ))}
@@ -269,9 +269,9 @@ export default function Careers() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-12 p-6 bg-white rounded-xl border border-gray-200 text-center"
+          className="mt-12 p-6 bg-white dark:bg-[#1E293B] rounded-xl border border-gray-200 dark:border-white/10 text-center"
         >
-          <p className="text-gray-600 mb-2">Don't see a position that fits your skills?</p>
+          <p className="text-gray-600 dark:text-gray-300 mb-2">Don't see a position that fits your skills?</p>
           <a
             href="mailto:careers@exsify.com"
             className="text-[hsl(var(--exsify-primary))] hover:underline font-medium"
@@ -296,16 +296,16 @@ export default function Careers() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+              className="bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
             >
-              <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+              <div className="p-6 border-b border-gray-100 dark:border-white/10 flex items-center justify-between">
                 <div>
-                  <h3 className="text-xl font-bold text-[#1E293B]">Apply for {applyJob.title}</h3>
-                  <p className="text-gray-500 text-sm">Upload your CV in PDF format</p>
+                  <h3 className="text-xl font-bold text-[#1E293B] dark:text-white">Apply for {applyJob.title}</h3>
+                  <p className="text-gray-500 dark:text-gray-300 text-sm">Upload your CV in PDF format</p>
                 </div>
                 <button
                   onClick={() => setApplyJob(null)}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -313,7 +313,7 @@ export default function Careers() {
 
               <form onSubmit={submitApplication} className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Full Name *</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
@@ -321,14 +321,14 @@ export default function Careers() {
                       required
                       value={applicant.name}
                       onChange={(e) => setApplicant({ ...applicant, name: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1E293B] focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-[#0B1120] border border-gray-200 dark:border-white/10 rounded-lg text-[#1E293B] dark:text-white focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
                       placeholder="John Doe"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Email *</label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
@@ -336,17 +336,17 @@ export default function Careers() {
                       required
                       value={applicant.email}
                       onChange={(e) => setApplicant({ ...applicant, email: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1E293B] focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-[#0B1120] border border-gray-200 dark:border-white/10 rounded-lg text-[#1E293B] dark:text-white focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
                       placeholder="john@email.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">CV / Resume (PDF) *</label>
-                  <label className="flex flex-col items-center justify-center gap-2 w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[hsl(var(--exsify-primary))] hover:bg-[hsl(var(--exsify-primary))]/5 transition-colors">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">CV / Resume (PDF) *</label>
+                  <label className="flex flex-col items-center justify-center gap-2 w-full px-4 py-6 border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg cursor-pointer hover:border-[hsl(var(--exsify-primary))] hover:bg-[hsl(var(--exsify-primary))]/5 transition-colors">
                     <FileUp className="w-8 h-8 text-[hsl(var(--exsify-primary))]" />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
                       {cvFile ? cvFile.name : 'Click to upload PDF'}
                     </span>
                     <input
@@ -359,12 +359,12 @@ export default function Careers() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Cover Message</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Cover Message</label>
                   <textarea
                     value={applicant.message}
                     onChange={(e) => setApplicant({ ...applicant, message: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1E293B] focus:border-[hsl(var(--exsify-primary))] focus:outline-none resize-none"
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-[#0B1120] border border-gray-200 dark:border-white/10 rounded-lg text-[#1E293B] dark:text-white focus:border-[hsl(var(--exsify-primary))] focus:outline-none resize-none"
                     placeholder="Tell us why you're a great fit..."
                   />
                 </div>

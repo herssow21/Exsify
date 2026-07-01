@@ -49,19 +49,19 @@ export default function ValueProposition() {
   const kenyanStats = getKenyanMarketStats();
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-12 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
-          <h2 className="section-title text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
+          <h2 className="section-title text-3xl md:text-4xl font-bold text-[#1E293B] dark:text-white mb-4">
             {t('features.title')}
           </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto">
+          <p className="text-gray-500 dark:text-gray-300 max-w-2xl mx-auto">
             {t('features.subtitle')}
           </p>
         </motion.div>
@@ -77,7 +77,7 @@ export default function ValueProposition() {
               transition={{ delay: index * 0.1 }}
               className="group relative"
             >
-              <div className="relative bg-white border border-gray-200 rounded-2xl p-8 hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-lg transition-all duration-300 h-full overflow-hidden">
+              <div className="relative bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-white/10 rounded-2xl p-8 hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-lg transition-all duration-300 h-full overflow-hidden">
                 {/* Hover Glow Effect */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
                 
@@ -87,10 +87,10 @@ export default function ValueProposition() {
                 </div>
 
                 {/* Content */}
-                <h3 className="relative text-xl font-bold text-[#1E293B] mb-3 group-hover:text-[hsl(var(--exsify-primary))] transition-colors">
+                <h3 className="relative text-xl font-bold text-[#1E293B] dark:text-white mb-3 group-hover:text-[hsl(var(--exsify-primary))] transition-colors">
                   {t(feature.titleKey)}
                 </h3>
-                <p className="relative text-gray-500 text-sm leading-relaxed">
+                <p className="relative text-gray-500 dark:text-gray-300 text-sm leading-relaxed">
                   {t(feature.descriptionKey)}
                 </p>
               </div>
@@ -98,21 +98,18 @@ export default function ValueProposition() {
           ))}
         </div>
 
-        {/* Country marquee */}
-        
-
         {/* Kenyan market */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.7 }}
-          className="mt-16"
+          className="mt-12"
         >
-          <h3 className="section-title-left text-xl font-bold text-[#1E293B] mb-2">
+          <h3 className="section-title-left text-xl font-bold text-[#1E293B] dark:text-white mb-2">
             {t('features.kenyanMarket.title')}
           </h3>
-          <p className="text-gray-500 text-sm mb-6">
+          <p className="text-gray-500 dark:text-gray-300 text-sm mb-6">
             {t('features.kenyanMarket.subtitle')}
           </p>
 
@@ -121,11 +118,11 @@ export default function ValueProposition() {
               <div
                 key={county.code}
                 title={`${county.name} — ${county.clients} clients`}
-                className="relative w-16 h-16 rounded-full bg-white border border-gray-200 flex items-center justify-center hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-md transition-all"
+                className="relative w-16 h-16 rounded-full bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-white/10 flex items-center justify-center hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-md transition-all"
               >
-                <span className="text-xs font-bold text-[#1E293B]">{county.code}</span>
+                <span className="text-xs font-bold text-[#1E293B] dark:text-white">{county.code}</span>
                 {county.clients > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[1.25rem] h-5 px-1 bg-[hsl(var(--exsify-accent))] text-[#1E293B] text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                  <span className="absolute -top-1 -right-1 min-w-[1.25rem] h-5 px-1 bg-[hsl(var(--exsify-accent))] text-[#1E293B] text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white dark:border-[#1E293B]">
                     {county.clients}
                   </span>
                 )}

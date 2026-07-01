@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { App, User, Review, News, Consultation, Download } from '../types';
+import type { App, User, Review, News, Consultation, Download, Career } from '../types';
 import {
   getApps,
   getUsers,
   getReviews,
   getNews,
+  getCareers,
   getConsultations,
   getDownloads,
   addApp,
@@ -16,6 +17,9 @@ import {
   addNews,
   updateNews,
   deleteNews,
+  addCareer,
+  updateCareer,
+  deleteCareer,
   updateConsultationStatus,
   deleteConsultation,
   updateUser,
@@ -149,6 +153,40 @@ export function useNews() {
   }, [refresh]);
 
   return { news, loading, refresh, create, update, remove };
+}
+
+export function useCareers() {
+  const [careers, setCareers] = useState<Career[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setCareers(getCareers());
+    setLoading(false);
+  }, []);
+
+  const refresh = useCallback(() => {
+    setCareers(getCareers());
+  }, []);
+
+  const create = useCallback((item: Omit<Career, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const newItem = addCareer(item);
+    refresh();
+    return newItem;
+  }, [refresh]);
+
+  const update = useCallback((id: string, updates: Partial<Career>) => {
+    const updated = updateCareer(id, updates);
+    refresh();
+    return updated;
+  }, [refresh]);
+
+  const remove = useCallback((id: string) => {
+    const success = deleteCareer(id);
+    refresh();
+    return success;
+  }, [refresh]);
+
+  return { careers, loading, refresh, create, update, remove };
 }
 
 export function useConsultations() {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import {
@@ -8,7 +8,8 @@ import {
   Star,
   MessageSquare,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  Calendar
 } from 'lucide-react';
 import {
   BarChart,
@@ -22,11 +23,47 @@ import {
   Line
 } from 'recharts';
 import { useStats, useApps } from '../../hooks/useDatabase';
+import { getDownloads, getUsers, getReviews, getConsultations } from '../../utils/dbOperations';
 import { formatPrice } from '../../utils/currencyConverter';
 import { useSettings } from '../../context/SettingsContext';
-import { getUsers } from '../../utils/dbOperations';
 import { getKenyanMarketStats } from '../../utils/kenyanMarket';
 import { getVisitsByDay } from '../../utils/visits';
+
+type DateFilter = 'today' | 'week' | 'month' | 'year' | 'all';
+
+function isWithinDateFilter(dateString: string, filter: DateFilter): boolean {
+  if (filter === 'all') return true;
+  const date = new Date(dateString);
+  const now = new Date();
+  const start = new Date(now);
+  start.setHours(0, 0, 0, 0);
+
+  switch (filter) {
+    case 'today':
+      return date >= start;
+    case 'week': {
+      const day = start.getDay();
+      start.setDate(start.getDate() - day);
+      return date >= start;
+    }
+    case 'month':
+      start.setDate(1);
+      return date >= start;
+    case 'year':
+      start.setMonth(0, 1);
+      return date >= start;
+    default:
+      return true;
+  }
+}
+
+const filterOptions: { value: DateFilter; label: string }[] = [
+  { value: 'today', label: 'Today' },
+  { value: 'week', label: 'This Week' },
+  { value: 'month', label: 'This Month' },
+  { value: 'year', label: 'This Year' },
+  { value: 'all', label: 'All Time' },
+];
 
 interface StatCardProps {
   title: string;
@@ -85,21 +122,27 @@ export default function AdminOverview() {
   const { stats } = useStats();
   const { apps } = useApps();
   const { currency } = useSettings();
+  const [dateFilter, setDateFilter] = useState<DateFilter>('all');
 
   const featuredApps = apps.filter(app => app.featured).length;
   const activeApps = apps.filter(app => app.status === 'active').length;
 
+  const filteredDownloads = getDownloads().filter(d => isWithinDateFilter(d.downloadedAt, dateFilter));
+  const filteredNewUsers = getUsers().filter(u => isWithinDateFilter(u.createdAt, dateFilter));
+  const filteredPendingReviews = getReviews().filter(r => !r.approved && isWithinDateFilter(r.createdAt, dateFilter));
+  const filteredNewConsultations = getConsultations().filter(c => c.status === 'new' && isWithinDateFilter(c.submittedAt, dateFilter));
+
   const statCards = [
     {
       title: t('admin.stats.totalDownloads'),
-      value: stats.totalDownloads.toLocaleString(),
+      value: filteredDownloads.length.toLocaleString(),
       icon: Download,
       trend: 12,
       color: 'bg-blue-500'
     },
     {
       title: t('admin.stats.activeUsers'),
-      value: stats.activeUsers.toLocaleString(),
+      value: filteredNewUsers.length.toLocaleString(),
       icon: Users,
       trend: 8,
       color: 'bg-green-500'
@@ -113,13 +156,13 @@ export default function AdminOverview() {
     },
     {
       title: t('admin.stats.pendingReviews'),
-      value: stats.pendingReviews,
+      value: filteredPendingReviews.length,
       icon: Star,
       color: 'bg-purple-500'
     },
     {
       title: t('admin.stats.newConsultations'),
-      value: stats.newConsultations,
+      value: filteredNewConsultations.length,
       icon: MessageSquare,
       color: 'bg-pink-500'
     },
@@ -157,9 +200,25 @@ export default function AdminOverview() {
   return (
     <div className="space-y-8">
       {/* Page Title */}
-      <div>
-        <h1 className="text-3xl font-bold text-white mb-2">{t('admin.overview')}</h1>
-        <p className="text-gray-300">Welcome back! Here's what's happening with your platform.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2">{t('admin.overview')}</h1>
+          <p className="text-gray-300">Welcome back! Here's what's happening with your platform.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Calendar className="w-5 h-5 text-gray-400" />
+          <select
+            value={dateFilter}
+            onChange={e => setDateFilter(e.target.value as DateFilter)}
+            className="px-4 py-2 bg-[hsl(var(--exsify-dark-lighter))] border border-[hsl(var(--exsify-primary))]/40 rounded-lg text-white focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
+          >
+            {filterOptions.map(option => (
+              <option key={option.value} value={option.value} className="bg-[hsl(var(--exsify-dark))]">
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Stats Grid */}

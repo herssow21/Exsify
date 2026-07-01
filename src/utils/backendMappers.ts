@@ -5,6 +5,7 @@ import type {
   Consultation,
   NewsPost,
   Download,
+  Career,
 } from '@/types';
 
 // ── Apps ──
@@ -281,6 +282,58 @@ export function toApiNewsUpdates(updates: Partial<NewsPost>): any {
   if (updates.imageUrl !== undefined) map.imageUrl = updates.imageUrl;
   if (updates.featured !== undefined) map.featured = updates.featured;
   if (updates.publishedAt !== undefined) map.publishedAt = updates.publishedAt;
+  return map;
+}
+
+// ── Careers ──
+export function fromApiCareer(api: any): Career {
+  return {
+    id: String(api.id),
+    title_en: api.titleEn ?? api.title_en ?? '',
+    title_ar: api.titleAr ?? api.title_ar ?? '',
+    description_en: api.descriptionEn ?? api.description_en ?? '',
+    description_ar: api.descriptionAr ?? api.description_ar ?? '',
+    department: api.department ?? '',
+    location: api.location ?? '',
+    type: (api.type ?? 'full-time') as Career['type'],
+    status: (api.status ?? 'active') as Career['status'],
+    featured: Boolean(api.featured),
+    createdAt:
+      (api.createdAt ? new Date(api.createdAt).toISOString() : undefined) ??
+      (api.created_at ? new Date(api.created_at).toISOString() : undefined) ??
+      new Date().toISOString(),
+    updatedAt:
+      (api.updatedAt ? new Date(api.updatedAt).toISOString() : undefined) ??
+      (api.updated_at ? new Date(api.updated_at).toISOString() : undefined),
+  };
+}
+
+export function toApiCareer(c: Career): any {
+  return {
+    id: c.id,
+    titleEn: c.title_en,
+    titleAr: c.title_ar,
+    descriptionEn: c.description_en,
+    descriptionAr: c.description_ar,
+    department: c.department,
+    location: c.location,
+    type: c.type,
+    status: c.status,
+    featured: c.featured,
+  };
+}
+
+export function toApiCareerUpdates(updates: Partial<Career>): any {
+  const map: Record<string, any> = {};
+  if (updates.title_en !== undefined) map.titleEn = updates.title_en;
+  if (updates.title_ar !== undefined) map.titleAr = updates.title_ar;
+  if (updates.description_en !== undefined) map.descriptionEn = updates.description_en;
+  if (updates.description_ar !== undefined) map.descriptionAr = updates.description_ar;
+  if (updates.department !== undefined) map.department = updates.department;
+  if (updates.location !== undefined) map.location = updates.location;
+  if (updates.type !== undefined) map.type = updates.type;
+  if (updates.status !== undefined) map.status = updates.status;
+  if (updates.featured !== undefined) map.featured = updates.featured;
   return map;
 }
 

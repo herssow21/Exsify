@@ -59,10 +59,10 @@ export default function Services() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-[#1E293B] mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#1E293B] dark:text-white mb-4">
             {t('apps.title')}
           </h1>
-          <p className="text-gray-500 max-w-2xl mx-auto mb-6">
+          <p className="text-gray-500 dark:text-gray-300 max-w-2xl mx-auto mb-6">
             {t('apps.subtitle')}
           </p>
           <Link
@@ -83,19 +83,19 @@ export default function Services() {
         >
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-300" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search apps..."
-              className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-[#1E293B] placeholder-gray-400 focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
+              className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-[#1E293B] border border-gray-200 dark:border-white/10 rounded-xl text-[#1E293B] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
             />
           </div>
 
           {/* Category Filter */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
-            <Filter className="w-5 h-5 text-gray-500 flex-shrink-0" />
+            <Filter className="w-5 h-5 text-gray-500 dark:text-gray-300 flex-shrink-0" />
             {categories.map(category => (
               <button
                 key={category}
@@ -103,7 +103,7 @@ export default function Services() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                   selectedCategory === category
                     ? 'bg-[hsl(var(--exsify-primary))] text-white'
-                    : 'bg-gray-100 text-gray-600 hover:text-[#1E293B] hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-[#1E293B] text-gray-600 dark:text-gray-300 hover:text-[#1E293B] dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/10'
                 }`}
               >
                 {category === 'all' ? t('apps.categories.all') : category}
@@ -112,13 +112,13 @@ export default function Services() {
           </div>
 
           {/* View Mode */}
-          <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center gap-2 bg-gray-100 dark:bg-[#1E293B] rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded transition-colors ${
                 viewMode === 'grid'
                   ? 'bg-[hsl(var(--exsify-primary))] text-white'
-                  : 'text-gray-600 hover:text-[#1E293B]'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-[#1E293B] dark:hover:text-white'
               }`}
             >
               <Grid3X3 className="w-5 h-5" />
@@ -128,7 +128,7 @@ export default function Services() {
               className={`p-2 rounded transition-colors ${
                 viewMode === 'list'
                   ? 'bg-[hsl(var(--exsify-primary))] text-white'
-                  : 'text-gray-600 hover:text-[#1E293B]'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-[#1E293B] dark:hover:text-white'
               }`}
             >
               <List className="w-5 h-5" />
@@ -138,7 +138,7 @@ export default function Services() {
 
         {/* Results Count */}
         <div className="mb-6">
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-300">
             Showing {filteredApps.length} {filteredApps.length === 1 ? 'app' : 'apps'}
             {selectedCategory !== 'all' && ` in ${selectedCategory}`}
           </p>
@@ -158,10 +158,10 @@ export default function Services() {
         ) : (
           <div className="text-center py-20">
             <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="w-10 h-10 text-gray-500" />
+              <Search className="w-10 h-10 text-gray-500 dark:text-gray-300" />
             </div>
-            <h3 className="text-xl font-bold text-[#1E293B] mb-2">No apps found</h3>
-            <p className="text-gray-500">Try adjusting your search or filters</p>
+            <h3 className="text-xl font-bold text-[#1E293B] dark:text-white mb-2">No apps found</h3>
+            <p className="text-gray-500 dark:text-gray-300">Try adjusting your search or filters</p>
           </div>
         )}
       </div>

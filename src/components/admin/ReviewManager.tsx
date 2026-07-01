@@ -56,6 +56,11 @@ export default function ReviewManager() {
     showToast('Review rejected', 'info');
   };
 
+  const handleToggleFeatured = (review: Review) => {
+    update(review.id, { featured: !review.featured });
+    showToast(`Review ${!review.featured ? 'marked as' : 'removed from'} featured`, 'success');
+  };
+
   const handleDelete = (review: Review) => {
     setDeletingReview(review);
     setIsDeleteModalOpen(true);
@@ -208,6 +213,17 @@ export default function ReviewManager() {
                     </button>
                   </>
                 )}
+                <button
+                  onClick={() => handleToggleFeatured(review)}
+                  title={review.featured ? 'Remove from featured' : 'Mark as featured'}
+                  className={`p-2 rounded-lg transition-colors ${
+                    review.featured
+                      ? 'bg-[hsl(var(--exsify-accent))]/20 text-[hsl(var(--exsify-accent))]'
+                      : 'bg-white/5 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Star className={`w-5 h-5 ${review.featured ? 'fill-[hsl(var(--exsify-accent))]' : ''}`} />
+                </button>
                 <button
                   onClick={() => handleDelete(review)}
                   className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"

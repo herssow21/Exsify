@@ -6,6 +6,7 @@ import {
   fromApiConsultation,
   fromApiNews,
   fromApiDownload,
+  fromApiCareer,
 } from './backendMappers';
 
 const KEYS = {
@@ -14,6 +15,7 @@ const KEYS = {
   reviews: 'exsify_reviews',
   consultations: 'exsify_consultations',
   news: 'exsify_news',
+  careers: 'exsify_careers',
   downloads: 'exsify_downloads',
 } as const;
 
@@ -66,6 +68,15 @@ export async function syncNews() {
   }
 }
 
+export async function syncCareers() {
+  try {
+    const rows = await trpcClient.careers.list.query();
+    setItem(KEYS.careers, rows.map(fromApiCareer));
+  } catch {
+    // offline / error
+  }
+}
+
 export async function syncDownloads() {
   try {
     const rows = await trpcClient.download.list.query();
@@ -82,6 +93,7 @@ export async function syncAll() {
     syncReviews(),
     syncConsultations(),
     syncNews(),
+    syncCareers(),
     syncDownloads(),
   ]);
 }

@@ -135,6 +135,25 @@ export const newsPosts = mysqlTable("news_posts", {
 export type NewsPost = typeof newsPosts.$inferSelect;
 export type InsertNewsPost = typeof newsPosts.$inferInsert;
 
+// ── Career Postings ──
+export const careers = mysqlTable("careers", {
+  id: varchar("id", { length: 100 }).primaryKey(),
+  titleEn: varchar("title_en", { length: 255 }).notNull(),
+  titleAr: varchar("title_ar", { length: 255 }),
+  descriptionEn: text("description_en"),
+  descriptionAr: text("description_ar"),
+  department: varchar("department", { length: 100 }),
+  location: varchar("location", { length: 100 }),
+  type: mysqlEnum("type", ["full-time", "part-time", "contract", "remote"]).default("full-time"),
+  status: mysqlEnum("status", ["active", "inactive", "closed"]).default("active").notNull(),
+  featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull().$onUpdate(() => new Date()),
+});
+
+export type Career = typeof careers.$inferSelect;
+export type InsertCareer = typeof careers.$inferInsert;
+
 // ── App Downloads tracking ──
 export const downloads = mysqlTable("downloads", {
   id: varchar("id", { length: 100 }).primaryKey(),

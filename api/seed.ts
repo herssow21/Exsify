@@ -6,6 +6,7 @@ import {
   reviews,
   consultations,
   newsPosts,
+  careers,
 } from "@db/schema";
 import {
   seedApps,
@@ -14,8 +15,9 @@ import {
   seedReviews,
   seedConsultations,
   seedNews,
+  seedCareers,
 } from "@/utils/seedDatabase";
-import type { App, User, Download, Review, Consultation, NewsPost } from "@/types";
+import type { App, User, Download, Review, Consultation, NewsPost, Career } from "@/types";
 
 export async function seedDatabaseIfEmpty() {
   const db = getDb();
@@ -153,5 +155,26 @@ export async function seedDatabaseIfEmpty() {
       });
     }
     console.log("[seed] News seeded");
+  }
+
+  // Seed careers
+  const existingCareers = await db.select({ id: careers.id }).from(careers).limit(1);
+  if (existingCareers.length === 0) {
+    for (const c of seedCareers as Career[]) {
+      await db.insert(careers).values({
+        id: c.id,
+        titleEn: c.title_en,
+        titleAr: c.title_ar,
+        descriptionEn: c.description_en,
+        descriptionAr: c.description_ar,
+        department: c.department,
+        location: c.location,
+        type: c.type,
+        status: c.status,
+        featured: c.featured,
+        createdAt: new Date(c.createdAt),
+      });
+    }
+    console.log("[seed] Careers seeded");
   }
 }

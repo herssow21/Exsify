@@ -38,7 +38,7 @@ export default function SystemTicker() {
       </div>
 
       {/* Stats Bar */}
-      <div className="bg-[hsl(var(--exsify-dark))] border-b border-white/10">
+      <div className="hidden sm:block bg-[hsl(var(--exsify-dark))] border-b border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 py-3 px-4">
             {tickerItems.map((item, index) => (

@@ -1,0 +1,47 @@
+services:
+  exsify-mysql:
+    image: mysql:8.0
+    container_name: exsify-mysql
+    restart: unless-stopped
+    environment:
+      # Credentials match the existing DATABASE_URL: mysql://root:2885%40wossreH%3F@localhost:3306/exsify
+      MYSQL_ROOT_PASSWORD: "2885@wossreH?"
+      MYSQL_DATABASE: exsify
+    ports:
+      - "3306:3306"
+    volumes:
+      - exsify_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p2885@wossreH?"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  exsify-app:
+    build: .
+    container_name: exsify-app
+    restart: unless-stopped
+    depends_on:
+      exsify-mysql:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      # Point the app at the MySQL container instead of localhost
+      DATABASE_URL: "mysql://root:2885%40wossreH%3F@exsify-mysql:3306/exsify"
+      APP_SECRET: ${APP_SECRET:-change-me-in-production}
+      APP_ID: ${APP_ID:-}
+      VITE_APP_ID: ${VITE_APP_ID:-}
+      VITE_KIMI_AUTH_URL: ${VITE_KIMI_AUTH_URL:-}
+      KIMI_AUTH_URL: ${KIMI_AUTH_URL:-}
+      KIMI_OPEN_URL: ${KIMI_OPEN_URL:-}
+      OWNER_UNION_ID: ${OWNER_UNION_ID:-}
+    ports:
+      - "3000:3000"
+    volumes:
+      - exsify_uploads:/app/uploads
+
+volumes:
+  exsify_mysql_data:
+  exsify_uploads:

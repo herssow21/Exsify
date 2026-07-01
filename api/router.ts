@@ -4,6 +4,7 @@ import { appRouter as appItemRouter } from "./app-router";
 import { reviewRouter } from "./review-router";
 import { consultationRouter } from "./consultation-router";
 import { newsRouter } from "./news-router";
+import { careerRouter } from "./career-router";
 import { uploadRouter } from "./upload-router";
 import { downloadRouter } from "./download-router";
 import { createRouter, publicQuery } from "./middleware";
@@ -16,6 +17,7 @@ export const appRouter = createRouter({
   review: reviewRouter,
   consultation: consultationRouter,
   news: newsRouter,
+  careers: careerRouter,
   upload: uploadRouter,
   download: downloadRouter,
 });

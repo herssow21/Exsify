@@ -27,19 +27,19 @@ export default function FeaturedAppsCarousel() {
   };
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-12 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1E293B] dark:text-white mb-4">
               {t('apps.title')}
             </h2>
-            <p className="text-gray-500 max-w-xl">
+            <p className="text-gray-500 dark:text-gray-300 max-w-xl">
               {t('apps.subtitle')}
             </p>
           </motion.div>
@@ -52,13 +52,13 @@ export default function FeaturedAppsCarousel() {
           >
             <button
               onClick={() => scroll('left')}
-              className="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-[hsl(var(--exsify-primary))] hover:text-white hover:border-[hsl(var(--exsify-primary))] transition-all shadow-sm"
+              className="w-12 h-12 bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-white/10 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-[hsl(var(--exsify-primary))] hover:text-white hover:border-[hsl(var(--exsify-primary))] transition-all shadow-sm"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={() => scroll('right')}
-              className="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-[hsl(var(--exsify-primary))] hover:text-white hover:border-[hsl(var(--exsify-primary))] transition-all shadow-sm"
+              className="w-12 h-12 bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-white/10 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-[hsl(var(--exsify-primary))] hover:text-white hover:border-[hsl(var(--exsify-primary))] transition-all shadow-sm"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -85,7 +85,7 @@ export default function FeaturedAppsCarousel() {
                 transition={{ delay: index * 0.1 }}
                 className="flex-shrink-0 w-[350px] snap-start"
               >
-                <div className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-lg transition-all duration-300 h-full">
+                <div className="group bg-white dark:bg-[#1E293B] rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-lg transition-all duration-300 h-full">
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden">
                     <img
@@ -109,20 +109,20 @@ export default function FeaturedAppsCarousel() {
                   {/* Content */}
                   <div className="p-6">
                     <div className="flex items-start justify-between gap-3 mb-3">
-                      <h3 className="text-[#1E293B] font-bold text-xl line-clamp-1 group-hover:text-[hsl(var(--exsify-primary))] transition-colors">
+                      <h3 className="text-[#1E293B] dark:text-white font-bold text-xl line-clamp-1 group-hover:text-[hsl(var(--exsify-primary))] transition-colors">
                         {name}
                       </h3>
                       <div className="flex items-center gap-1 flex-shrink-0">
                         <Star className="w-4 h-4 text-[hsl(var(--exsify-accent))] fill-[hsl(var(--exsify-accent))]" />
-                        <span className="text-[#1E293B] text-sm font-medium">{app.rating}</span>
+                        <span className="text-[#1E293B] dark:text-white text-sm font-medium">{app.rating}</span>
                       </div>
                     </div>
 
-                    <p className="text-gray-500 text-sm line-clamp-2 mb-4">
+                    <p className="text-gray-500 dark:text-gray-300 text-sm line-clamp-2 mb-4">
                       {description}
                     </p>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-white/10">
                       <div className="text-[hsl(var(--exsify-primary))] font-bold text-lg">
                         {formattedPrice}
                       </div>
@@ -150,7 +150,7 @@ export default function FeaturedAppsCarousel() {
         >
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-[hsl(var(--exsify-primary))] hover:text-[hsl(var(--exsify-primary))] transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white dark:bg-[#1E293B] border-2 border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-200 rounded-xl font-semibold hover:border-[hsl(var(--exsify-primary))] hover:text-[hsl(var(--exsify-primary))] transition-all"
           >
             View All Solutions
             <ArrowRight className={`w-5 h-5 ${isRTL ? 'rotate-180' : ''}`} />

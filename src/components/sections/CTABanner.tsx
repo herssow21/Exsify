@@ -9,7 +9,7 @@ export default function CTABanner() {
   const isRTL = i18n.language === 'ar';
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-12 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--exsify-primary))]/20 via-[hsl(var(--exsify-accent))]/10 to-[hsl(var(--exsify-primary))]/20" />
@@ -22,7 +22,7 @@ export default function CTABanner() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-white rounded-3xl border border-gray-200 shadow-lg p-8 md:p-16 overflow-hidden"
+          className="relative bg-white dark:bg-[#1E293B] rounded-3xl border border-gray-200 dark:border-white/10 shadow-lg p-8 md:p-16 overflow-hidden"
         >
           {/* Decorative Elements */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-[hsl(var(--exsify-primary))]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -36,7 +36,7 @@ export default function CTABanner() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="section-title text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E293B] mb-6 leading-tight"
+                className="section-title text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E293B] dark:text-white mb-6 leading-tight"
               >
                 {t('cta.title')}{' '}
                 <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-primary-dark))] bg-clip-text text-transparent">
@@ -49,7 +49,7 @@ export default function CTABanner() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className="text-gray-500 text-lg mb-8"
+                className="text-gray-500 dark:text-gray-300 text-lg mb-8"
               >
                 {t('cta.subtitle')}
               </motion.p>
@@ -70,7 +70,7 @@ export default function CTABanner() {
                 </Link>
                 <Link
                   to="/contact"
-                  className="flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-[hsl(var(--exsify-primary))] hover:text-[hsl(var(--exsify-primary))] transition-all"
+                  className="flex items-center justify-center gap-2 px-8 py-4 bg-white dark:bg-[#0B1120] border-2 border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-200 rounded-xl font-semibold hover:border-[hsl(var(--exsify-primary))] hover:text-[hsl(var(--exsify-primary))] transition-all"
                 >
                   <MessageCircle className="w-5 h-5" />
                   {t('cta.ctaSecondary')}
@@ -86,21 +86,21 @@ export default function CTABanner() {
               transition={{ delay: 0.5 }}
               className="grid grid-cols-2 gap-6"
             >
-              <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 text-center">
+              <div className="bg-gray-50 dark:bg-[#0B1120] rounded-2xl border border-gray-200 dark:border-white/10 p-6 text-center">
                 <p className="text-4xl font-bold text-[hsl(var(--exsify-accent))] mb-2">50K+</p>
-                <p className="text-gray-500 text-sm">{t('cta.stats.activeUsers')}</p>
+                <p className="text-gray-500 dark:text-gray-300 text-sm">{t('cta.stats.activeUsers')}</p>
               </div>
-              <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 text-center">
+              <div className="bg-gray-50 dark:bg-[#0B1120] rounded-2xl border border-gray-200 dark:border-white/10 p-6 text-center">
                 <p className="text-4xl font-bold text-[hsl(var(--exsify-primary))] mb-2">8</p>
-                <p className="text-gray-500 text-sm">{t('cta.stats.softwareSolutions')}</p>
+                <p className="text-gray-500 dark:text-gray-300 text-sm">{t('cta.stats.softwareSolutions')}</p>
               </div>
-              <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 text-center">
+              <div className="bg-gray-50 dark:bg-[#0B1120] rounded-2xl border border-gray-200 dark:border-white/10 p-6 text-center">
                 <p className="text-4xl font-bold text-green-600 mb-2">{partnerCountries.length}+</p>
-                <p className="text-gray-500 text-sm">{t('cta.stats.countriesServed')}</p>
+                <p className="text-gray-500 dark:text-gray-300 text-sm">{t('cta.stats.countriesServed')}</p>
               </div>
-              <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 text-center">
+              <div className="bg-gray-50 dark:bg-[#0B1120] rounded-2xl border border-gray-200 dark:border-white/10 p-6 text-center">
                 <p className="text-4xl font-bold text-purple-600 mb-2">24/7</p>
-                <p className="text-gray-500 text-sm">{t('cta.stats.supportAvailable')}</p>
+                <p className="text-gray-500 dark:text-gray-300 text-sm">{t('cta.stats.supportAvailable')}</p>
               </div>
             </motion.div>
           </div>

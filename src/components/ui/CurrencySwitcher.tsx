@@ -14,7 +14,11 @@ const currencies: { code: CurrencyCode; symbol: string; name: string }[] = [
   { code: 'ZAR', symbol: 'R', name: 'South African Rand' },
 ];
 
-export default function CurrencySwitcher() {
+interface CurrencySwitcherProps {
+  variant?: 'navbar' | 'menu';
+}
+
+export default function CurrencySwitcher({ variant = 'navbar' }: CurrencySwitcherProps) {
   const { currency, setCurrency } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -37,11 +41,17 @@ export default function CurrencySwitcher() {
     setIsOpen(false);
   };
 
+  const isNavbar = variant === 'navbar';
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 text-white/80 hover:text-white transition-colors"
+        className={`flex items-center gap-2 px-3 py-2 transition-colors ${
+          isNavbar
+            ? 'text-white/80 hover:text-white'
+            : 'text-gray-700 dark:text-gray-200 hover:text-[hsl(var(--exsify-primary))] dark:hover:text-white'
+        }`}
       >
         <DollarSign className="w-4 h-4" />
         <span className="text-sm font-medium">{currentCurrency.code}</span>
@@ -49,7 +59,7 @@ export default function CurrencySwitcher() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden z-50">
+        <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-white/10 rounded-lg shadow-xl overflow-hidden z-50">
           {currencies.map((c) => (
             <button
               key={c.code}
@@ -57,7 +67,7 @@ export default function CurrencySwitcher() {
               className={`w-full flex items-center justify-between px-4 py-2 text-sm transition-colors ${
                 currency === c.code
                   ? 'bg-[hsl(var(--exsify-primary))] text-white'
-                  : 'text-gray-700 hover:bg-[hsl(var(--exsify-primary))]/10 hover:text-[hsl(var(--exsify-primary))]'
+                  : 'text-gray-700 dark:text-gray-200 hover:bg-[hsl(var(--exsify-primary))]/10 hover:text-[hsl(var(--exsify-primary))]'
               }`}
             >
               <span>{c.code}</span>

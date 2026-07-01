@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { App, User, Review, NewsPost, Consultation, Download, RegionStat } from '../types';
+import type { App, User, Review, NewsPost, Consultation, Download, RegionStat, Career } from '../types';
 import { encodePassword } from './validators';
 
 export const seedApps: App[] = [
@@ -585,6 +585,48 @@ export const seedNews: NewsPost[] = [
   }
 ];
 
+export const seedCareers: Career[] = [
+  {
+    id: 'career-001',
+    title_en: 'Senior Full-Stack Engineer',
+    title_ar: 'مهندس Full-Stack أول',
+    description_en: 'Lead development of scalable web and mobile applications using React, Node.js, and cloud services. Mentor junior engineers and drive technical decisions.',
+    description_ar: 'قيادة تطوير تطبيقات الويب والجوال القابلة للتوسع باستخدام React وNode.js والخدمات السحابية. إرشاد المهندسين الجدد واتخاذ القرارات التقنية.',
+    department: 'Engineering',
+    location: 'Nairobi, Kenya / Remote',
+    type: 'full-time',
+    status: 'active',
+    featured: true,
+    createdAt: '2024-03-01T00:00:00Z'
+  },
+  {
+    id: 'career-002',
+    title_en: 'Product Designer',
+    title_ar: 'مصمم منتج',
+    description_en: 'Create intuitive UI/UX for our suite of business apps. Collaborate with product and engineering teams to deliver polished user experiences.',
+    description_ar: 'إنشاء واجهات مستخدم بديهية لتشكيلة تطبيقات الأعمال لدينا. التعاون مع فرق المنتج والهندسة لتقديم تجارب مستخدم متقنة.',
+    department: 'Design',
+    location: 'Dubai, UAE / Remote',
+    type: 'full-time',
+    status: 'active',
+    featured: false,
+    createdAt: '2024-03-10T00:00:00Z'
+  },
+  {
+    id: 'career-003',
+    title_en: 'Customer Success Manager',
+    title_ar: 'مدير نجاح العملاء',
+    description_en: 'Help enterprise clients across Africa and the Middle East get the most out of EXSIFY solutions. Own onboarding, training, and account health.',
+    description_ar: 'مساعدة عملاء المؤسسات في جميع أنحاء أفريقيا والشرق الأوسط على الاستفادة القصوى من حلول EXSIFY. إدارة التهيئة والتدريب وصحة الحساب.',
+    department: 'Customer Success',
+    location: 'Nairobi, Kenya',
+    type: 'full-time',
+    status: 'active',
+    featured: true,
+    createdAt: '2024-03-15T00:00:00Z'
+  }
+];
+
 export const seedConsultations: Consultation[] = [
   {
     id: 'consult-001',
@@ -694,6 +736,9 @@ export function seedDatabase(): void {
   if (!localStorage.getItem('exsify_news')) {
     localStorage.setItem('exsify_news', JSON.stringify(seedNews));
   }
+  if (!localStorage.getItem('exsify_careers')) {
+    localStorage.setItem('exsify_careers', JSON.stringify(seedCareers));
+  }
   if (!localStorage.getItem('exsify_consultations')) {
     localStorage.setItem('exsify_consultations', JSON.stringify(seedConsultations));
   }
@@ -777,5 +822,6 @@ export function resetDatabase(): void {
   localStorage.setItem('exsify_news', JSON.stringify(seedNews));
   localStorage.setItem('exsify_consultations', JSON.stringify(seedConsultations));
   localStorage.setItem('exsify_downloads', JSON.stringify(seedDownloads));
+  localStorage.setItem('exsify_careers', JSON.stringify(seedCareers));
   localStorage.setItem('exsify_region_stats', JSON.stringify(seedRegionStats));
 }

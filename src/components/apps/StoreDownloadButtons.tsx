@@ -4,9 +4,10 @@ import type { App } from '../../types';
 interface StoreDownloadButtonsProps {
   app: App;
   className?: string;
+  compact?: boolean;
 }
 
-export default function StoreDownloadButtons({ app, className = '' }: StoreDownloadButtonsProps) {
+export default function StoreDownloadButtons({ app, className = '', compact = false }: StoreDownloadButtonsProps) {
   const links = [
     {
       id: 'play-store',
@@ -38,9 +39,31 @@ export default function StoreDownloadButtons({ app, className = '' }: StoreDownl
 
   if (visibleLinks.length === 0) return null;
 
+  if (compact) {
+    return (
+      <div className={`flex flex-wrap items-center gap-2 ${className}`}>
+        {visibleLinks.map((link) => {
+          const Icon = link.icon;
+          return (
+            <a
+              key={link.id}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-white/10 rounded-full text-xs font-medium text-gray-700 dark:text-gray-200 transition-colors ${link.color} group`}
+            >
+              <Icon className="w-3.5 h-3.5 text-gray-400 group-hover:text-current flex-shrink-0" />
+              <span>{link.label}</span>
+            </a>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div className={`space-y-3 ${className}`}>
-      <p className="text-sm text-gray-500 text-center">Also available on</p>
+      <p className="text-sm text-gray-500 dark:text-gray-300 text-center">Also available on</p>
       <div className="grid grid-cols-1 gap-2">
         {visibleLinks.map((link) => {
           const Icon = link.icon;
@@ -50,12 +73,12 @@ export default function StoreDownloadButtons({ app, className = '' }: StoreDownl
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 rounded-xl transition-colors ${link.color} group`}
+              className={`flex items-center gap-3 px-4 py-3 bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-white/10 rounded-xl transition-colors ${link.color} group`}
             >
               <Icon className="w-6 h-6 text-gray-400 group-hover:text-current flex-shrink-0" />
               <div className="text-left leading-tight">
                 <p className="text-[10px] text-gray-400 uppercase tracking-wide">{link.sublabel}</p>
-                <p className="text-sm font-semibold text-[#1E293B]">{link.label}</p>
+                <p className="text-sm font-semibold text-[#1E293B] dark:text-white">{link.label}</p>
               </div>
             </a>
           );

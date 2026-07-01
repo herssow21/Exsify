@@ -15,6 +15,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useSettings } from '../../context/SettingsContext';
 import CurrencySwitcher from '../ui/CurrencySwitcher';
+import ThemeToggle from '../ui/ThemeToggle';
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -57,7 +58,7 @@ export default function Navbar() {
             <span className="text-[#fff] font-bold text-xl tracking-tight">
               {t('app.name')} 
             </span>
-            <span className="text-[#dea440] font-bold TEXT-X1 tracking-tight">
+            <span className="hidden sm:inline text-[#dea440] font-bold TEXT-X1 tracking-tight">
               SOFTWARE
             </span>
           </Link>
@@ -95,6 +96,9 @@ export default function Navbar() {
             {/* Currency Switcher */}
             <CurrencySwitcher />
 
+            {/* Theme Toggle */}
+            <ThemeToggle size="sm" />
+
             {/* Auth Buttons */}
             {isAuthenticated ? (
               <div className="relative">
@@ -113,13 +117,13 @@ export default function Navbar() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden"
+                      className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-white/10 rounded-lg shadow-xl overflow-hidden"
                     >
                       {isAdmin && (
                         <Link
                           to="/admin"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-[hsl(var(--exsify-primary))]/10 hover:text-[hsl(var(--exsify-primary))] transition-colors"
+                          className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-[hsl(var(--exsify-primary))]/10 hover:text-[hsl(var(--exsify-primary))] transition-colors"
                         >
                           <LayoutDashboard className="w-4 h-4" />
                           <span className="text-sm">{t('nav.admin')}</span>
@@ -128,7 +132,7 @@ export default function Navbar() {
                       <Link
                         to="/profile"
                         onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-[hsl(var(--exsify-primary))]/10 hover:text-[hsl(var(--exsify-primary))] transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-[hsl(var(--exsify-primary))]/10 hover:text-[hsl(var(--exsify-primary))] transition-colors"
                       >
                         <User className="w-4 h-4" />
                         <span className="text-sm">My Profile</span>
@@ -136,7 +140,7 @@ export default function Navbar() {
                       <Link
                         to="/my-library"
                         onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-[hsl(var(--exsify-primary))]/10 hover:text-[hsl(var(--exsify-primary))] transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-[hsl(var(--exsify-primary))]/10 hover:text-[hsl(var(--exsify-primary))] transition-colors"
                       >
                         <Library className="w-4 h-4" />
                         <span className="text-sm">{t('nav.myLibrary')}</span>
@@ -170,13 +174,16 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-white/80 hover:text-white"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile Controls: Theme Toggle + Hamburger */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle size="sm" />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-white/80 hover:text-white"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -187,7 +194,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-gray-200 shadow-lg"
+            className="md:hidden bg-white dark:bg-[#1E293B] border-t border-gray-200 dark:border-white/10 shadow-lg"
           >
             <div className="px-4 py-4 space-y-2">
               {navLinks.map((link) => (
@@ -198,24 +205,24 @@ export default function Navbar() {
                   className={`block px-4 py-3 rounded-lg text-sm font-medium ${
                     isActive(link.path)
                       ? 'bg-[hsl(var(--exsify-primary))] text-white'
-                      : 'text-gray-700 hover:text-[hsl(var(--exsify-primary))] hover:bg-[hsl(var(--exsify-primary))]/5'
+                      : 'text-gray-700 dark:text-gray-200 hover:text-[hsl(var(--exsify-primary))] hover:bg-[hsl(var(--exsify-primary))]/5'
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
               
-              <div className="pt-4 border-t border-gray-200 space-y-2">
+              <div className="pt-4 border-t border-gray-200 dark:border-white/10 space-y-2">
                 <button
                   onClick={toggleLanguage}
-                  className="flex items-center gap-2 px-4 py-3 text-gray-700 hover:text-[hsl(var(--exsify-primary))] w-full"
+                  className="flex items-center gap-2 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-[hsl(var(--exsify-primary))] w-full"
                 >
                   <Globe className="w-4 h-4" />
                   <span className="text-sm">{language === 'en' ? 'العربية' : 'English'}</span>
                 </button>
                 
                 <div className="px-4 py-2">
-                  <CurrencySwitcher />
+                  <CurrencySwitcher variant="menu" />
                 </div>
                 
                 {isAuthenticated ? (
@@ -224,7 +231,7 @@ export default function Navbar() {
                       <Link
                         to="/admin"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-3 text-gray-700 hover:text-[hsl(var(--exsify-primary))]"
+                        className="flex items-center gap-2 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-[hsl(var(--exsify-primary))]"
                       >
                         <LayoutDashboard className="w-4 h-4" />
                         <span className="text-sm">{t('nav.admin')}</span>
@@ -233,7 +240,7 @@ export default function Navbar() {
                     <Link
                       to="/my-library"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 px-4 py-3 text-gray-700 hover:text-[hsl(var(--exsify-primary))]"
+                      className="flex items-center gap-2 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-[hsl(var(--exsify-primary))]"
                     >
                       <Library className="w-4 h-4" />
                       <span className="text-sm">{t('nav.myLibrary')}</span>
@@ -251,7 +258,7 @@ export default function Navbar() {
                     <Link
                       to="/auth?mode=login"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="px-4 py-3 text-center text-gray-700 hover:text-[hsl(var(--exsify-primary))] border border-gray-200 rounded-lg"
+                      className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:text-[hsl(var(--exsify-primary))] border border-gray-200 dark:border-white/10 rounded-lg"
                     >
                       {t('nav.login')}
                     </Link>

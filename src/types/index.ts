@@ -9,6 +9,8 @@ export type CurrencyCode = 'USD' | 'EUR' | 'SAR' | 'KES' | 'AED' | 'EGP' | 'NGN'
 export type LanguageCode = 'en' | 'ar';
 export type AppStatus = 'active' | 'inactive';
 export type ConsultationStatus = 'new' | 'contacted' | 'closed';
+export type CareerType = 'full-time' | 'part-time' | 'contract' | 'remote';
+export type CareerStatus = 'active' | 'inactive' | 'closed';
 
 /**
  * User interface representing a registered user
@@ -140,6 +142,24 @@ export interface NewsPost {
 }
 
 /**
+ * Career interface representing a job posting
+ */
+export interface Career {
+  id: string;
+  title_en: string;
+  title_ar: string;
+  description_en: string;
+  description_ar: string;
+  department: string;
+  location: string;
+  type: CareerType;
+  status: CareerStatus;
+  featured: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+/**
  * Settings interface representing application settings
  */
 export interface Settings {
@@ -158,6 +178,7 @@ export interface EXSIFY_DB {
   reviews: Review[];
   regions: RegionStat[];
   news: NewsPost[];
+  careers: Career[];
   settings: Settings;
 }
 

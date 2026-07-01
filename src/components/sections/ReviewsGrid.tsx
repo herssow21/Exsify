@@ -11,7 +11,9 @@ export default function ReviewsGrid() {
   const { apps } = useApps();
   const isRTL = i18n.language === 'ar';
 
-  const approvedReviews = reviews.filter(r => r.status === 'approved').slice(0, 6);
+  const approvedReviews = reviews
+    .filter(r => r.status === 'approved' && r.featured)
+    .slice(0, 6);
 
   const getAppName = (appId: string) => {
     const app = apps.find(a => a.id === appId);
@@ -19,7 +21,7 @@ export default function ReviewsGrid() {
   };
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-12 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[hsl(var(--exsify-accent))]/5 to-transparent" />
       
@@ -29,15 +31,15 @@ export default function ReviewsGrid() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#1E293B] dark:text-white mb-4">
             What Our{' '}
             <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-primary-dark))] bg-clip-text text-transparent">
               Customers Say
             </span>
           </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto">
+          <p className="text-gray-500 dark:text-gray-300 max-w-2xl mx-auto">
             Trusted by thousands of businesses across Africa and the Middle East
           </p>
         </motion.div>
@@ -54,13 +56,13 @@ export default function ReviewsGrid() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="group bg-white rounded-2xl border border-gray-200 p-6 hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-md transition-all duration-300"
+                className="group bg-white dark:bg-[#1E293B] rounded-2xl border border-gray-200 dark:border-white/10 p-6 hover:border-[hsl(var(--exsify-primary))]/40 hover:shadow-md transition-all duration-300"
               >
                 {/* Quote Icon */}
                 <Quote className={`w-10 h-10 text-[hsl(var(--exsify-primary))]/30 mb-4 ${isRTL ? 'rotate-180' : ''}`} />
 
                 {/* Review Text */}
-                <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6">
                   "{comment}"
                 </p>
 
@@ -72,22 +74,22 @@ export default function ReviewsGrid() {
                       className={`w-4 h-4 ${
                         i < review.rating
                           ? 'text-[hsl(var(--exsify-accent))] fill-[hsl(var(--exsify-accent))]'
-                          : 'text-gray-300'
+                          : 'text-gray-300 dark:text-gray-600'
                       }`}
                     />
                   ))}
                 </div>
 
                 {/* User Info */}
-                <div className="flex items-center gap-4 pt-4 border-t border-gray-200">
+                <div className="flex items-center gap-4 pt-4 border-t border-gray-200 dark:border-white/10">
                   <div className="w-12 h-12 bg-gradient-to-br from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-primary-dark))] rounded-full flex items-center justify-center">
                     <span className="text-[#1E293B] font-bold text-lg">
                       {review.userName.charAt(0).toUpperCase()}
                     </span>
                   </div>
                   <div>
-                    <h4 className="text-[#1E293B] font-medium">{review.userName}</h4>
-                    <p className="text-gray-500 text-sm">{review.userCountry}</p>
+                    <h4 className="text-[#1E293B] dark:text-white font-medium">{review.userName}</h4>
+                    <p className="text-gray-500 dark:text-gray-300 text-sm">{review.userCountry}</p>
                   </div>
                 </div>
 
@@ -108,26 +110,26 @@ export default function ReviewsGrid() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6 }}
-          className="mt-16 flex flex-wrap items-center justify-center gap-8"
+          className="mt-12 flex flex-wrap items-center justify-center gap-8"
         >
           <div className="text-center">
-            <p className="text-3xl font-bold text-[#1E293B]">4.7</p>
+            <p className="text-3xl font-bold text-[#1E293B] dark:text-white">4.7</p>
             <div className="flex items-center gap-1 justify-center my-1">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 text-[hsl(var(--exsify-accent))] fill-[hsl(var(--exsify-accent))]" />
               ))}
             </div>
-            <p className="text-gray-500 text-sm">Average Rating</p>
+            <p className="text-gray-500 dark:text-gray-300 text-sm">Average Rating</p>
           </div>
           <div className="w-px h-16 bg-[hsl(var(--exsify-primary))]/20 hidden md:block" />
           <div className="text-center">
-            <p className="text-3xl font-bold text-[#1E293B]">1,400+</p>
-            <p className="text-gray-500 text-sm mt-1">Reviews</p>
+            <p className="text-3xl font-bold text-[#1E293B] dark:text-white">1,400+</p>
+            <p className="text-gray-500 dark:text-gray-300 text-sm mt-1">Reviews</p>
           </div>
           <div className="w-px h-16 bg-[hsl(var(--exsify-primary))]/20 hidden md:block" />
           <div className="text-center">
-            <p className="text-3xl font-bold text-[#1E293B]">96%</p>
-            <p className="text-gray-500 text-sm mt-1">Would Recommend</p>
+            <p className="text-3xl font-bold text-[#1E293B] dark:text-white">96%</p>
+            <p className="text-gray-500 dark:text-gray-300 text-sm mt-1">Would Recommend</p>
           </div>
         </motion.div>
       </div>

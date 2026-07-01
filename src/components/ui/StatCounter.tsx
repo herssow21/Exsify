@@ -73,12 +73,12 @@ export default function StatCounter({
       <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[hsl(var(--exsify-primary))]/20 rounded-2xl mb-4 group-hover:scale-110 group-hover:-translate-y-1 transition-transform duration-300">
         <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-[hsl(var(--exsify-accent))] group-hover:rotate-6 transition-transform duration-300" />
       </div>
-      <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1E293B] mb-2">
+      <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1E293B] dark:text-white mb-2">
         {prefix}
         {formatNumber(count)}
         {suffix}
       </div>
-      <p className="text-gray-400 text-sm">{label}</p>
+      <p className="text-gray-400 dark:text-gray-300 text-sm">{label}</p>
     </motion.div>
   );
 }

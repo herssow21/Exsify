@@ -18,7 +18,7 @@ export default function Layout() {
   }, [isAuthenticated, user, location.pathname, navigate]);
 
   return (
-    <div className={`min-h-screen flex flex-col ${isAdmin ? 'bg-[hsl(var(--exsify-dark))]' : 'bg-[#F8FAFC]'}`}>
+    <div className={`min-h-screen flex flex-col ${isAdmin ? 'bg-[hsl(var(--exsify-dark))]' : 'bg-[#F8FAFC] dark:bg-[#0B1120]'}`}>
       <SystemTicker />
       <Navbar />
       <main className="flex-1">

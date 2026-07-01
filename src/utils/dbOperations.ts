@@ -14,6 +14,7 @@ import type {
   Review, 
   RegionStat, 
   NewsPost, 
+  Career,
 } from '@/types';
 import { generateId } from './validators';
 import { trpcClient } from './trpcVanilla';
@@ -28,6 +29,8 @@ import {
   toApiNews,
   toApiNewsUpdates,
   toApiDownload,
+  toApiCareer,
+  toApiCareerUpdates,
 } from './backendMappers';
 
 // ============ HELPERS ============
@@ -50,6 +53,7 @@ const KEYS = {
   users: 'exsify_users',
   reviews: 'exsify_reviews',
   news: 'exsify_news',
+  careers: 'exsify_careers',
   consultations: 'exsify_consultations',
   downloads: 'exsify_downloads',
   regionStats: 'exsify_region_stats',
@@ -419,6 +423,55 @@ export function deleteNews(id: string): boolean {
   setItem(KEYS.news, allNews);
 
   trpcClient.news.delete.mutate({ id }).catch(() => {});
+  return true;
+}
+
+// ============ CAREER OPERATIONS ============
+
+export function getCareers(): Career[] {
+  return getItem<Career[]>(KEYS.careers, []);
+}
+
+export function getCareerById(id: string): Career | undefined {
+  return getCareers().find(c => c.id === id);
+}
+
+export function addCareer(career: Omit<Career, 'id' | 'createdAt' | 'updatedAt'>): Career {
+  const careers = getCareers();
+  const newCareer: Career = {
+    ...career,
+    id: generateId(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  careers.push(newCareer);
+  setItem(KEYS.careers, careers);
+
+  trpcClient.careers.create.mutate(toApiCareer(newCareer)).catch(() => {});
+  return newCareer;
+}
+
+export function updateCareer(id: string, updates: Partial<Career>): Career | null {
+  const careers = getCareers();
+  const index = careers.findIndex(c => c.id === id);
+  if (index === -1) return null;
+  careers[index] = { ...careers[index], ...updates, updatedAt: new Date().toISOString() };
+  setItem(KEYS.careers, careers);
+
+  trpcClient.careers.update
+    .mutate({ id, data: toApiCareerUpdates(updates) })
+    .catch(() => {});
+  return careers[index];
+}
+
+export function deleteCareer(id: string): boolean {
+  const careers = getCareers();
+  const index = careers.findIndex(c => c.id === id);
+  if (index === -1) return false;
+  careers.splice(index, 1);
+  setItem(KEYS.careers, careers);
+
+  trpcClient.careers.delete.mutate({ id }).catch(() => {});
   return true;
 }
 

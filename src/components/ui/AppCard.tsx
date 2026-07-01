@@ -26,7 +26,7 @@ export default function AppCard({ app, index = 0 }: AppCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
-      className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[hsl(var(--exsify-primary))]/50 transition-all duration-300 hover:shadow-xl hover:shadow-[hsl(var(--exsify-primary))]/10"
+      className="group bg-white dark:bg-[#1E293B] rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden hover:border-[hsl(var(--exsify-primary))]/50 transition-all duration-300 hover:shadow-xl hover:shadow-[hsl(var(--exsify-primary))]/10"
     >
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
@@ -53,22 +53,22 @@ export default function AppCard({ app, index = 0 }: AppCardProps) {
       {/* Content */}
       <div className="p-5">
         <div className="flex items-start justify-between gap-3 mb-3">
-          <h3 className="text-[#1E293B] font-bold text-lg line-clamp-1 group-hover:text-[hsl(var(--exsify-primary))] transition-colors">
+          <h3 className="text-[#1E293B] dark:text-white font-bold text-lg line-clamp-1 group-hover:text-[hsl(var(--exsify-primary))] transition-colors">
             {name}
           </h3>
           <div className="flex items-center gap-1 flex-shrink-0">
             <Star className="w-4 h-4 text-[hsl(var(--exsify-accent))] fill-[hsl(var(--exsify-accent))]" />
-            <span className="text-white text-sm font-medium">{app.rating}</span>
+            <span className="text-[#1E293B] dark:text-white text-sm font-medium">{app.rating}</span>
           </div>
         </div>
 
-        <p className="text-gray-500 text-sm line-clamp-2 mb-4">
+        <p className="text-gray-500 dark:text-gray-300 text-sm line-clamp-2 mb-4">
           {description}
         </p>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 text-gray-500 text-xs">
+            <div className="flex items-center gap-1 text-gray-500 dark:text-gray-300 text-xs">
               <Download className="w-3.5 h-3.5" />
               <span>{formatNumber(app.downloadCount)}</span>
             </div>
