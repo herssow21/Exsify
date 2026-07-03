@@ -4,6 +4,7 @@ import { getUsers } from '../utils/dbOperations';
 import { encodePassword, decodePassword, generateId } from '../utils/validators';
 import { trpcClient } from '../utils/trpcVanilla';
 import { fromApiUser } from '../utils/backendMappers';
+import { syncFavorites } from '../utils/syncEngine';
 
 interface AuthContextType {
   user: User | null;
@@ -39,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
         setIsAuthenticated(true);
+        syncFavorites(parsedUser.id).catch(() => {});
       } catch {
         localStorage.removeItem('exsify_current_user');
       }
@@ -50,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(u);
     setIsAuthenticated(true);
     localStorage.setItem('exsify_current_user', JSON.stringify(u));
+    syncFavorites(u.id).catch(() => {});
   };
 
   const login = async (email: string, password: string): Promise<{ success: boolean; requiresPasswordChange?: boolean; error?: string }> => {

@@ -11,6 +11,7 @@ export type AppStatus = 'active' | 'inactive';
 export type ConsultationStatus = 'new' | 'contacted' | 'closed';
 export type CareerType = 'full-time' | 'part-time' | 'contract' | 'remote';
 export type CareerStatus = 'active' | 'inactive' | 'closed';
+export type JobApplicationStatus = 'new' | 'reviewed' | 'shortlisted' | 'rejected';
 
 /**
  * User interface representing a registered user
@@ -160,6 +161,41 @@ export interface Career {
 }
 
 /**
+ * Job application interface representing a career application
+ */
+export interface JobApplication {
+  id: string;
+  careerId?: string;
+  jobTitle?: string;
+  name: string;
+  email: string;
+  message?: string;
+  cvName?: string;
+  cvData?: string;
+  status: JobApplicationStatus;
+  appliedAt: string;
+}
+
+/**
+ * Favorite interface representing a user's liked app
+ */
+export interface Favorite {
+  id: string;
+  userId: string;
+  appId: string;
+  createdAt: string;
+}
+
+/**
+ * Visit interface representing a site visit/analytics event
+ */
+export interface Visit {
+  id: string;
+  sessionId?: string;
+  visitedAt: string;
+}
+
+/**
  * Settings interface representing application settings
  */
 export interface Settings {
@@ -179,6 +215,9 @@ export interface EXSIFY_DB {
   regions: RegionStat[];
   news: NewsPost[];
   careers: Career[];
+  jobApplications: JobApplication[];
+  favorites: Favorite[];
+  visits: Visit[];
   settings: Settings;
 }
 

@@ -33,6 +33,7 @@ export default function AdminSidebar({ activeTab, onTabChange, mobileOpen, onMob
     { id: 'reviews', label: t('admin.reviews'), icon: Star },
     { id: 'news', label: t('admin.news'), icon: Newspaper },
     { id: 'careers', label: 'Careers', icon: Briefcase },
+    { id: 'job-applications', label: 'Applications', icon: FileText },
     { id: 'users', label: t('admin.users'), icon: Users },
     { id: 'media', label: 'Media', icon: FolderOpen },
     { id: 'content', label: 'Content', icon: FileText },

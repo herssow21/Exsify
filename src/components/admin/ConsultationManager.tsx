@@ -248,9 +248,13 @@ export default function ConsultationManager() {
                   </span>
                 </div>
 
-                <p className="text-gray-200 text-sm bg-white/5 p-3 rounded-lg">
-                  {consultation.projectDetails}
-                </p>
+                <div className="text-gray-200 text-sm bg-white/5 p-3 rounded-lg space-y-2">
+                  <p className="text-xs text-gray-400">
+                    <span className="font-medium text-[hsl(var(--exsify-primary))]">Service of Interest:</span>{' '}
+                    {consultation.serviceInterest || '—'}
+                  </p>
+                  <p>{consultation.projectDetails}</p>
+                </div>
               </div>
 
               <div className="flex items-center gap-2 flex-wrap">

@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { apps, reviews, consultations, newsPosts, downloads, localUsers } from "./schema";
+import { apps, reviews, consultations, newsPosts, downloads, localUsers, jobApplications, favorites, visits } from "./schema";
 
 export const appsRelations = relations(apps, ({ many }) => ({
   reviews: many(reviews),

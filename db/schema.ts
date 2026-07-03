@@ -165,6 +165,44 @@ export const downloads = mysqlTable("downloads", {
 export type Download = typeof downloads.$inferSelect;
 export type InsertDownload = typeof downloads.$inferInsert;
 
+// ── Job Applications ──
+export const jobApplications = mysqlTable("job_applications", {
+  id: varchar("id", { length: 100 }).primaryKey(),
+  careerId: varchar("career_id", { length: 100 }),
+  jobTitle: varchar("job_title", { length: 255 }),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  message: text("message"),
+  cvName: varchar("cv_name", { length: 255 }),
+  cvData: text("cv_data"),
+  status: mysqlEnum("status", ["new", "reviewed", "shortlisted", "rejected"]).default("new").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type JobApplication = typeof jobApplications.$inferSelect;
+export type InsertJobApplication = typeof jobApplications.$inferInsert;
+
+// ── Favorites ──
+export const favorites = mysqlTable("favorites", {
+  id: varchar("id", { length: 100 }).primaryKey(),
+  userId: varchar("user_id", { length: 100 }).notNull(),
+  appId: varchar("app_id", { length: 100 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type Favorite = typeof favorites.$inferSelect;
+export type InsertFavorite = typeof favorites.$inferInsert;
+
+// ── Site Visits ──
+export const visits = mysqlTable("visits", {
+  id: varchar("id", { length: 100 }).primaryKey(),
+  sessionId: varchar("session_id", { length: 255 }),
+  visitedAt: timestamp("visited_at").defaultNow().notNull(),
+});
+
+export type Visit = typeof visits.$inferSelect;
+export type InsertVisit = typeof visits.$inferInsert;
+
 // ── Media Uploads ──
 export const uploads = mysqlTable("uploads", {
   id: serial("id").primaryKey(),

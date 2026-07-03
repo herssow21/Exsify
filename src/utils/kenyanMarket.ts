@@ -55,11 +55,11 @@ export const kenyanCounties: KenyanCounty[] = [
   { code: 'WPK', name: 'West Pokot' },
 ];
 
-export function getKenyanMarketStats(): { code: string; name: string; clients: number }[] {
-  const users = getUsers();
+export function getKenyanMarketStats(users?: ReturnType<typeof getUsers>): { code: string; name: string; clients: number }[] {
+  const sourceUsers = users ?? getUsers();
   const counts = new Map<string, number>();
 
-  for (const user of users) {
+  for (const user of sourceUsers) {
     if (user.country !== 'Kenya' || !user.region) continue;
     const match = kenyanCounties.find((c) => c.name === user.region || c.code === user.region);
     if (!match) continue;

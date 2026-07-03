@@ -15,6 +15,7 @@ import ThemeManager from '../components/admin/ThemeManager';
 import MediaManager from '../components/admin/MediaManager';
 import ContentEditor from '../components/admin/ContentEditor';
 import CareerManager from '../components/admin/CareerManager';
+import JobApplicationManager from '../components/admin/JobApplicationManager';
 
 export default function AdminDashboard() {
   const { t } = useTranslation();
@@ -61,6 +62,8 @@ export default function AdminDashboard() {
         return <NewsManager />;
       case 'careers':
         return <CareerManager />;
+      case 'job-applications':
+        return <JobApplicationManager />;
       case 'users':
         return <UserManager />;
       case 'theme':

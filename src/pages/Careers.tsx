@@ -5,6 +5,7 @@ import { MapPin, Briefcase, Clock, ChevronDown, ChevronUp, Send, X, FileUp, User
 import { useCareers } from '../hooks/useDatabase';
 import type { Career } from '../types';
 import { useToast } from '../context/ToastContext';
+import { addJobApplication } from '../utils/dbOperations';
 
 const benefits = [
   { title: 'Competitive Salary', description: 'We offer market-competitive compensation packages', icon: Briefcase },
@@ -68,19 +69,15 @@ export default function Careers() {
 
     const reader = new FileReader();
     reader.onload = () => {
-      const applications = JSON.parse(localStorage.getItem('exsify_job_applications') || '[]');
-      applications.push({
-        id: `app-${Date.now()}`,
-        jobId: applyJob.id,
+      addJobApplication({
+        careerId: applyJob.id,
         jobTitle: applyJob.title,
         name: applicant.name,
         email: applicant.email,
         message: applicant.message,
         cvName: cvFile.name,
-        cvData: reader.result,
-        appliedAt: new Date().toISOString(),
+        cvData: typeof reader.result === 'string' ? reader.result : undefined,
       });
-      localStorage.setItem('exsify_job_applications', JSON.stringify(applications));
 
       showToast(`Application submitted for ${applyJob.title}`, 'success');
       setApplyJob(null);

@@ -27,7 +27,7 @@ import { getDownloads, getUsers, getReviews, getConsultations } from '../../util
 import { formatPrice } from '../../utils/currencyConverter';
 import { useSettings } from '../../context/SettingsContext';
 import { getKenyanMarketStats } from '../../utils/kenyanMarket';
-import { getVisitsByDay } from '../../utils/visits';
+import { getVisitsByDay } from '../../utils/dbOperations';
 
 type DateFilter = 'today' | 'week' | 'month' | 'year' | 'all';
 
@@ -128,9 +128,14 @@ export default function AdminOverview() {
   const activeApps = apps.filter(app => app.status === 'active').length;
 
   const filteredDownloads = getDownloads().filter(d => isWithinDateFilter(d.downloadedAt, dateFilter));
-  const filteredNewUsers = getUsers().filter(u => isWithinDateFilter(u.createdAt, dateFilter));
+  const filteredUsers = getUsers().filter(u => isWithinDateFilter(u.createdAt, dateFilter));
   const filteredPendingReviews = getReviews().filter(r => r.status === 'pending' && isWithinDateFilter(r.createdAt, dateFilter));
   const filteredNewConsultations = getConsultations().filter(c => c.status === 'new' && isWithinDateFilter(c.submittedAt, dateFilter));
+
+  const filteredRevenue = filteredDownloads.reduce((acc, dl) => {
+    const app = apps.find(a => a.id === dl.appId);
+    return acc + (app ? app.price_usd : 0);
+  }, 0);
 
   const statCards = [
     {
@@ -141,15 +146,15 @@ export default function AdminOverview() {
       color: 'bg-blue-500'
     },
     {
-      title: t('admin.stats.activeUsers'),
-      value: filteredNewUsers.length.toLocaleString(),
+      title: dateFilter === 'all' ? t('admin.stats.activeUsers') : 'New Users',
+      value: filteredUsers.length.toLocaleString(),
       icon: Users,
       trend: 8,
       color: 'bg-green-500'
     },
     {
       title: t('admin.stats.totalRevenue'),
-      value: formatPrice(stats.totalRevenue, currency),
+      value: formatPrice(filteredRevenue, currency),
       icon: DollarSign,
       trend: 15,
       color: 'bg-[hsl(var(--exsify-accent))]'
@@ -175,27 +180,34 @@ export default function AdminOverview() {
   ];
 
   // Country performance (registered users)
-  const users = getUsers();
   const countryCounts = React.useMemo(() => {
     const counts = new Map<string, number>();
-    for (const user of users) {
+    for (const user of filteredUsers) {
       counts.set(user.country, (counts.get(user.country) || 0) + 1);
     }
     return Array.from(counts.entries())
       .map(([country, clients]) => ({ country, clients }))
       .sort((a, b) => b.clients - a.clients)
       .slice(0, 10);
-  }, [users]);
+  }, [filteredUsers]);
 
   // Kenyan counties performance
   const kenyanCounts = React.useMemo(() => {
-    return getKenyanMarketStats()
+    return getKenyanMarketStats(filteredUsers)
       .filter(c => c.clients > 0)
       .sort((a, b) => b.clients - a.clients);
-  }, []);
+  }, [filteredUsers]);
 
-  // Site visitors over the last 14 days
-  const visitorData = React.useMemo(() => getVisitsByDay(14), []);
+  // Site visitors filtered by the selected date range
+  const visitorDays =
+    dateFilter === 'today' ? 1 :
+    dateFilter === 'week' ? 7 :
+    dateFilter === 'month' ? 30 :
+    dateFilter === 'year' ? 365 : 14;
+
+  const visitorData = React.useMemo(() => {
+    return getVisitsByDay(visitorDays);
+  }, [dateFilter, visitorDays]);
 
   return (
     <div className="space-y-8">
@@ -246,7 +258,7 @@ export default function AdminOverview() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Site Visitors (Last 14 Days)" delay={0.7}>
+        <ChartCard title={`Site Visitors (${dateFilter === 'today' ? 'Today' : dateFilter === 'week' ? 'Last 7 Days' : dateFilter === 'month' ? 'Last 30 Days' : dateFilter === 'year' ? 'Last 365 Days' : 'Last 14 Days'})`} delay={0.7}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={visitorData} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
@@ -294,9 +306,13 @@ export default function AdminOverview() {
           <h3 className="text-lg font-bold text-white mb-4">Top Performing Apps</h3>
           <div className="space-y-4">
             {apps
-              .sort((a, b) => b.downloadCount - a.downloadCount)
+              .map(app => {
+                const actualDownloads = filteredDownloads.filter(d => d.appId === app.id).length;
+                return { app, actualDownloads };
+              })
+              .sort((a, b) => b.actualDownloads - a.actualDownloads || b.app.downloadCount - a.app.downloadCount)
               .slice(0, 5)
-              .map((app, index) => (
+              .map(({ app, actualDownloads }, index) => (
                 <div key={app.id} className="flex items-center gap-4">
                   <div className="w-8 h-8 bg-[hsl(var(--exsify-primary))]/20 rounded-lg flex items-center justify-center text-[hsl(var(--exsify-accent))] font-bold text-sm">
                     {index + 1}
@@ -308,7 +324,7 @@ export default function AdminOverview() {
                   />
                   <div className="flex-1">
                     <p className="text-white text-sm font-medium">{app.name_en}</p>
-                    <p className="text-gray-400 text-xs">{app.downloadCount.toLocaleString()} downloads</p>
+                    <p className="text-gray-400 text-xs">{actualDownloads.toLocaleString()} downloads</p>
                   </div>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-[hsl(var(--exsify-accent))] fill-[hsl(var(--exsify-accent))]" />

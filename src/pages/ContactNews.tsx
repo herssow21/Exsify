@@ -70,6 +70,7 @@ export default function ContactNews() {
     name: '',
     email: '',
     company: '',
+    serviceInterest: 'General Inquiry',
     message: ''
   });
 
@@ -108,14 +109,14 @@ export default function ContactNews() {
         email: contactData.email,
         company: contactData.company || '',
         phone: '',
-        serviceInterest: 'General Inquiry',
+        serviceInterest: contactData.serviceInterest,
         projectDetails: contactData.message,
         budget: 'N/A',
         country: 'Unknown',
       });
 
       showToast('Thank you for your message! We will get back to you soon.', 'success');
-      setContactData({ name: '', email: '', company: '', message: '' });
+      setContactData({ name: '', email: '', company: '', serviceInterest: 'General Inquiry', message: '' });
     } catch {
       showToast('Something went wrong. Please try again.', 'error');
     }
@@ -344,6 +345,19 @@ export default function ContactNews() {
                         className="w-full px-4 py-3 bg-gray-50 dark:bg-[#0B1120] border border-gray-200 dark:border-white/10 rounded-lg text-[#1E293B] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
                         placeholder="Your company (optional)"
                       />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Service of Interest</label>
+                      <select
+                        value={contactData.serviceInterest}
+                        onChange={e => setContactData(prev => ({ ...prev, serviceInterest: e.target.value }))}
+                        className="w-full px-4 py-3 bg-gray-50 dark:bg-[#0B1120] border border-gray-200 dark:border-white/10 rounded-lg text-[#1E293B] dark:text-white focus:border-[hsl(var(--exsify-primary))] focus:outline-none"
+                      >
+                        <option value="General Inquiry">General Inquiry</option>
+                        {serviceOptions.map(opt => (
+                          <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Message *</label>

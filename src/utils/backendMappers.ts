@@ -6,6 +6,9 @@ import type {
   NewsPost,
   Download,
   Career,
+  JobApplication,
+  Favorite,
+  Visit,
 } from '@/types';
 
 // ── Apps ──
@@ -335,6 +338,80 @@ export function toApiCareerUpdates(updates: Partial<Career>): any {
   if (updates.status !== undefined) map.status = updates.status;
   if (updates.featured !== undefined) map.featured = updates.featured;
   return map;
+}
+
+// ── Job Applications ──
+export function fromApiJobApplication(api: any): JobApplication {
+  return {
+    id: String(api.id),
+    careerId: api.careerId ?? api.career_id,
+    jobTitle: api.jobTitle ?? api.job_title,
+    name: api.name ?? '',
+    email: api.email ?? '',
+    message: api.message,
+    cvName: api.cvName ?? api.cv_name,
+    cvData: api.cvData ?? api.cv_data,
+    status: (api.status ?? 'new') as JobApplication['status'],
+    appliedAt:
+      (api.createdAt ? new Date(api.createdAt).toISOString() : undefined) ??
+      (api.created_at ? new Date(api.created_at).toISOString() : undefined) ??
+      new Date().toISOString(),
+  };
+}
+
+export function toApiJobApplication(ja: JobApplication): any {
+  return {
+    id: ja.id,
+    careerId: ja.careerId,
+    jobTitle: ja.jobTitle,
+    name: ja.name,
+    email: ja.email,
+    message: ja.message,
+    cvName: ja.cvName,
+    cvData: ja.cvData,
+    status: ja.status,
+  };
+}
+
+// ── Favorites ──
+export function fromApiFavorite(api: any): Favorite {
+  return {
+    id: String(api.id),
+    userId: String(api.userId ?? api.user_id ?? ''),
+    appId: String(api.appId ?? api.app_id ?? ''),
+    createdAt:
+      (api.createdAt ? new Date(api.createdAt).toISOString() : undefined) ??
+      (api.created_at ? new Date(api.created_at).toISOString() : undefined) ??
+      new Date().toISOString(),
+  };
+}
+
+export function toApiFavorite(f: Favorite): any {
+  return {
+    id: f.id,
+    userId: f.userId,
+    appId: f.appId,
+  };
+}
+
+// ── Visits ──
+export function fromApiVisit(api: any): Visit {
+  return {
+    id: String(api.id),
+    sessionId: api.sessionId ?? api.session_id,
+    visitedAt:
+      (api.visitedAt ? new Date(api.visitedAt).toISOString() : undefined) ??
+      (api.visited_at ? new Date(api.visited_at).toISOString() : undefined) ??
+      new Date().toISOString(),
+  };
+}
+
+export function toApiVisit(v: Visit): any {
+  return {
+    id: v.id,
+    sessionId: v.sessionId,
+    visitedAt: v.visitedAt,
+  };
 }
 
 // ── Downloads ──

@@ -8,7 +8,7 @@ import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { DarkModeProvider } from './context/DarkModeContext';
 import { seedDatabase } from './utils/seedDatabase';
-import { recordVisit } from './utils/visits';
+import { recordVisit } from './utils/dbOperations';
 import { syncAll } from './utils/syncEngine';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
@@ -29,8 +29,8 @@ import TermsOfService from './pages/TermsOfService';
 function App() {
   useEffect(() => {
     seedDatabase();
-    recordVisit();
     syncAll().catch(() => {});
+    recordVisit();
   }, []);
 
   return (

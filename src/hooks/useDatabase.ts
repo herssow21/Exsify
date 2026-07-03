@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { App, User, Review, News, Consultation, Download, Career } from '../types';
+import type { App, User, Review, News, Consultation, Download, Career, JobApplication } from '../types';
 import {
   getApps,
   getUsers,
@@ -24,7 +24,10 @@ import {
   deleteConsultation,
   updateUser,
   deleteUser,
-  getStats
+  getStats,
+  getJobApplications,
+  updateJobApplicationStatus,
+  deleteJobApplication,
 } from '../utils/dbOperations';
 
 export function useApps() {
@@ -231,6 +234,34 @@ export function useDownloads() {
   }, []);
 
   return { downloads, loading, refresh };
+}
+
+export function useJobApplications() {
+  const [applications, setApplications] = useState<JobApplication[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setApplications(getJobApplications());
+    setLoading(false);
+  }, []);
+
+  const refresh = useCallback(() => {
+    setApplications(getJobApplications());
+  }, []);
+
+  const updateStatus = useCallback((id: string, status: JobApplication['status']) => {
+    const updated = updateJobApplicationStatus(id, status);
+    refresh();
+    return updated;
+  }, [refresh]);
+
+  const remove = useCallback((id: string) => {
+    const success = deleteJobApplication(id);
+    refresh();
+    return success;
+  }, [refresh]);
+
+  return { applications, loading, refresh, updateStatus, remove };
 }
 
 export function useStats() {

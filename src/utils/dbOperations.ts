@@ -15,6 +15,9 @@ import type {
   RegionStat, 
   NewsPost, 
   Career,
+  JobApplication,
+  Favorite,
+  Visit,
 } from '@/types';
 import { generateId } from './validators';
 import { trpcClient } from './trpcVanilla';
@@ -31,6 +34,9 @@ import {
   toApiDownload,
   toApiCareer,
   toApiCareerUpdates,
+  toApiJobApplication,
+  toApiFavorite,
+  toApiVisit,
 } from './backendMappers';
 
 // ============ HELPERS ============
@@ -57,7 +63,13 @@ const KEYS = {
   consultations: 'exsify_consultations',
   downloads: 'exsify_downloads',
   regionStats: 'exsify_region_stats',
+  jobApplications: 'exsify_job_applications',
+  visits: 'exsify_visits',
 } as const;
+
+function favoritesKey(userId: string): string {
+  return `exsify_favorites_${userId}`;
+}
 
 // ============ USER OPERATIONS ============
 
@@ -221,10 +233,6 @@ export function addDownload(userId: string, appId: string): Download {
 
 // ============ FAVORITE OPERATIONS ============
 
-function favoritesKey(userId: string): string {
-  return `exsify_favorites_${userId}`;
-}
-
 export function getFavorites(userId: string): string[] {
   return getItem<string[]>(favoritesKey(userId), []);
 }
@@ -239,11 +247,21 @@ export function addFavorite(userId: string, appId: string): void {
     favorites.push(appId);
     setItem(favoritesKey(userId), favorites);
   }
+
+  const favorite: Favorite = {
+    id: generateId(),
+    userId,
+    appId,
+    createdAt: new Date().toISOString(),
+  };
+  trpcClient.favorite.create.mutate(toApiFavorite(favorite)).catch(() => {});
 }
 
 export function removeFavorite(userId: string, appId: string): void {
   const favorites = getFavorites(userId).filter(id => id !== appId);
   setItem(favoritesKey(userId), favorites);
+
+  trpcClient.favorite.delete.mutate({ userId, appId }).catch(() => {});
 }
 
 export function toggleFavorite(userId: string, appId: string): boolean {
@@ -253,6 +271,10 @@ export function toggleFavorite(userId: string, appId: string): boolean {
   }
   addFavorite(userId, appId);
   return true;
+}
+
+export function setFavorites(userId: string, appIds: string[]): void {
+  setItem(favoritesKey(userId), appIds);
 }
 
 // ============ CONSULTATION OPERATIONS ============
@@ -472,6 +494,113 @@ export function deleteCareer(id: string): boolean {
   setItem(KEYS.careers, careers);
 
   trpcClient.careers.delete.mutate({ id }).catch(() => {});
+  return true;
+}
+
+// ============ JOB APPLICATION OPERATIONS ============
+
+export function getJobApplications(): JobApplication[] {
+  return getItem<JobApplication[]>(KEYS.jobApplications, []);
+}
+
+export function addJobApplication(application: Omit<JobApplication, 'id' | 'appliedAt' | 'status'>): JobApplication {
+  const applications = getJobApplications();
+  const newApplication: JobApplication = {
+    ...application,
+    id: generateId(),
+    status: 'new',
+    appliedAt: new Date().toISOString(),
+  };
+  applications.push(newApplication);
+  setItem(KEYS.jobApplications, applications);
+
+  trpcClient.jobApplications.create.mutate(toApiJobApplication(newApplication)).catch(() => {});
+  return newApplication;
+}
+
+export function updateJobApplicationStatus(
+  id: string,
+  status: JobApplication['status']
+): JobApplication | null {
+  const applications = getJobApplications();
+  const index = applications.findIndex(a => a.id === id);
+  if (index === -1) return null;
+  applications[index].status = status;
+  setItem(KEYS.jobApplications, applications);
+
+  trpcClient.jobApplications.updateStatus.mutate({ id, status }).catch(() => {});
+  return applications[index];
+}
+
+export function deleteJobApplication(id: string): boolean {
+  const applications = getJobApplications();
+  const index = applications.findIndex(a => a.id === id);
+  if (index === -1) return false;
+  applications.splice(index, 1);
+  setItem(KEYS.jobApplications, applications);
+
+  trpcClient.jobApplications.delete.mutate({ id }).catch(() => {});
+  return true;
+}
+
+// ============ VISIT OPERATIONS ============
+
+export function getVisits(): Visit[] {
+  return getItem<Visit[]>(KEYS.visits, []);
+}
+
+export function recordVisit(sessionId?: string): void {
+  try {
+    if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('exsify_visit_recorded')) return;
+    const visits = getVisits();
+    const now = new Date().toISOString();
+    const visit: Visit = {
+      id: generateId(),
+      sessionId,
+      visitedAt: now,
+    };
+    visits.push(visit);
+    setItem(KEYS.visits, visits);
+
+    trpcClient.visit.create.mutate(toApiVisit(visit)).catch(() => {});
+
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('exsify_visit_recorded', 'true');
+    }
+  } catch {
+    // ignore storage errors
+  }
+}
+
+export function getVisitsByDay(days: number): { date: string; visits: number }[] {
+  const visits = getVisits();
+  const counts = new Map<string, number>();
+
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    counts.set(key, 0);
+  }
+
+  for (const visit of visits) {
+    const key = visit.visitedAt.split('T')[0];
+    if (counts.has(key)) {
+      counts.set(key, (counts.get(key) || 0) + 1);
+    }
+  }
+
+  return Array.from(counts.entries()).map(([date, visits]) => ({ date, visits }));
+}
+
+export function deleteVisit(id: string): boolean {
+  const visits = getVisits();
+  const index = visits.findIndex(v => v.id === id);
+  if (index === -1) return false;
+  visits.splice(index, 1);
+  setItem(KEYS.visits, visits);
+
+  trpcClient.visit.delete.mutate({ id }).catch(() => {});
   return true;
 }
 
