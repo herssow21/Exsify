@@ -86,6 +86,29 @@
       "subtitle": "العملاء في جميع أنحاء كينيا حسب المقاطعة"
     }
   },
+  "showcase": {
+    "title": "حلولنا في العمل",
+    "subtitle": "تجربة موحدة عبر سطح المكتب والجهاز اللوحي والجوال",
+    "imageUrl": ""
+  },
+  "careers": {
+    "title": "انضم إلى فريقنا",
+    "subtitle": "ساعدنا في بناء مستقبل برامج الأعمال في أفريقيا والشرق الأوسط.",
+    "benefitsTitle": "لماذا تعمل في إكسيفي؟",
+    "openPositions": "الوظائف المفتوحة",
+    "noPositions": "لا توجد وظائف مميزة متاحة حالياً.",
+    "ctaText": "لم تجد وظيفة تناسب مهاراتك؟",
+    "ctaLink": "أرسل لنا سيرتك الذاتية على أي حال",
+    "applyTitle": "التقديم على {{title}}",
+    "applySubtitle": "قم بتحميل سيرتك الذاتية بصيغة PDF",
+    "coverMessage": "رسالة تغطية",
+    "submitApplication": "إرسال الطلب"
+  },
+  "content": {
+    "showcaseImageUrl": "",
+    "heroBackgroundUrl": "",
+    "ctaBackgroundUrl": ""
+  },
   "apps": {
     "title": "حلول البرمجيات لدينا",
     "subtitle": "برامج أعمال شاملة لكل احتياج",

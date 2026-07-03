@@ -12,6 +12,7 @@ import { useToast } from '../context/ToastContext';
 import { useSettings } from '../context/SettingsContext';
 import { partnerCountries } from '../utils/countryFlags';
 import { convertPrice, getCurrencySymbol, formatNumber } from '../utils/currencyConverter';
+import { addConsultation } from '../utils/dbOperations';
 import type { CurrencyCode } from '../types';
 
 const serviceOptions = [
@@ -87,27 +88,37 @@ export default function ContactNews() {
     setConsultationData(prev => ({ ...prev, budget: budgetOptions[0].value }));
   }, [budgetOptions]);
 
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactData.name || !contactData.email || !contactData.message) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
+    if (!isValidEmail(contactData.email)) {
+      showToast('Please enter a valid email address', 'error');
+      return;
+    }
 
-    const messages = JSON.parse(localStorage.getItem('exsify_messages') || '[]');
-    messages.push({
-      id: `msg-${Date.now()}`,
-      name: contactData.name,
-      email: contactData.email,
-      company: contactData.company || '',
-      message: contactData.message,
-      status: 'new',
-      createdAt: new Date().toISOString(),
-    });
-    localStorage.setItem('exsify_messages', JSON.stringify(messages));
+    try {
+      // Store general contact messages as consultations so they sync to the backend/admin dashboard.
+      addConsultation({
+        fullName: contactData.name,
+        email: contactData.email,
+        company: contactData.company || '',
+        phone: '',
+        serviceInterest: 'General Inquiry',
+        projectDetails: contactData.message,
+        budget: 'N/A',
+        country: 'Unknown',
+      });
 
-    showToast('Thank you for your message! We will get back to you soon.', 'success');
-    setContactData({ name: '', email: '', company: '', message: '' });
+      showToast('Thank you for your message! We will get back to you soon.', 'success');
+      setContactData({ name: '', email: '', company: '', message: '' });
+    } catch {
+      showToast('Something went wrong. Please try again.', 'error');
+    }
   };
 
   const handleConsultationSubmit = (e: React.FormEvent) => {
@@ -116,22 +127,32 @@ export default function ContactNews() {
       showToast('Please fill in all required fields', 'error');
       return;
     }
+    if (!isValidEmail(consultationData.email)) {
+      showToast('Please enter a valid email address', 'error');
+      return;
+    }
 
-    const consultations = JSON.parse(localStorage.getItem('exsify_consultations') || '[]');
-    consultations.push({
-      id: `consult-${Date.now()}`,
-      ...consultationData,
-      status: 'new',
-      submittedAt: new Date().toISOString()
-    });
-    localStorage.setItem('exsify_consultations', JSON.stringify(consultations));
+    try {
+      addConsultation({
+        fullName: consultationData.fullName,
+        email: consultationData.email,
+        phone: consultationData.phone,
+        company: consultationData.company,
+        serviceInterest: consultationData.serviceInterest,
+        projectDetails: consultationData.projectDetails,
+        budget: consultationData.budget,
+        country: consultationData.country,
+      });
 
-    showToast('Consultation request submitted! Our team will contact you under 1 hour.', 'success');
-    setConsultationData({
-      fullName: '', email: '', phone: '', company: '',
-      serviceInterest: 'KaatibPOS', budget: '<$5k',
-      country: 'Saudi Arabia', projectDetails: ''
-    });
+      showToast('Consultation request submitted! Our team will contact you under 1 hour.', 'success');
+      setConsultationData({
+        fullName: '', email: '', phone: '', company: '',
+        serviceInterest: 'KaatibPOS', budget: '<$5k',
+        country: 'Saudi Arabia', projectDetails: ''
+      });
+    } catch {
+      showToast('Something went wrong. Please try again.', 'error');
+    }
   };
 
   const formatDate = (dateString: string) => {

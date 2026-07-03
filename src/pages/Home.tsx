@@ -4,6 +4,7 @@ import HeroSection from '../components/sections/HeroSection';
 import StatsDashboard from '../components/sections/StatsDashboard';
 import FeaturedAppsCarousel from '../components/sections/FeaturedAppsCarousel';
 import ReviewsGrid from '../components/sections/ReviewsGrid';
+import AppScreenshotsMarquee from '../components/sections/AppScreenshotsMarquee';
 import ValueProposition from '../components/sections/ValueProposition';
 import CTABanner from '../components/sections/CTABanner';
 
@@ -15,6 +16,7 @@ export default function Home() {
   return (
     <div className="space-y-0">
       <HeroSection />
+      <AppScreenshotsMarquee />
       <StatsDashboard />
       <FeaturedAppsCarousel />
       <ValueProposition />

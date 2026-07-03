@@ -491,11 +491,18 @@ export function getStats() {
   const reviews = getReviews();
   const uniqueCountries = new Set(users.map(u => u.country));
 
+  // Revenue is based on actual tracked downloads x the app's price.
+  // This avoids the inflated marketing downloadCount figures.
+  const totalRevenue = downloads.reduce((acc, dl) => {
+    const app = apps.find(a => a.id === dl.appId);
+    return acc + (app ? app.price_usd : 0);
+  }, 0);
+
   return {
     totalDownloads: downloads.length,
     activeUsers: users.length,
-    totalRevenue: apps.reduce((acc, app) => acc + (app.price_usd * app.downloadCount), 0),
-    pendingReviews: reviews.filter(r => !r.approved).length,
+    totalRevenue,
+    pendingReviews: reviews.filter(r => r.status === 'pending').length,
     newConsultations: consultations.filter(c => c.status === 'new').length,
     growth: 12,
     totalApps: apps.filter(a => a.status === 'active').length,

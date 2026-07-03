@@ -1,100 +1,51 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Briefcase, Clock, ChevronDown, ChevronUp, Send, X, FileUp, User, Mail, FileText } from 'lucide-react';
+import { MapPin, Briefcase, Clock, ChevronDown, ChevronUp, Send, X, FileUp, User, Mail } from 'lucide-react';
+import { useCareers } from '../hooks/useDatabase';
+import type { Career } from '../types';
 import { useToast } from '../context/ToastContext';
-
-const jobOpenings = [
-  {
-    id: 1,
-    title: 'Senior Full-Stack Developer',
-    department: 'Engineering',
-    location: 'Remote (MENA Region)',
-    type: 'Full-time',
-    description: 'We are looking for an experienced Full-Stack Developer to join our engineering team. You will be responsible for building and maintaining our SaaS products.',
-    requirements: [
-      '5+ years of experience in full-stack development',
-      'Strong proficiency in React, Node.js, and TypeScript',
-      'Experience with cloud services (AWS/Azure)',
-      'Knowledge of database design and optimization'
-    ]
-  },
-  {
-    id: 2,
-    title: 'Product Manager',
-    department: 'Product',
-    location: 'Riyadh, Saudi Arabia',
-    type: 'Full-time',
-    description: 'Join our product team to help shape the future of EXSIFY solutions. You will work closely with engineering, design, and customers.',
-    requirements: [
-      '3+ years of product management experience',
-      'Experience in B2B SaaS products',
-      'Strong analytical and communication skills',
-      'Understanding of African and Middle Eastern markets is a plus'
-    ]
-  },
-  {
-    id: 3,
-    title: 'Customer Success Manager',
-    department: 'Customer Success',
-    location: 'Dubai, UAE',
-    type: 'Full-time',
-    description: 'Help our customers succeed by providing exceptional support and guidance throughout their journey with EXSIFY.',
-    requirements: [
-      '3+ years in customer success or account management',
-      'Experience with SaaS products',
-      'Excellent communication skills in English and Arabic',
-      'Problem-solving mindset'
-    ]
-  },
-  {
-    id: 4,
-    title: 'Sales Representative',
-    department: 'Sales',
-    location: 'Cairo, Egypt',
-    type: 'Full-time',
-    description: 'Drive growth by acquiring new customers and building relationships with businesses across the region.',
-    requirements: [
-      '2+ years of B2B sales experience',
-      'Proven track record of meeting targets',
-      'Strong negotiation and presentation skills',
-      'Fluency in Arabic and English'
-    ]
-  },
-  {
-    id: 5,
-    title: 'UX/UI Designer',
-    department: 'Design',
-    location: 'Remote',
-    type: 'Full-time',
-    description: 'Create beautiful and intuitive user experiences for our suite of business applications.',
-    requirements: [
-      '3+ years of UX/UI design experience',
-      'Proficiency in Figma and design tools',
-      'Portfolio demonstrating strong design skills',
-      'Experience with design systems'
-    ]
-  }
-];
 
 const benefits = [
   { title: 'Competitive Salary', description: 'We offer market-competitive compensation packages', icon: Briefcase },
   { title: 'Remote Friendly', description: 'Work from anywhere in the MENA region', icon: MapPin },
   { title: 'Health Insurance', description: 'Comprehensive health coverage for you and your family', icon: User },
-  { title: 'Learning Budget', description: 'Annual budget for courses, conferences, and books', icon: FileText },
+  { title: 'Learning Budget', description: 'Annual budget for courses, conferences, and books', icon: FileUp },
   { title: 'Flexible Hours', description: 'Work when you are most productive', icon: Clock },
   { title: 'Paid Time Off', description: 'Generous vacation and parental leave policies', icon: Send },
 ];
 
+function statusBadgeClasses(status: Career['status']) {
+  switch (status) {
+    case 'active':
+      return 'bg-green-500/10 text-green-500 border-green-500/20';
+    case 'inactive':
+      return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
+    case 'closed':
+      return 'bg-red-500/10 text-red-500 border-red-500/20';
+    default:
+      return 'bg-gray-500/10 text-gray-500 border-gray-500/20';
+  }
+}
+
 export default function Careers() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { showToast } = useToast();
-  const [expandedJob, setExpandedJob] = useState<number | null>(null);
-  const [applyJob, setApplyJob] = useState<{ id: number; title: string } | null>(null);
+  const { careers, loading } = useCareers();
+  const isRTL = i18n.language === 'ar';
+
+  const [expandedJob, setExpandedJob] = useState<string | null>(null);
+  const [applyJob, setApplyJob] = useState<{ id: string; title: string } | null>(null);
   const [applicant, setApplicant] = useState({ name: '', email: '', message: '' });
   const [cvFile, setCvFile] = useState<File | null>(null);
 
-  const toggleJob = (jobId: number) => {
+  // Public careers: any featured position is shown, regardless of status.
+  // The status badge tells visitors whether it is currently active/inactive/closed.
+  const openPositions = careers
+    .filter((c) => c.featured)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  const toggleJob = (jobId: string) => {
     setExpandedJob(expandedJob === jobId ? null : jobId);
   };
 
@@ -136,6 +87,9 @@ export default function Careers() {
       setApplicant({ name: '', email: '', message: '' });
       setCvFile(null);
     };
+    reader.onerror = () => {
+      showToast('Failed to read CV. Please try again.', 'error');
+    };
     reader.readAsDataURL(cvFile);
   };
 
@@ -149,14 +103,10 @@ export default function Careers() {
           className="mb-16 text-start"
         >
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1E293B] dark:text-white mb-6 tracking-tight">
-            Join Our{' '}
-            <span className="bg-gradient-to-r from-[hsl(var(--exsify-primary))] to-[hsl(var(--exsify-accent))] bg-clip-text text-transparent">
-              Team
-            </span>
+            {t('careers.title')}
           </h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl text-base sm:text-lg">
-            Help us build the future of business software in Africa and the Middle East.
-            We are always looking for talented individuals who share our passion.
+            {t('careers.subtitle')}
           </p>
         </motion.div>
 
@@ -167,7 +117,7 @@ export default function Careers() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-2xl font-bold text-[#1E293B] dark:text-white mb-8">Why Work at EXSIFY?</h2>
+          <h2 className="text-2xl font-bold text-[#1E293B] dark:text-white mb-8">{t('careers.benefitsTitle')}</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {benefits.map((benefit, index) => (
               <motion.div
@@ -194,74 +144,93 @@ export default function Careers() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl font-bold text-[#1E293B] dark:text-white mb-8">Open Positions</h2>
-          <div className="space-y-4">
-            {jobOpenings.map((job) => (
-              <motion.div
-                key={job.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-white dark:bg-[#1E293B] rounded-xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden"
-              >
-                <button
-                  onClick={() => toggleJob(job.id)}
-                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-                >
-                  <div className="flex-1">
-                    <h3 className="text-[#1E293B] dark:text-white font-bold text-lg mb-2">{job.title}</h3>
-                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-500 dark:text-gray-300">
-                      <span className="flex items-center gap-1">
-                        <Briefcase className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
-                        {job.department}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
-                        {job.location}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
-                        {job.type}
-                      </span>
-                    </div>
-                  </div>
-                  {expandedJob === job.id ? (
-                    <ChevronUp className="w-6 h-6 text-gray-400 flex-shrink-0" />
-                  ) : (
-                    <ChevronDown className="w-6 h-6 text-gray-400 flex-shrink-0" />
-                  )}
-                </button>
+          <h2 className="text-2xl font-bold text-[#1E293B] dark:text-white mb-8">{t('careers.openPositions')}</h2>
 
-                <AnimatePresence>
-                  {expandedJob === job.id && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="px-5 sm:px-6 pb-6 border-t border-gray-100 dark:border-white/10"
+          {loading ? (
+            <div className="flex items-center justify-center h-32">
+              <div className="animate-spin w-8 h-8 border-2 border-[hsl(var(--exsify-primary))] border-t-transparent rounded-full" />
+            </div>
+          ) : openPositions.length === 0 ? (
+            <div className="bg-white dark:bg-[#1E293B] rounded-xl border border-gray-200 dark:border-white/10 p-8 text-center">
+              <p className="text-gray-600 dark:text-gray-300">{t('careers.noPositions')}</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {openPositions.map((job) => {
+                const title = isRTL ? job.title_ar : job.title_en;
+                const description = isRTL ? job.description_ar : job.description_en;
+
+                return (
+                  <motion.div
+                    key={job.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="bg-white dark:bg-[#1E293B] rounded-xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden"
+                  >
+                    <button
+                      onClick={() => toggleJob(job.id)}
+                      className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
                     >
-                      <div className="pt-4">
-                        <p className="text-gray-600 dark:text-gray-300 mb-4">{job.description}</p>
-                        <h4 className="text-[#1E293B] dark:text-white font-bold mb-2">Requirements:</h4>
-                        <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 space-y-1">
-                          {job.requirements.map((req, index) => (
-                            <li key={index}>{req}</li>
-                          ))}
-                        </ul>
-                        <button
-                          onClick={() => setApplyJob({ id: job.id, title: job.title })}
-                          className="inline-flex items-center gap-2 px-6 py-3 bg-[hsl(var(--exsify-primary))] text-white rounded-lg font-semibold hover:bg-[hsl(var(--exsify-primary-dark))] transition-colors"
-                        >
-                          <Send className="w-4 h-4" />
-                          Apply Now
-                        </button>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                          <h3 className="text-[#1E293B] dark:text-white font-bold text-lg truncate">{title}</h3>
+                          <span
+                            className={`px-2 py-0.5 text-xs font-medium border rounded-full capitalize ${statusBadgeClasses(
+                              job.status
+                            )}`}
+                          >
+                            {job.status}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-500 dark:text-gray-300">
+                          <span className="flex items-center gap-1">
+                            <Briefcase className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
+                            {job.department}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
+                            {job.location}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-4 h-4 text-[hsl(var(--exsify-primary))]" />
+                            {job.type}
+                          </span>
+                        </div>
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </div>
+                      {expandedJob === job.id ? (
+                        <ChevronUp className="w-6 h-6 text-gray-400 flex-shrink-0 ml-4" />
+                      ) : (
+                        <ChevronDown className="w-6 h-6 text-gray-400 flex-shrink-0 ml-4" />
+                      )}
+                    </button>
+
+                    <AnimatePresence>
+                      {expandedJob === job.id && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="px-5 sm:px-6 pb-6 border-t border-gray-100 dark:border-white/10"
+                        >
+                          <div className="pt-4">
+                            <p className="text-gray-600 dark:text-gray-300 mb-6 whitespace-pre-line">{description}</p>
+                            <button
+                              onClick={() => setApplyJob({ id: job.id, title })}
+                              className="inline-flex items-center gap-2 px-6 py-3 bg-[hsl(var(--exsify-primary))] text-white rounded-lg font-semibold hover:bg-[hsl(var(--exsify-primary-dark))] transition-colors"
+                            >
+                              <Send className="w-4 h-4" />
+                              Apply Now
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
         </motion.div>
 
         {/* No positions CTA */}
@@ -271,12 +240,12 @@ export default function Careers() {
           viewport={{ once: true }}
           className="mt-12 p-6 bg-white dark:bg-[#1E293B] rounded-xl border border-gray-200 dark:border-white/10 text-center"
         >
-          <p className="text-gray-600 dark:text-gray-300 mb-2">Don't see a position that fits your skills?</p>
+          <p className="text-gray-600 dark:text-gray-300 mb-2">{t('careers.ctaText')}</p>
           <a
             href="mailto:careers@exsify.com"
             className="text-[hsl(var(--exsify-primary))] hover:underline font-medium"
           >
-            Send us your resume anyway
+            {t('careers.ctaLink')}
           </a>
         </motion.div>
       </div>
@@ -300,8 +269,8 @@ export default function Careers() {
             >
               <div className="p-6 border-b border-gray-100 dark:border-white/10 flex items-center justify-between">
                 <div>
-                  <h3 className="text-xl font-bold text-[#1E293B] dark:text-white">Apply for {applyJob.title}</h3>
-                  <p className="text-gray-500 dark:text-gray-300 text-sm">Upload your CV in PDF format</p>
+                  <h3 className="text-xl font-bold text-[#1E293B] dark:text-white">{t('careers.applyTitle', { title: applyJob.title })}</h3>
+                  <p className="text-gray-500 dark:text-gray-300 text-sm">{t('careers.applySubtitle')}</p>
                 </div>
                 <button
                   onClick={() => setApplyJob(null)}
@@ -359,7 +328,7 @@ export default function Careers() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Cover Message</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{t('careers.coverMessage')}</label>
                   <textarea
                     value={applicant.message}
                     onChange={(e) => setApplicant({ ...applicant, message: e.target.value })}
@@ -374,7 +343,7 @@ export default function Careers() {
                   className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[hsl(var(--exsify-primary))] text-white rounded-lg font-semibold hover:bg-[hsl(var(--exsify-primary-dark))] transition-colors"
                 >
                   <Send className="w-4 h-4" />
-                  Submit Application
+                  {t('careers.submitApplication')}
                 </button>
               </form>
             </motion.div>

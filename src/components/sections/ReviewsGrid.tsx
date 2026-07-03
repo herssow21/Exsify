@@ -12,7 +12,7 @@ export default function ReviewsGrid() {
   const isRTL = i18n.language === 'ar';
 
   const approvedReviews = reviews
-    .filter(r => r.status === 'approved' && r.featured)
+    .filter(r => r.featured)
     .slice(0, 6);
 
   const getAppName = (appId: string) => {

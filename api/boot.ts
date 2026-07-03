@@ -92,7 +92,11 @@ app.post("/api/upload", bodyLimit({ maxSize: 50 * 1024 * 1024 }), async (c) => {
 
     const db = getDb();
     const url = `/uploads/${fileName}`;
-    const result = await db.insert(uploads).values({
+    // Generate an explicit numeric id to avoid relying on the serial/default
+    // column, which can fail when the MySQL column is not set to auto-increment.
+    const uploadId = Date.now();
+    await db.insert(uploads).values({
+      id: uploadId,
       originalName: file.name,
       fileName,
       mimeType: file.type,
@@ -104,7 +108,7 @@ app.post("/api/upload", bodyLimit({ maxSize: 50 * 1024 * 1024 }), async (c) => {
 
     return c.json({
       success: true,
-      id: Number(result[0].insertId),
+      id: uploadId,
       url,
       originalName: file.name,
       fileName,

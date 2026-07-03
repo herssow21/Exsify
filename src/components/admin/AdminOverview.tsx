@@ -129,7 +129,7 @@ export default function AdminOverview() {
 
   const filteredDownloads = getDownloads().filter(d => isWithinDateFilter(d.downloadedAt, dateFilter));
   const filteredNewUsers = getUsers().filter(u => isWithinDateFilter(u.createdAt, dateFilter));
-  const filteredPendingReviews = getReviews().filter(r => !r.approved && isWithinDateFilter(r.createdAt, dateFilter));
+  const filteredPendingReviews = getReviews().filter(r => r.status === 'pending' && isWithinDateFilter(r.createdAt, dateFilter));
   const filteredNewConsultations = getConsultations().filter(c => c.status === 'new' && isWithinDateFilter(c.submittedAt, dateFilter));
 
   const statCards = [

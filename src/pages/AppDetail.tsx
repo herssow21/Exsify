@@ -66,7 +66,7 @@ export default function AppDetail() {
   const formattedPrice = formatPrice(app.price_usd, currency);
 
   const appReviews = reviews.filter(
-    r => r.appId === app.id && r.status === 'approved' && r.featured
+    r => r.appId === app.id && r.featured
   );
   const relatedApps = apps
     .filter(a => a.category === app.category && a.id !== app.id && a.status === 'active')

@@ -51,7 +51,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2 flex-shrink-0">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
               <img src="/Exfy_Logo.png" alt="EXSIFY" className="w-10 h-10 object-contain" />
             </div>
@@ -96,10 +96,7 @@ export default function Navbar() {
             {/* Currency Switcher */}
             <CurrencySwitcher />
 
-            {/* Theme Toggle */}
-            <ThemeToggle size="sm" />
-
-            {/* Auth Buttons */}
+            {/* Auth Buttons -- desktop theme toggle lives in HeroSection only */}
             {isAuthenticated ? (
               <div className="relative">
                 <button
@@ -174,16 +171,18 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile Controls: Theme Toggle + Hamburger */}
-          <div className="flex items-center gap-2 md:hidden">
+          {/* Mobile Theme Toggle - centered between logo and hamburger */}
+          <div className="flex-1 flex items-center justify-center md:hidden">
             <ThemeToggle size="sm" />
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-white/80 hover:text-white"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
           </div>
+
+          {/* Mobile Hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 text-white/80 hover:text-white flex-shrink-0"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
 

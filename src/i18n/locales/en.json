@@ -86,6 +86,29 @@
       "subtitle": "Clients across Kenya by county"
     }
   },
+  "showcase": {
+    "title": "Our Solutions in Action",
+    "subtitle": "One unified experience across desktop, tablet and mobile",
+    "imageUrl": ""
+  },
+  "careers": {
+    "title": "Join Our Team",
+    "subtitle": "Help us build the future of business software in Africa and the Middle East.",
+    "benefitsTitle": "Why Work at EXSIFY?",
+    "openPositions": "Open Positions",
+    "noPositions": "No featured open positions at the moment.",
+    "ctaText": "Don't see a position that fits your skills?",
+    "ctaLink": "Send us your resume anyway",
+    "applyTitle": "Apply for {{title}}",
+    "applySubtitle": "Upload your CV in PDF format",
+    "coverMessage": "Cover Message",
+    "submitApplication": "Submit Application"
+  },
+  "content": {
+    "showcaseImageUrl": "",
+    "heroBackgroundUrl": "",
+    "ctaBackgroundUrl": ""
+  },
   "apps": {
     "title": "Our Software Solutions",
     "subtitle": "Comprehensive business software for every need",

@@ -44,7 +44,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-start lg:text-start mr-3 sm:mr-0"
+            className="text-start lg:text-start mr-3 sm:mr-0 min-w-0 max-w-full overflow-hidden"
           >
             {/* Badge */}
             <motion.div
@@ -64,7 +64,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#1E293B] dark:text-white mb-6 leading-[1.1] sm:leading-tight tracking-tight"
+              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#1E293B] dark:text-white mb-6 leading-[1.1] sm:leading-tight tracking-tight break-words"
             >
               {t('hero.title')}<br />
               <span className="text-[#1E293B] dark:text-white">{t('hero.headline.line2')}</span><br />
@@ -90,7 +90,7 @@ export default function HeroSection() {
               transition={{ delay: 0.45 }}
               className="mb-8"
             >
-              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide max-w-full">
                 {heroCountries.map((country) => (
                   <span
                     key={country.name}
@@ -111,18 +111,18 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex flex-col sm:flex-row items-center sm:items-start gap-4 justify-center sm:justify-start"
+              className="flex flex-col sm:flex-row items-center sm:items-start gap-4 justify-center sm:justify-start min-w-0 w-full"
             >
               <Link
                 to="/services"
-                className="group flex items-center justify-center gap-2 w-full max-w-sm sm:w-auto sm:max-w-none mx-auto sm:mx-0 px-8 py-4 bg-[hsl(var(--exsify-primary))] text-white rounded-xl font-semibold text-center hover:bg-[hsl(var(--exsify-primary-dark))] transition-all hover:shadow-lg hover:shadow-[hsl(var(--exsify-primary))]/20"
+                className="group flex items-center justify-center gap-2 w-full max-w-full sm:w-auto sm:max-w-none mx-auto sm:mx-0 px-8 py-4 bg-[hsl(var(--exsify-primary))] text-white rounded-xl font-semibold text-center hover:bg-[hsl(var(--exsify-primary-dark))] transition-all hover:shadow-lg hover:shadow-[hsl(var(--exsify-primary))]/20"
               >
                 {t('hero.ctaPrimary')}
                 <ArrowRight className={`w-5 h-5 transition-transform group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`} />
               </Link>
               <Link
                 to="/contact?form=consultation"
-                className="group flex items-center justify-center gap-2 w-full max-w-sm sm:w-auto sm:max-w-none mx-auto sm:mx-0 px-8 py-4 bg-white dark:bg-[#1E293B] border-2 border-[hsl(var(--exsify-primary))] text-[hsl(var(--exsify-primary))] rounded-xl font-semibold text-center hover:bg-[hsl(var(--exsify-primary))] hover:text-white transition-all"
+                className="group flex items-center justify-center gap-2 w-full max-w-full sm:w-auto sm:max-w-none mx-auto sm:mx-0 px-8 py-4 bg-white dark:bg-[#1E293B] border-2 border-[hsl(var(--exsify-primary))] text-[hsl(var(--exsify-primary))] rounded-xl font-semibold text-center hover:bg-[hsl(var(--exsify-primary))] hover:text-white transition-all"
               >
                 <Briefcase className="w-5 h-5" />
                 {t('hero.ctaSecondary')}
@@ -199,8 +199,8 @@ export default function HeroSection() {
               </div>
             </motion.div>
 
-            {/* Theme Toggle - bottom right intersection */}
-            <div className="absolute bottom-0 right-0 translate-x-4 translate-y-4 z-20">
+            {/* Theme Toggle - bottom right intersection (desktop only) */}
+            <div className="hidden md:block absolute bottom-0 right-0 translate-x-4 translate-y-4 z-20">
               <ThemeToggle />
             </div>
           </motion.div>
